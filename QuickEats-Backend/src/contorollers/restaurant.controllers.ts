@@ -148,6 +148,7 @@ export const updateOrderStatusHandler = async (reg: Request, res: Response, next
 
 
 export const searchRestaurantHandler = async () => {}
+
 export const getSingleRestaurantHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const restaurantId = req.params.id;

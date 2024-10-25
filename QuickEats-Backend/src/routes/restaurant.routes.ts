@@ -14,10 +14,10 @@ import { updateRestaurantSchema } from "../schema/restaurant.schema.js";
 
 const route = Router();
 
-route.post("/restaurant", [isAuthenticated, upload.single("file")], createRestaurantHandler);
-route.get("/restaurant", isAuthenticated, getRestaurantHandler);
-route.put("/restaurant", [isAuthenticated, validateRequestData(updateRestaurantSchema), upload.single("file")], updateRestaurantHandler);
-route.get("/restaurant/order", isAuthenticated, getRestaurantOrderHandler);
-route.get("/restaurant/search/:searchText", searchRestaurantHandler);
+route.post("/", [isAuthenticated, upload.single("file")], createRestaurantHandler);
+route.get("/", isAuthenticated, getRestaurantHandler);
+route.put("/", [isAuthenticated, validateRequestData(updateRestaurantSchema), upload.single("file")], updateRestaurantHandler);
+route.get("/order", isAuthenticated, getRestaurantOrderHandler);
+route.get("/search/:searchText", searchRestaurantHandler);
 
 export default route;

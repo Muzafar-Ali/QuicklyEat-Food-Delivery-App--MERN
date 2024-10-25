@@ -26,7 +26,7 @@ app.get('/api/v1/health', (req, res) => {
 
 // routes
 app.use('/api/v1', userRoutes);
-app.use('/api/v1', restaurantRoutes);
+app.use('/api/v1/restaurant', restaurantRoutes);
 
 // Error middleware 
 app.use(errorMiddleware)
