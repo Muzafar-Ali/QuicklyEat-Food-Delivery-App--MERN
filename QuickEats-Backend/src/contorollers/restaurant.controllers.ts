@@ -4,6 +4,7 @@ import { createRestaurant, uploadImages } from "../services/restaurant.services.
 import ErrorHandler from "../utils/errorClass.js";
 import RestaurantModel from "../models/restaurant.model.js";
 import uploadImageToCloudinary2 from "../utils/cloudinary/uploadImageToCloudinary2.js";
+import { OrderModel } from "../models/order.model.js";
 
 
 
@@ -103,10 +104,67 @@ export const updateRestaurantHandler = async (req: Request<{},{},TUpdateRestaura
   }
 }
 
-export const getRestaurantOrderHandler = async () => {}
+export const getRestaurantOrderHandler = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const restaurant = await RestaurantModel.findOne({ user: req.id })
+    if(!restaurant) throw new ErrorHandler(404, "Restaurant not found");
 
-export const updateOrderStatusHandler = async () => {}
+    const order = await OrderModel.find({restaurant: restaurant._id}).populate("restaurant").populate("user")
+    if(!order) throw new ErrorHandler(404, "Order not found");
+    if(order.length === 0) throw new ErrorHandler(404, "No orders found");
+    
+    res.status(200).json({
+      success: true,
+      order
+    })
+    
+  } catch (error) {
+    console.error("getRestaurantOrderHandler error = ", error);
+    next(error)
+  }
+}
+
+export const updateOrderStatusHandler = async (reg: Request, res: Response, next: NextFunction) => {
+  try {
+    const { orderId } = reg.params;
+    const { status } = reg.body;
+
+    const order = await OrderModel.findById(orderId);
+    if(!order) throw new ErrorHandler(404, "Order not found");
+    
+    order.status = status;
+    await order.save();
+    
+    res.status(200).json({
+      success: true,
+      message: `Order status updated successfully to ${order.status}`,
+    })
+    
+  } catch (error) {
+    console.error("updateOrderStatusHandler error = ", error);
+    next(error)
+  }
+}
+
 
 export const searchRestaurantHandler = async () => {}
-
-export const getSingleRestaurantHandler = async () => {}
+export const getSingleRestaurantHandler = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const restaurantId = req.params.id;
+    
+    const restaurant = await RestaurantModel.findById(restaurantId).populate({
+      path:'menus',
+      options:{createdAt:-1}
+    });
+    if(!restaurant) throw new ErrorHandler(404, "Restaurant not found");
+    
+    res.status(200).json({
+      success: true,
+      restaurant
+    })
+    
+  } catch (error) {
+    console.error("getSingleRestaurantHandler error = ", error);
+    next(error)
+  }
+}
