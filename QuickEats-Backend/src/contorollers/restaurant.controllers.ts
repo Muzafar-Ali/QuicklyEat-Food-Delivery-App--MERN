@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express"
-import { TRestaurant } from "../schema/restaurant.schema.js"
+import { TRestaurant, TUpdateRestaurant } from "../schema/restaurant.schema.js"
 import { createRestaurant, uploadImages } from "../services/restaurant.services.js";
 import ErrorHandler from "../utils/errorClass.js";
 import RestaurantModel from "../models/restaurant.model.js";
@@ -46,9 +46,62 @@ export const createRestaurantHandler = async (req: Request<{}, {}, TRestaurant["
   }
 }
 
-export const getRestaurantHandler = async () => {}
+export const getRestaurantHandler = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const id = req.id;
+    const restaurant = await RestaurantModel.findOne({user: id}).populate("menus")
+    if(!restaurant) throw new ErrorHandler(404, "Restaurant not found");
+    
+    res.status(200).json({
+      success: true,
+      restaurant
+    })
+    
+  } catch (error) {
+    console.error("getRestaurantHandler error = ", error);
+    next(error)
+  }
+}
 
-export const updateRestaurantHandler = async () => {}
+export const updateRestaurantHandler = async (req: Request<{},{},TUpdateRestaurant["body"]>, res: Response, next: NextFunction) => {
+  try {
+    const id = req.id;
+    const file = req.file;
+    const {city, country, cuisines, deliveryTime, menus, restaurantName} = req.body;
+
+    // Create an update object only with fields that are provided
+    const updateData: any = {};
+    if (city) updateData.city = city;
+    if (country) updateData.country = country;
+    if (cuisines) updateData.cuisines = cuisines;
+    if (deliveryTime) updateData.deliveryTime = deliveryTime;
+    if (menus) updateData.menus = menus;
+    if (restaurantName) updateData.restaurantName = restaurantName;
+    
+    if (file) {
+      if(!restaurantName) throw new ErrorHandler(400, "Restaurant name is required when uploading image ");
+      const imageUrl = await uploadImageToCloudinary2(file, restaurantName, "restaurant");
+      updateData.imageUrl = imageUrl;
+    }
+
+    const restaurant = await RestaurantModel.findOneAndUpdate(
+      {user: id}, 
+      updateData, 
+      {new: true}
+    )
+    if(!restaurant) throw new ErrorHandler(404, "Restaurant not found");
+    
+    res.status(200).json({
+      success: true,
+      message: "Restaurant updated successfully",
+      restaurant
+    })
+    
+  } catch (error) {
+    console.error("updateRestaurantHandler error = ", error);
+    next(error)
+  }
+}
 
 export const getRestaurantOrderHandler = async () => {}
 
