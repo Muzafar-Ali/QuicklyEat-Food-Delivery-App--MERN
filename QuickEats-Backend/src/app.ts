@@ -9,6 +9,7 @@ import cookieParser from 'cookie-parser';
 // route imports
 import userRoutes from './routes/user.routes.js';
 import restaurantRoutes from './routes/restaurant.routes.js';
+import menuRoutes from './routes/menu.routes.js';
 
 const app = express();
 const port = config.port;
@@ -27,6 +28,7 @@ app.get('/api/v1/health', (req, res) => {
 // routes
 app.use('/api/v1', userRoutes);
 app.use('/api/v1/restaurant', restaurantRoutes);
+app.use('/api/v1/menu', menuRoutes);
 
 // Error middleware 
 app.use(errorMiddleware)

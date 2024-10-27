@@ -1,6 +1,6 @@
 import path, { dirname } from "path";
 import { fileURLToPath } from "url";
-import { uploadImageToCloudinary } from "../utils/cloudinary/uploadImageToCloudinary.js";
+import { uploadImageToCloudinary2 } from "../utils/cloudinary/uploadImageToCloudinary2.js";
 import fs from "fs";
 import RestaurantModel from "../models/restaurant.model.js";
 import ErrorHandler from "../utils/errorClass.js";
@@ -25,7 +25,7 @@ export const uploadImages = async (restaurantName: string) => {
         // Construct the full path to the image file.
         const imageFile = path.join(imageDirectoryPath, image);
         
-        const imageUrl = await uploadImageToCloudinary(imageFile, restaurantName, "restaurant", counter);
+        const imageUrl = await uploadImageToCloudinary2(imageFile, restaurantName, "restaurant", counter);
         imagesArray.push(imageUrl?.secure_url)
 
       } catch (error) {

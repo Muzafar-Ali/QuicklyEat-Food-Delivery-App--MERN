@@ -1,5 +1,6 @@
 import { v2 as cloudinary } from "cloudinary";
 import config from "../../config/config.js";
+import { retryCloudinaryUpload } from "./retryCloudinaryUpload.js";
 
   // Configuration
   cloudinary.config({
@@ -8,33 +9,31 @@ import config from "../../config/config.js";
     api_secret: config.cloudinarySeceret,
   });
   
+  
+  export const uploadImageToCloudinary2 = async (imagePath: string, title: string, subfolderCategory: string, counter: number) => {
+    try {
+      
+      if(!imagePath) throw new Error("no image available to upload");
+      
+      // Folder structure setup for cloudinary
+      const baseFolder = "QuickEats";
+      let subFolder = subfolderCategory;
+      const slug = title.toLowerCase().split(" ").join("-");
+      
+      // Combine the base folder, subfolder, and the product name to form the complete folder path
+      const publicId = `${baseFolder}/${subFolder}/${slug}`; // Include the product name in the folder path
 
-const uploadImageToCloudinary2 = async (file:Express.Multer.File, title: string, subfolderName: string) => {
-  try {
-    
-    // Folder structure setup for cloudinary
-    const baseFolder = "QuickEats";
-    let subFolder = subfolderName;
-    const slug = title.toLowerCase().split(" ").join("-");
+      const result = await retryCloudinaryUpload(imagePath, {
+        resource_type: "auto",
+        public_id: `image${counter}`,
+        folder: publicId,
+      });
 
-    // Combine the base folder, subfolder, and the product name to form the complete folder path
-    const publicId = `${baseFolder}/${subFolder}/${slug}`; // Include the product name in the folder path
-
-    const base64Image = Buffer.from(file.buffer).toString("base64");
-    const dataURI = `data:${file.mimetype};base64,${base64Image}`;
-
-    const uploadResponse = await cloudinary.uploader.upload(dataURI, {
-      resource_type: "auto",
-      public_id: `image${Math.round(Math.random() * 1E9)}`,
-      folder: publicId,
-    });
-
-    return uploadResponse.secure_url;
-    
-  } catch (error) {
-    console.error(error);
-    throw new Error("Failed to upload image on cloudinary");    
+      return result;
+      
+      
+    } catch (error) {
+      console.error("Error uploading image to Cloudinary:", error);
+      return null;
+    }
   }
-};
-
-export default uploadImageToCloudinary2;

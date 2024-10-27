@@ -3,7 +3,7 @@ import { TRestaurant, TUpdateRestaurant } from "../schema/restaurant.schema.js"
 import { createRestaurant, uploadImages } from "../services/restaurant.services.js";
 import ErrorHandler from "../utils/errorClass.js";
 import RestaurantModel from "../models/restaurant.model.js";
-import uploadImageToCloudinary2 from "../utils/cloudinary/uploadImageToCloudinary2.js";
+import uploadImageToCloudinary from "../utils/cloudinary/uploadImageToCloudinary.js";
 import { OrderModel } from "../models/order.model.js";
 
 
@@ -24,7 +24,7 @@ export const createRestaurantHandler = async (req: Request<{}, {}, TRestaurant["
     // const imageUrl = await uploadImages(restaurantName)
 
     // upload images to cloudinary directly
-    const imageUrl = await uploadImageToCloudinary2(file, restaurantName, "restaurant")
+    const imageUrl = await uploadImageToCloudinary(file, restaurantName, "restaurant")
     console.log('imageUrl cloudinary', imageUrl);
     
     
@@ -81,7 +81,7 @@ export const updateRestaurantHandler = async (req: Request<{},{},TUpdateRestaura
     
     if (file) {
       if(!restaurantName) throw new ErrorHandler(400, "Restaurant name is required when uploading image ");
-      const imageUrl = await uploadImageToCloudinary2(file, restaurantName, "restaurant");
+      const imageUrl = await uploadImageToCloudinary(file, restaurantName, "restaurant");
       updateData.imageUrl = imageUrl;
     }
 
@@ -146,9 +146,6 @@ export const updateOrderStatusHandler = async (reg: Request, res: Response, next
   }
 }
 
-
-export const searchRestaurantHandler = async () => {}
-
 export const getSingleRestaurantHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const restaurantId = req.params.id;
@@ -169,3 +166,5 @@ export const getSingleRestaurantHandler = async (req: Request, res: Response, ne
     next(error)
   }
 }
+
+export const searchRestaurantHandler = async () => {}

@@ -32,7 +32,7 @@ function validateRequestData(schema: AnyZodObject) {
       next();
 
     } catch (error) {
-      console.log("validateRequestData error = ", error);
+      console.error("validateRequestData error = ", error);
       next(error);
       
     }
