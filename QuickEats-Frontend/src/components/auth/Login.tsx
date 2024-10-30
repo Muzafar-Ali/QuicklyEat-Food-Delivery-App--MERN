@@ -1,24 +1,20 @@
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
-import { LoginInputType, userLoginSchema } from '@/schema/UserSchema'
+import { TUserLogin, userLoginSchema } from '@/schema/userSchema'
 import { Separator } from '@radix-ui/react-separator'
 import { Loader2, LockKeyhole, Mail } from 'lucide-react'
 import { ChangeEvent, FormEvent, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { useUserStore } from '@/store/userStore'
 
 const Login = () => {
-  const [input, setInput] = useState<LoginInputType>({
+  const [input, setInput] = useState<TUserLogin>({
     email: "",
     password: "",
   });
-  const [errors, setErrors] = useState<Partial<LoginInputType>>({});
-  // const { loading, login } = useUserStore();
-  // to be removed later start
-  const loading = false;
-  const login = async (data: LoginInputType) => {
-    console.log(data);
-  };
-  // to be removed later end
+  const [errors, setErrors] = useState<Partial<TUserLogin>>({});
+  const { loading, login } = useUserStore();
+  
   const navigate = useNavigate();
 
   const changeEventHandler = (e: ChangeEvent<HTMLInputElement>) => {
@@ -31,12 +27,12 @@ const Login = () => {
     const result = userLoginSchema.safeParse(input);
     if (!result.success) {
       const fieldErrors = result.error.formErrors.fieldErrors;
-      setErrors(fieldErrors as Partial<LoginInputType>);
+      setErrors(fieldErrors as Partial<TUserLogin>);
       return;
     }
     try {
-      await login(input);
-      navigate("/");
+      const isLoginSuccesful =await login(input);
+      if(isLoginSuccesful) navigate("/");
     } catch (error) {console.log(error);
     }
   };

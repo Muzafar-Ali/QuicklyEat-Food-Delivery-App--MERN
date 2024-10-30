@@ -5,21 +5,14 @@ import MobileNavbar from "./MobileNavbar";
 import { Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarTrigger } from "../ui/menubar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
+import { useUserStore } from "@/store/userStore";
 
 const Navbar = () => {
-  // const { user, loading, logout } = useUserStore();
+  const { user, loading, logout } = useUserStore();
   // const { cart } = useCartStore();
   // const {setTheme} = useThemeStore();
 
   // to be removed later starts
-  const user = {
-    name: "John Doe",
-    email: "john@example.com",
-    admin: true,
-    profilePicture: "pic"
-  };
-  const loading = false;
-  const logout = () => {};
   const cart = [];
   const setTheme = (theme: string) => {};
   // to be removed later ends

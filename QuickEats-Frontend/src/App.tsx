@@ -11,12 +11,15 @@ import Profile from './components/Profile'
 import SearchPage from './components/SearchPage/SearchPage'
 import RestaurantDetails from './RestaurantDetails/RestaurantDetails'
 import Cart from './components/cart/Cart'
+import ProtectedRoutes from './components/protectedRoutes/ProtectedRoutes'
+import AuthenticatedUser from './components/protectedRoutes/AuthenticatedUser'
+import AdminRoute from './components/protectedRoutes/AdminRoute'
 
 
 const appRouter = createBrowserRouter([
   {
     path: '/',
-    element: <HomepageLayout/>,
+    element: <ProtectedRoutes><HomepageLayout/></ProtectedRoutes>,
     children: [
       {
         path: '/',
@@ -46,15 +49,15 @@ const appRouter = createBrowserRouter([
   },
   {
     path: '/login',
-    element: <Login/>
+    element: <AuthenticatedUser><Login/></AuthenticatedUser>
   },
   {
     path: '/signup',
-    element: <Signup/>
+    element: <AuthenticatedUser><Signup/></AuthenticatedUser>
   },
   {
     path: '/forgot-password',
-    element: <ForgotPassword/>
+    element: <AuthenticatedUser><ForgotPassword/></AuthenticatedUser>
   },
   {
     path: '/reset-password',
@@ -63,15 +66,26 @@ const appRouter = createBrowserRouter([
   {
     path: '/verify-email',
     element: <VerifyEmail/>
-  }
+  },
+   // admin routes
+  //  {
+  //   path: "/admin/restaurant",
+  //   element:<AdminRoute><Restaurant /></AdminRoute>,
+  // },
+  // {
+  //   path: "/admin/menu",
+  //   element:<AdminRoute><AddMenu /></AdminRoute>,
+  // },
+  // {
+  //   path: "/admin/orders",
+  //   element:<AdminRoute><Orders /></AdminRoute>,
+  // },
 
 ])
 function App() {
   return (
     <>
-      <RouterProvider router={appRouter}>
-
-      </RouterProvider>
+      <RouterProvider router={appRouter}></RouterProvider>
     </>
   )
 }

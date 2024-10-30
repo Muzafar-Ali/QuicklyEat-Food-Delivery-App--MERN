@@ -23,3 +23,22 @@ export type TOrder =  mongoose.Document & {
     totalAmount: number;
     status: "pending" | "confirmed" | "preparing" | "onTheWay" | "delivered"
 }
+
+
+export type TCheckoutSessionRequest = {
+    cartItems: {
+        menuId: string;
+        name: string;
+        image: string;
+        price: number;
+        quantity: number
+    }[],
+    deliveryDetails: {
+        name: string;
+        email: string;
+        address: string;
+        city: string
+    },
+    restaurantId: string
+  }
+  

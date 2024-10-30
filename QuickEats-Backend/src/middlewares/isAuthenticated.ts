@@ -20,7 +20,7 @@ export const isAuthenticated = async (req: Request, res: Response, next: NextFun
         message: "User not authenticated"
       });
 
-      return; // Return to exit the function
+      return; 
     }
 
     const decode = jwt.verify(token, config.jwtSecretKey!) as jwt.JwtPayload;
@@ -31,7 +31,7 @@ export const isAuthenticated = async (req: Request, res: Response, next: NextFun
         message: "Invalid token"
       })
 
-      return; // Return to exit the function
+      return; 
     }
 
     req.id = decode.userId;

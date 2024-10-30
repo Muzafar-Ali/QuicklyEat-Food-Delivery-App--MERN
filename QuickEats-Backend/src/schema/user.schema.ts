@@ -22,28 +22,28 @@ import { z } from "zod";
     .regex(/(?=.*[0-9])/, "Password must contain at least one digit")
     .regex(/(?=.*[!@#$%^&*])/, "Password must contain at least one special character"),
   
-    confirmPassword: z.string({
-      required_error: "Confirm password is required",
-    }).min(8, "Password must be at least 8 characters."),
+    // confirmPassword: z.string({
+    //   required_error: "Confirm password is required",
+    // }).min(8, "Password must be at least 8 characters."),
   
     contact: z.number({
       required_error: "Contact is required",
       invalid_type_error: "Contact must be a number",
     }).nonnegative("Contact must be a non-negative number"),
     
-    address: z.string({
-      required_error: "Address is required",
-    }).min(1, "Address is required"),
+    // address: z.string({
+    //   required_error: "Address is required",
+    // }).min(1, "Address is required"),
   
-    city: z.string({
-      required_error: "City is required",
-    }).min(1, "City is required"),
+    // city: z.string({
+    //   required_error: "City is required",
+    // }).min(1, "City is required"),
     
-    country: z.string().min(1, "Country is required"),
+    // country: z.string().min(1, "Country is required"),
     
-    profilePicture: z.string({
-      required_error: "Profile picture is required",
-    }).url(),
+    // profilePicture: z.string({
+    //   required_error: "Profile picture is required",
+    // }).url(),
     
     admin: z.boolean().default(false).optional(),
   })
@@ -63,19 +63,14 @@ export const loginSchema = z.object({
     
     password: z.string({
       required_error: "Password is required",
-    })
-    .min(8, "Password must be at least 8 characters")
-    .regex(/(?=.*[a-z])/, "Password must contain at least one lowercase letter")
-    .regex(/(?=.*[A-Z])/, "Password must contain at least one uppercase letter")
-    .regex(/(?=.*[0-9])/, "Password must contain at least one digit")
-    .regex(/(?=.*[!@#$%^&*])/, "Password must contain at least one special character"),
+    }),
   })
 })
 
 // verify email schema  
 export const verifyEmailSchema = z.object({
   body: z.object({
-    verificationToken: z.string({
+    verificationCode: z.string({
       required_error: "Verification token is required",
       invalid_type_error: "Verification token must be a string",
     }).min(1, "verfication token is missing"),
