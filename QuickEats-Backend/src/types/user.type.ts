@@ -17,8 +17,8 @@ export type TUser = {
   isVerified?: boolean;
   resetPasswordToken?: string,
   resetPasswordTokenExpiresAt?: Date;
-  verificationToken: string | null;
-  verificationTokenExpiresAt: Date | null,
+  verificationCode: string | null;
+  verificationCodeExpiresAt: Date | null,
 }
 
 export type TUserDocument = TUser & Document & {

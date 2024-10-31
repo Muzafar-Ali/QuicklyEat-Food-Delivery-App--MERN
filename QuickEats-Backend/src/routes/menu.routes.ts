@@ -10,7 +10,7 @@ const route = Router();
 
 route.post("/", [isAuthenticated, upload.single("file")] , createMenuHandler)
 route.get("/", isAuthenticated, getMenuHandler)
-route.put("/:id", [isAuthenticated, upload.single("file"), validateRequestData(idSchema)],  updateMenuHandler)
+route.put("/:id", [isAuthenticated, validateRequestData(idSchema), upload.single("file")],  updateMenuHandler)
 route.delete("/:id", [isAuthenticated, validateRequestData(idSchema)],  deleteMenuHandler)
 
 export default route;

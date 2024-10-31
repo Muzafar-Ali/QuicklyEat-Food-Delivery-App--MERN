@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-// import { useUserStore } from "@/store/useUserStore";
+import { useUserStore } from "@/store/userStore";
 import { Loader2 } from "lucide-react";
 import { FormEvent, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -8,15 +8,8 @@ import { useNavigate } from "react-router-dom";
 const VerifyEmail = () => {
   const [otp, setOtp] = useState<string[]>(["", "", "", "", "", ""]);
   const inputRef = useRef<any>([]);
-  // const { loading, verifyEmail } = useUserStore();
+  const { loading, verifyEmail } = useUserStore();
   
-  //to be removed later start
-  const loading = false;
-  const verifyEmail = async (code: string) => {
-    console.log(code);
-  };
-  //to be removed later end
-
   const navigate = useNavigate();
   const handleChange = (index: number, value: string) => {
     if (/^[a-zA-Z0-9]$/.test(value) || value === "") {
@@ -38,13 +31,16 @@ const VerifyEmail = () => {
       inputRef.current[index - 1].focus();
     }
   };
-  const submitHandler = async (e: FormEvent<HTMLFormElement>) => {
+  
+  const verifyEmailSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const verificationCode = otp.join("");
+    
     try {
-      await verifyEmail(verificationCode);
-      navigate("/");
-    } catch (error) {console.log(error);
+     const isVerifySuccessful =  await verifyEmail(verificationCode);
+     if(isVerifySuccessful) navigate("/");
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -57,7 +53,7 @@ const VerifyEmail = () => {
             Enter the 6 digit code sent to your email address
           </p>
         </div>
-        <form onSubmit={submitHandler}>
+        <form onSubmit={verifyEmailSubmit}>
           <div className="flex justify-between">
             {otp.map((letter: string, idx: number) => (
               <Input

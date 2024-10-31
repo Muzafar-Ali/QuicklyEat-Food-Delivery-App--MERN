@@ -1,56 +1,58 @@
-import { SignupInputType, userSignupSchema } from "@/schema/UserSchema";
+import { TUserSignup, userSignupSchema } from "@/schema/userSchema";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Input } from "../ui/input";
 import { Loader2, LockKeyhole, Mail, PhoneOutgoing, User } from "lucide-react";
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
+import { useUserStore } from "@/store/userStore";
 
 const Signup = () => {
-  const [input, setInput] = useState<SignupInputType>({
-      fullname:"",
-      email:"",
-      password:"", 
-      contact:"", 
+  const [userInput, setuserInput] = useState<TUserSignup>({
+    fullname:"",
+    email:"",
+    password:"", 
+    // confirmPassword:"", 
+    contact:0, 
   });
-  const [errors, setErrors] = useState<Partial<SignupInputType>>({});
-  // const {signup, loading} = useUserStore();
-  
-  // to be removed later start
-  const signup = async (data:SignupInputType) => {
-    console.log(data);
-  }
-  const loading = false
-  // to be removed later end
 
+  const [errors, setErrors] = useState<Partial<TUserSignup>>({});
+  const {signup, loading} = useUserStore();
+  
   const navigate = useNavigate();
+
   const changeEventHandler = (e:ChangeEvent<HTMLInputElement>) => {
-      const {name, value} = e.target;
-      setInput({...input, [name]:value});
+    const {name, value} = e.target;
+    setuserInput({...userInput, [name]:value});
   }
-  const loginSubmitHandler = async (e:FormEvent) => {
-      e.preventDefault();
-      // form validation check start
-      const result = userSignupSchema.safeParse(input);
-      if(!result.success){
-          const fieldErrors = result.error.formErrors.fieldErrors;
-          setErrors(fieldErrors as Partial<SignupInputType>);
-          return;
-      }
-      // login api implementation start here
-      try {
-        await signup(input);
-        navigate("/verify-email");
-      } catch (error) {
-        console.log(error);
-      }
+  
+  const signupSubmit = async (e:FormEvent) => {
+    e.preventDefault();
+    // form validation check start
+    const result = userSignupSchema.safeParse({...userInput, contact: Number(userInput.contact)});
+    
+    if(!result.success){
+      const fieldErrors = result.error.formErrors.fieldErrors;
+      setErrors(fieldErrors as Partial<TUserSignup>);
+ 
+      return;
+    }
+      
+    // signup api implementation start here
+    try {
+      const isSignupSuccesful = await signup({...userInput, contact: Number(userInput.contact)});
+      if(isSignupSuccesful) navigate("/verify-email");
+
+    } catch (error) {
+      console.error('signupSubmit error:', error);
+    }
   }
 
 return (
   <div className="flex items-center justify-center min-h-screen">
-    <form onSubmit={loginSubmitHandler} className="md:p-8 w-full max-w-md rounded-lg md:border border-gray-200 mx-4">
+    <form onSubmit={signupSubmit} className="md:p-8 w-full max-w-md rounded-lg md:border border-gray-200 mx-4">
       <div className="mb-4">
-        <h1 className="font-bold text-2xl">PatelEats</h1>
+        <h1 className="font-bold text-2xl">QuickEats</h1>
       </div>
       <div className="mb-4">
         <div className="relative">
@@ -58,7 +60,7 @@ return (
             type="text"
             placeholder="Full Name"
             name="fullname"
-            value={input.fullname}
+            value={userInput.fullname}
             onChange={changeEventHandler}
             className="pl-10 focus-visible:ring-1"
           />
@@ -72,7 +74,7 @@ return (
             type="email"
             placeholder="Email"
             name="email"
-            value={input.email}
+            value={userInput.email}
             onChange={changeEventHandler}
             className="pl-10 focus-visible:ring-1"
           />
@@ -86,7 +88,7 @@ return (
             type="password"
             placeholder="Password"
             name="password"
-            value={input.password}
+            value={userInput.password}
             onChange={changeEventHandler}
             className="pl-10 focus-visible:ring-1"
           />
@@ -94,13 +96,27 @@ return (
           { errors && <span className="text-xs text-red-500">{errors.password}</span>}
         </div>
       </div>
+      {/* <div className="mb-4">
+        <div className="relative">
+          <Input
+            type="password"
+            placeholder="confirm password"
+            name="confirmPassword"
+            value={userInput.confirmPassword}
+            onChange={changeEventHandler}
+            className="pl-10 focus-visible:ring-1"
+          />
+          <LockKeyhole className="absolute inset-y-2 left-2 text-gray-500 pointer-events-none" />
+          { errors && <span className="text-xs text-red-500">{errors.confirmPassword}</span>}
+        </div>
+      </div> */}
       <div className="mb-4">
         <div className="relative">
           <Input
             type="text"
             placeholder="Contact"
             name="contact"
-            value={input.contact}
+            value={userInput.contact}
             onChange={changeEventHandler}
             className="pl-10 focus-visible:ring-1"
           />

@@ -6,7 +6,7 @@ import { NextFunction, Request, Response } from "express";
 import { TUser, TUserLogin, TVerifyEmail, verifyEmailSchema } from "../schema/user.schema.js";
 import { createUser } from "../services/user.service.js";
 import { generateAndSetJwtToken } from "../utils/generateJwtToken.js";
-import { generateVerificationToken } from "../utils/generateVerificationToken.js";
+import { generateVerificationCode } from "../utils/generateVerificationToken.js";
 import config from "../config/config.js";
 import { sendVerificationEmail, sendWelcomeEmail } from "../mailtrap/emails.js";
 
@@ -14,9 +14,9 @@ export const signupHandler = async (req: Request<{}, {}, TUser["body"]>, res: Re
   try {
     const userData = req.body;
 
-    const verificationToken = generateVerificationToken()
+    const verificationCode = generateVerificationCode()
 
-    const user = await createUser(userData, verificationToken);
+    const user = await createUser(userData, verificationCode);
     if(!user) throw new ErrorHandler(404, "Failed to create user");
 
     const userId = user._id as mongoose.Types.ObjectId;
@@ -69,20 +69,22 @@ export const loginHanlder = async (req: Request<{}, {}, TUserLogin["body"]>, res
 }
 
 export const verifyEmailHandler = async (req: Request<{}, {}, TVerifyEmail["body"]>, res: Response, next: NextFunction) => {
-  try {
-    const { verificationToken } = req.body;
-    if(!verificationToken) throw new ErrorHandler(400, "Verification token is required");
+  try {    
+    const { verificationCode } = req.body;
+    console.log('verificationCode', verificationCode);
+    
+    if(!verificationCode) throw new ErrorHandler(400, "Verification token is required");
     
     const user = await UserModel.findOne({
-      verificationToken: verificationToken, 
-      verificationTokenExpiresAt: {$gt: new Date()}
+      verificationCode: verificationCode, 
+      verificationCodeExpiresAt: {$gt: new Date()}
     }).select("-password");
 
     if(!user) throw new ErrorHandler(404, "Invalid or expired verification token");
     
     user.isVerified = true;
-    user.verificationToken = null;
-    user.verificationTokenExpiresAt = null;
+    user.verificationCode = null;
+    user.verificationCodeExpiresAt = null;
     await user.save();
     
     // send verification email

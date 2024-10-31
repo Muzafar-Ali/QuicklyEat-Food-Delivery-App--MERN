@@ -1,7 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 import { MenuModel } from "../models/menu.model.js";
 import { TId, TMenu } from "../schema/menu.schema.js";
-import { deleteMenuImage, updateMenuImage, updateRestaurantMenus } from "../services/menu.services.js";
+import { updateRestaurantMenus } from "../services/menu.services.js";
+import { replaceImageOnCloudinary } from "../utils/cloudinary/replaceImageOnCloudinary.js";
+import { deleteImageFromCloudinary } from "../utils/cloudinary/deleteImageFromCloudinary.js";
 import RestaurantModel from "../models/restaurant.model.js";
 import ErrorHandler from "../utils/errorClass.js";
 import uploadImageToCloudinary from "../utils/cloudinary/uploadImageToCloudinary.js";
@@ -76,7 +78,10 @@ export const updateMenuHandler = async (req: Request<TId["params"]>, res: Respon
     // update menu image
     if(file) {
       if(!name) throw new ErrorHandler(400, "Menu Title name is required when uploading image ");
-      const imageUrl = await updateMenuImage(menuId, name, file)
+      const extractedPublicId = await MenuModel.findOne({_id: menuId}).select("image")
+      const subFolder = "menu"
+      
+      const imageUrl = await replaceImageOnCloudinary(extractedPublicId!, name, file, subFolder)
       updateData.image = imageUrl;
     }
     
@@ -104,7 +109,8 @@ export const deleteMenuHandler = async (req: Request<TId["params"]>, res: Respon
     if(!menu) throw new ErrorHandler(404, "Menu not found");
 
     // delete image from cloudinary
-    await deleteMenuImage(menuId);
+    const extractedPublicId = await MenuModel.findOne({_id: menuId}).select("image")
+    await deleteImageFromCloudinary(extractedPublicId);
 
     // delete menu from database
     const deleteResult = await menu.deleteOne();

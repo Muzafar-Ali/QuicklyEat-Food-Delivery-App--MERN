@@ -45,8 +45,7 @@ type TRestaurantData = {
   country: string, 
   cuisines: string[], 
   deliveryTime: number, 
-  imageUrl: string, 
-  menus: string[], 
+  menus?: string[], 
   restaurantName: string
 }
 
@@ -70,7 +69,6 @@ export const createRestaurant = async ( restaurantData: TRestaurantData, userId:
     
   } catch (error) {
     console.error("createRestaurant error = ", error);
-    if(error instanceof ErrorHandler) throw error;
-    throw new ErrorHandler(500, "Internal server error");
+    throw error;
   }
 }

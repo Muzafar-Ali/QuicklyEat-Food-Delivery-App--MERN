@@ -32,6 +32,7 @@ const userSchema = new mongoose.Schema<TUserDocument>({
   country:{
     type:String,
     default:"Update your country"
+    
   },
   profilePicture:{
     type:String,
@@ -49,8 +50,8 @@ const userSchema = new mongoose.Schema<TUserDocument>({
   },    
   resetPasswordToken:String,
   resetPasswordTokenExpiresAt:Date,
-  verificationToken:String,
-  verificationTokenExpiresAt:Date,
+  verificationCode:String,
+  verificationCodeExpiresAt:Date,
 },{timestamps:true});
 
 
