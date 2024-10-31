@@ -23,7 +23,13 @@
 
 // export default getFolderPathFromUrl;
 
-const getPathAndFileFromUrl = (url: string | undefined) => {
+const getPathAndFileFromUrl = (url: string | undefined | null) => {
+  
+  if (!url) {
+    console.error("URL is undefined or null.");
+    return null;
+  }
+
   const regex = /\/upload\/[^\/]+\/(.+\/)([^\/]+)\.[^\/]+$/; // Capture folder and filename
   const match = url?.match(regex);
   
@@ -35,7 +41,10 @@ const getPathAndFileFromUrl = (url: string | undefined) => {
       folderPath: folderPath.slice(0, -1), // Remove the trailing slash
       publicId: publicId, // The public ID
     };
+  } else {
+    console.error("URL does not match the expected pattern.");
   }
+
   return null;
 };
 

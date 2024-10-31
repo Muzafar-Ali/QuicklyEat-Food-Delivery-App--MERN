@@ -2,7 +2,7 @@ import { AnyZodObject } from 'zod';
 import { Request, Response, NextFunction } from 'express';
 import ErrorHandler from '../utils/errorClass.js';
 
-function validateRequestData(schema: AnyZodObject) {
+function validateRequestData2(schema: AnyZodObject) {
   return function (req: Request, res: Response, next: NextFunction) {
     const result = schema.safeParse({
       body: req.body,
@@ -28,4 +28,4 @@ function validateRequestData(schema: AnyZodObject) {
   };
 }
 
-export default validateRequestData;
+export default validateRequestData2;

@@ -14,6 +14,7 @@ import Cart from './components/cart/Cart'
 import ProtectedRoutes from './components/protectedRoutes/ProtectedRoutes'
 import AuthenticatedUser from './components/protectedRoutes/AuthenticatedUser'
 import AdminRoute from './components/protectedRoutes/AdminRoute'
+import Restaurant from './components/admin/Restaurant'
 
 
 const appRouter = createBrowserRouter([
@@ -68,10 +69,10 @@ const appRouter = createBrowserRouter([
     element: <VerifyEmail/>
   },
    // admin routes
-  //  {
-  //   path: "/admin/restaurant",
-  //   element:<AdminRoute><Restaurant /></AdminRoute>,
-  // },
+   {
+    path: "/admin/restaurant",
+    element:<AdminRoute><Restaurant/></AdminRoute>,
+  },
   // {
   //   path: "/admin/menu",
   //   element:<AdminRoute><AddMenu /></AdminRoute>,

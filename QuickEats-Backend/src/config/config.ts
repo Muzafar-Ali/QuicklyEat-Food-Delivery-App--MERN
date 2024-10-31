@@ -10,6 +10,7 @@ const config = {
   jwtTokenAge: 24*60*60*1000,
   verificationTokenExpiry: 24 * 60 * 60 * 1000, // 24 hours
   passwordResetTokenTokenExpiry: 1 * 60 * 60 * 1000, // 1 hour
+  corsOrigin: process.env.CLIENT_URL,
   mailtrapApiToken: process.env.MAILTRAP_API_TOKEN,
   // cloudinary
   clientUrl: process.env.CLIENT_URL,

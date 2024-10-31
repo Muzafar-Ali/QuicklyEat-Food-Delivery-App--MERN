@@ -9,7 +9,7 @@ import config from "../../config/config.js";
   });
   
   const uploadImageToCloudinary = async (
-    file:Express.Multer.File, 
+    image:Express.Multer.File, 
     title: string, 
     subfolderName: string, 
     existingFolderPath?: string,
@@ -33,8 +33,8 @@ import config from "../../config/config.js";
         if(destroyResponse.result === 'not found') throw new Error('Failed to destroy old image');
       }
   
-      const base64Image = Buffer.from(file.buffer).toString("base64");
-      const dataURI = `data:${file.mimetype};base64,${base64Image}`;
+      const base64Image = Buffer.from(image.buffer).toString("base64");
+      const dataURI = `data:${image.mimetype};base64,${base64Image}`;
           
       // upload the image
       const uploadResponse = await cloudinary.uploader.upload(dataURI, {

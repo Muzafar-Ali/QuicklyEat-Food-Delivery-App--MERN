@@ -1,30 +1,29 @@
 import { NextFunction, Request, Response } from "express"
 import { TRestaurant, TUpdateRestaurant } from "../schema/restaurant.schema.js"
 import { createRestaurant, uploadImages } from "../services/restaurant.services.js";
+import { OrderModel } from "../models/order.model.js";
+import { replaceImageOnCloudinary } from "../utils/cloudinary/replaceImageOnCloudinary.js";
 import ErrorHandler from "../utils/errorClass.js";
 import RestaurantModel from "../models/restaurant.model.js";
 import uploadImageToCloudinary from "../utils/cloudinary/uploadImageToCloudinary.js";
-import { OrderModel } from "../models/order.model.js";
-
-
 
 export const createRestaurantHandler = async (req: Request<{}, {}, TRestaurant["body"]>, res: Response, next: NextFunction) => {
   try {
     const { restaurantName } = req.body  
-    const file = req.file;
+    const image = req.file;
     const id = req.id;
-  
+    
     const restaurantExist = await RestaurantModel.findOne({user: req.id})
     
     if (restaurantExist) throw new ErrorHandler(409, "Restaurant already exist for this user"); // each user is allowed to create only one restaurant
  
-    if(!file) throw new ErrorHandler(400, "Please upload a restaurant image");
+    if(!image) throw new ErrorHandler(400, "Please upload a restaurant image");
 
     // upload images to cloudinary from local folder
     // const imageUrl = await uploadImages(restaurantName)
 
     // upload images to cloudinary directly
-    const imageUrl = await uploadImageToCloudinary(file, restaurantName, "restaurant")
+    const imageUrl = await uploadImageToCloudinary(image, restaurantName, "restaurant")
     console.log('imageUrl cloudinary', imageUrl);
     
     
@@ -66,9 +65,9 @@ export const getRestaurantHandler = async (req: Request, res: Response, next: Ne
 
 export const updateRestaurantHandler = async (req: Request<{},{},TUpdateRestaurant["body"]>, res: Response, next: NextFunction) => {
   try {
-    const id = req.id;
-    const file = req.file;
-    const {city, country, cuisines, deliveryTime, menus, restaurantName} = req.body;
+    const userId = req.id;
+    const image = req.file;
+    const {city, country, cuisines, deliveryTime, menus, restaurantName} = req.body;   
 
     // Create an update object only with fields that are provided
     const updateData: any = {};
@@ -78,15 +77,19 @@ export const updateRestaurantHandler = async (req: Request<{},{},TUpdateRestaura
     if (deliveryTime) updateData.deliveryTime = deliveryTime;
     if (menus) updateData.menus = menus;
     if (restaurantName) updateData.restaurantName = restaurantName;
-    
-    if (file) {
+
+    // update restaurant image    
+    if (image) {
       if(!restaurantName) throw new ErrorHandler(400, "Restaurant name is required when uploading image ");
-      const imageUrl = await uploadImageToCloudinary(file, restaurantName, "restaurant");
+      const extractedPublicId = await RestaurantModel.findOne({user: userId}).select("imageUrl")
+      const subFolder = "restaurant"
+      
+      const imageUrl = await replaceImageOnCloudinary(extractedPublicId, restaurantName, image, subFolder)
       updateData.imageUrl = imageUrl;
     }
 
     const restaurant = await RestaurantModel.findOneAndUpdate(
-      {user: id}, 
+      {user: userId}, 
       updateData, 
       {new: true}
     )

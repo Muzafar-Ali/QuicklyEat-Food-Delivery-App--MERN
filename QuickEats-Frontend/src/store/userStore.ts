@@ -20,6 +20,7 @@ export const useUserStore = create<TUserState>()(persist((set) => ({
         headers: {
           'Content-Type': 'application/json'
         },
+        withCredentials: true,
       })
 
       if(response.data.success) {       
@@ -44,6 +45,7 @@ export const useUserStore = create<TUserState>()(persist((set) => ({
         headers: {
           'Content-Type': 'application/json'
         },
+        withCredentials: true,
       })
 
       if(response.data.success) {

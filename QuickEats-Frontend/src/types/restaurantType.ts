@@ -1,6 +1,6 @@
 import { Orders } from "./orderType";
 
-export type MenuItem = {
+export type TMenuItem = {
     _id: string;
     name: string;
     description: string;
@@ -15,18 +15,18 @@ export type Restaurant = {
     country: string;
     deliveryTime: number;
     cuisines: string[];
-    menus: MenuItem[];
+    menus: TMenuItem[];
     imageUrl: string;
 }
 
-export type SearchedRestaurant = {
+export type TSearchedRestaurant = {
     data:Restaurant[]
 }
 
-export type RestaurantState = {
+export type TRestaurantState = {
     loading: boolean;
     restaurant: Restaurant | null;
-    searchedRestaurant: SearchedRestaurant | null;
+    searchedRestaurant: TSearchedRestaurant | null;
     appliedFilter:string[];
     singleRestaurant: Restaurant | null,
     restaurantOrder:Orders[],
@@ -34,8 +34,8 @@ export type RestaurantState = {
     getRestaurant: () => Promise<void>;
     updateRestaurant: (formData: FormData) => Promise<void>;
     searchRestaurant: (searchText: string, searchQuery: string, selectedCuisines: any) => Promise<void>;
-    addMenuToRestaurant: (menu: MenuItem) => void;
-    updateMenuToRestaurant: (menu: MenuItem) => void;
+    addMenuToRestaurant: (menu: TMenuItem) => void;
+    updateMenuToRestaurant: (menu: TMenuItem) => void;
     setAppliedFilter: (value:string) => void;
     resetAppliedFilter: () => void;
     getSingleRestaurant: (restaurantId:string) => Promise<void>;
