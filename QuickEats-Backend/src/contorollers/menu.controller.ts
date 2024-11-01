@@ -32,7 +32,7 @@ export const createMenuHandler = async (req: Request<{}, {}, TMenu["body"]>, res
     await updateRestaurantMenus( userId, menu._id)
    
     res.status(201).json({
-      status: true,
+      success: true,
       message: "Menu created successfully",
       menu
     })
@@ -52,7 +52,7 @@ export const getMenuHandler = async (req: Request, res: Response, next: NextFunc
   if(!restaurant.menus) throw new ErrorHandler(404, "Menu not found");
   
   res.status(200).json({
-    status: true,
+    success: true,
     message: "Menu fetched successfully",
     menu: restaurant.menus,
   })
@@ -71,7 +71,7 @@ export const updateMenuHandler = async (req: Request<TId["params"]>, res: Respon
 
     // Create an update object only with provided fields
     const updateData: any = {};
-    if (name) updateData.price = price;
+    if (name) updateData.name = name;
     if (price) updateData.price = price;
     if (description) updateData.description = description;
 
@@ -90,7 +90,7 @@ export const updateMenuHandler = async (req: Request<TId["params"]>, res: Respon
     if(!menu) throw new ErrorHandler(404, "Menu not found");
     
     res.status(200).json({
-      status: true,
+      success: true,
       message: "Menu updated successfully",
       menu
     })
@@ -126,7 +126,7 @@ export const deleteMenuHandler = async (req: Request<TId["params"]>, res: Respon
     if(!updateRestaurantMenus) throw new ErrorHandler(404, "Restaurant menu not found");
     
     res.status(200).json({
-      status: true,
+      success: true,
       message: "Menu deleted successfully",
     })
     

@@ -12,14 +12,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Loader2, Plus } from "lucide-react";
 import React, { FormEvent, useState } from "react";
-import EditMenu from "./EditMenu";
-import { MenuFormSchema, menuSchema } from "@/schema/menuSchema";
-import { useMenuStore } from "@/store/useMenuStore";
-import { useRestaurantStore } from "@/store/useRestaurantStore";
- 
+import UpdateMenu from "./updateMenu";
+import { menuSchema, TMenuSchema } from "@/schema/menuSchema"; 
+import { useMenuStore } from "@/store/menuStore";
+import { useRestaurantStore } from "@/store/restaurantStore";
 
 const AddMenu = () => {
-  const [input, setInput] = useState<MenuFormSchema>({
+  const [input, setInput] = useState<TMenuSchema>({
     name: "",
     description: "",
     price: 0,
@@ -28,8 +27,8 @@ const AddMenu = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [editOpen, setEditOpen] = useState<boolean>(false);
   const [selectedMenu, setSelectedMenu] = useState<any>();
-  const [error, setError] = useState<Partial<MenuFormSchema>>({});
-  const { loading, createMenu } = useMenuStore();
+  const [error, setError] = useState<Partial<TMenuSchema>>({});
+  const { loading, createMenu, del } = useMenuStore();
   const {restaurant} = useRestaurantStore();
 
   const changeEventHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,10 +41,10 @@ const AddMenu = () => {
     const result = menuSchema.safeParse(input);
     if (!result.success) {
       const fieldErrors = result.error.formErrors.fieldErrors;
-      setError(fieldErrors as Partial<MenuFormSchema>);
+      setError(fieldErrors as Partial<TMenuSchema>);
       return;
     }
-    // api ka kaam start from here
+    // api calling
     try {
       const formData = new FormData();
       formData.append("name", input.name);
@@ -60,6 +59,7 @@ const AddMenu = () => {
     }
    
   };
+  
   return (
     <div className="max-w-6xl mx-auto my-10">
       <div className="flex justify-between">
@@ -187,10 +187,20 @@ const AddMenu = () => {
             >
               Edit
             </Button>
+            <Button
+              onClick={() => {
+                setSelectedMenu(menu);
+                setEditOpen(true);
+              }}
+              size={"sm"}
+              className="bg-red-600 hover:bg-red-700 mt-2"
+            >
+              Delete
+            </Button>
           </div>
         </div>
       ))}
-      <EditMenu
+      <UpdateMenu
         selectedMenu={selectedMenu}
         editOpen={editOpen}
         setEditOpen={setEditOpen}

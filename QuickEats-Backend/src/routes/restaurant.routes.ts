@@ -14,7 +14,7 @@ import restaurantSchema, { updateRestaurantSchema } from "../schema/restaurant.s
 
 const route = Router();
 
-route.post("/", [isAuthenticated, upload.single("image")], validateRequestData(restaurantSchema),  createRestaurantHandler);
+route.post("/", [isAuthenticated, upload.single("image"), validateRequestData(restaurantSchema)],  createRestaurantHandler);
 route.get("/", isAuthenticated, getRestaurantHandler);
 route.put("/", [isAuthenticated, upload.single("image"), validateRequestData(updateRestaurantSchema)], updateRestaurantHandler);
 route.get("/order", isAuthenticated, getRestaurantOrderHandler);

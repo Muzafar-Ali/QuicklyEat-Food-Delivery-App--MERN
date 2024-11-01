@@ -1,4 +1,5 @@
 import config from "@/config/config";
+import { TMenuItem } from "@/types/restaurantType";
 import axios from "axios";
 import { toast } from "sonner";
 import { create } from "zustand";
@@ -64,6 +65,28 @@ updateRestaurant: async (formData: FormData) => {
     set({ loading: false });
   }
 },
+addMenuToRestaurant: (menu: TMenuItem) => {
+  set((state: any) => ({
+    restaurant: state.restaurant ? { ...state.restaurant, menus: [...state.restaurant.menus, menu] } : null,
+  }))
+},
+updateMenuToRestaurant: (updatedMenu: TMenuItem) => {
+  set((state: any) => {
+      
+    if (state.restaurant) {
+      const updatedMenuList = state.restaurant.menus.map((menu: any) => menu._id === updatedMenu._id ? updatedMenu : menu);
+      return {
+        restaurant: {
+          ...state.restaurant,
+          menus: updatedMenuList
+        }
+      }
+    }
+    // if state.restaruant is undefined then return state
+    return state;
+  })
+},
+
 }), {
   name: 'restaurant-name',
   storage: createJSONStorage(() => localStorage)
