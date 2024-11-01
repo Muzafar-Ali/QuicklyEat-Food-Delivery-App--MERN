@@ -8,9 +8,9 @@ import validateRequestData from "../middlewares/validateRequestData.js";
 
 const route = Router();
 
-route.post("/", [isAuthenticated, upload.single("file")] , createMenuHandler)
+route.post("/", [isAuthenticated, upload.single("image")] , createMenuHandler)
 route.get("/", isAuthenticated, getMenuHandler)
-route.put("/:id", [isAuthenticated, validateRequestData(idSchema), upload.single("file")],  updateMenuHandler)
+route.put("/:id", [isAuthenticated, validateRequestData(idSchema), upload.single("image")],  updateMenuHandler)
 route.delete("/:id", [isAuthenticated, validateRequestData(idSchema)],  deleteMenuHandler)
 
 export default route;
