@@ -1,13 +1,14 @@
-import { MenuItem } from "./restaurantType";
+import { TMenuItem } from "./restaurantType";
 
-export interface CartItem extends MenuItem { 
+export type CartItem = TMenuItem & { 
     quantity:number;
 }
+
 export type CartState = {
-    cart:CartItem[];
-    addToCart:(item:MenuItem) => void;
+    cart: CartItem[];
+    addToCart:(item: TMenuItem) => void;
     clearCart: () => void;
-    removeFromTheCart: (id:string) => void;
-    incrementQuantity: (id:string) => void;
-    decrementQuantity: (id:string) => void;
+    removeFromTheCart: (id: string) => void;
+    increaseQuantity: (id: string) => void;
+    decreasetQuantity: (id: string) => void;
 }
