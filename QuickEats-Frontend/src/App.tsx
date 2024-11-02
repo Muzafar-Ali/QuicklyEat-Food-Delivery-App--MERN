@@ -15,6 +15,7 @@ import ProtectedRoutes from './components/protectedRoutes/ProtectedRoutes'
 import AuthenticatedUser from './components/protectedRoutes/AuthenticatedUser'
 import AdminRoute from './components/protectedRoutes/AdminRoute'
 import Restaurant from './components/admin/Restaurant'
+import AddMenu from './components/admin/AddMenu'
 
 
 const appRouter = createBrowserRouter([
@@ -73,10 +74,10 @@ const appRouter = createBrowserRouter([
     path: "/admin/restaurant",
     element:<AdminRoute><Restaurant/></AdminRoute>,
   },
-  // {
-  //   path: "/admin/menu",
-  //   element:<AdminRoute><AddMenu /></AdminRoute>,
-  // },
+  {
+    path: "/admin/menu",
+    element:<AdminRoute><AddMenu /></AdminRoute>,
+  },
   // {
   //   path: "/admin/orders",
   //   element:<AdminRoute><Orders /></AdminRoute>,

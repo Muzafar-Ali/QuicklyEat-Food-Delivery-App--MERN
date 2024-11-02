@@ -9,9 +9,10 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { MenuFormSchema, menuSchema } from "@/schema/menuSchema";
-import { useMenuStore } from "@/store/useMenuStore";
-import { MenuItem } from "@/types/restaurantType";
+import { menuSchema, TMenuSchema } from "@/schema/menuSchema";
+import { useMenuStore } from "@/store/menuStore";
+import { TMenuItem } from "@/types/restaurantType";
+
 import { Loader2 } from "lucide-react";
 import {
   Dispatch,
@@ -21,23 +22,19 @@ import {
   useState,
 } from "react";
 
-const EditMenu = ({
-  selectedMenu,
-  editOpen,
-  setEditOpen,
-}: {
-  selectedMenu: MenuItem;
+const UpdateMenu = ({ selectedMenu, editOpen, setEditOpen }: {
+  selectedMenu: TMenuItem;
   editOpen: boolean;
   setEditOpen: Dispatch<SetStateAction<boolean>>;
 }) => {
-  const [input, setInput] = useState<MenuFormSchema>({
+  const [input, setInput] = useState<TMenuSchema>({
     name: "",
     description: "",
     price: 0,
     image: undefined,
   });
-  const [error, setError] = useState<Partial<MenuFormSchema>>({});
-  const {loading, editMenu} = useMenuStore();
+  const [error, setError] = useState<Partial<TMenuSchema>>({});
+  const {loading, updateMenu} = useMenuStore();
 
   const changeEventHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type } = e.target;
@@ -49,7 +46,7 @@ const EditMenu = ({
     const result = menuSchema.safeParse(input);
     if (!result.success) {
       const fieldErrors = result.error.formErrors.fieldErrors;
-      setError(fieldErrors as Partial<MenuFormSchema>);
+      setError(fieldErrors as Partial<TMenuSchema>);
       return;
     }
      
@@ -62,7 +59,7 @@ const EditMenu = ({
       if(input.image){
         formData.append("image", input.image);
       }
-      await editMenu(selectedMenu._id, formData);
+      await updateMenu(selectedMenu._id, formData);
     } catch (error) {
       console.log(error);
     }
@@ -76,6 +73,7 @@ const EditMenu = ({
       image: undefined,
     });
   }, [selectedMenu]);
+  
   return (
     <Dialog open={editOpen} onOpenChange={setEditOpen}>
       <DialogContent>
@@ -146,4 +144,4 @@ const EditMenu = ({
   );
 };
 
-export default EditMenu;
+export default UpdateMenu;

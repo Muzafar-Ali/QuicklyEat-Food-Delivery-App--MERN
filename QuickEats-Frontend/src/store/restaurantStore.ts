@@ -1,12 +1,16 @@
 import config from "@/config/config";
+import { TMenuItem } from "@/types/restaurantType";
 import axios from "axios";
 import { toast } from "sonner";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
-export const useRestaurantStore = create<any>()(persist((set) => ({
+export const useRestaurantStore = create<any>()(persist((set, get) => ({
   loading: false,
   restaurant: null,
+  appliedFilter: [],
+  searchedRestaurant: null,
+  singleRestaurant: null,
   createRestaurant: async(FormData: FormData) => {
     try {
       set({ loading: true })
@@ -30,7 +34,7 @@ export const useRestaurantStore = create<any>()(persist((set) => ({
       set({ loading: false });
     }
   },
-  getRestaurant: async () => {
+  getRestaurantbyUserId: async () => {
     try {
       set({ loading: true });
       const response = await axios.get(`${config.baseUri}/api/v1/restaurant`, {
@@ -45,6 +49,14 @@ export const useRestaurantStore = create<any>()(persist((set) => ({
       }
       set({ loading: false });
     }
+},
+getSingleRestaurant: async (restaurantId: string) => {
+  try {
+      const response = await axios.get(`${config.baseUri}/api/v1/restaurant/${restaurantId}`);
+      if (response.data.success) {
+          set({ singleRestaurant: response.data.restaurant })
+      }
+  } catch (error) { }
 },
 updateRestaurant: async (formData: FormData) => {
   try {
@@ -64,6 +76,68 @@ updateRestaurant: async (formData: FormData) => {
     set({ loading: false });
   }
 },
+addMenuToRestaurant: (menu: TMenuItem) => {
+  set((state: any) => ({
+    restaurant: state.restaurant ? { ...state.restaurant, menus: [...state.restaurant.menus, menu] } : null,
+  }))
+},
+updateMenuToRestaurant: (updatedMenu: TMenuItem) => {
+  set((state: any) => {
+      
+    if (state.restaurant) {
+      const updatedMenuList = state.restaurant.menus.map((menu: any) => menu._id === updatedMenu._id ? updatedMenu : menu);
+      return {
+        restaurant: {
+          ...state.restaurant,
+          menus: updatedMenuList
+        }
+      }
+    }
+    // if state.restaruant is undefined then return state
+    return state;
+  })
+},
+manageAppliedFilter: (selectedValue: string) => {
+  set((state: any) => {
+    // Check if the selectedValue is already in the appliedFilter array 
+    const isFilterApplied = state.appliedFilter.includes(selectedValue);
+        
+    // Update the filter based on whether selectedValue is already applied
+    // If it's already applied, remove it from the filter
+    // If it's not applied, add it to the filter
+    const updatedFilter = isFilterApplied ? state.appliedFilter.filter((item: string) => item !== selectedValue) : [...state.appliedFilter, selectedValue]; 
+    
+    // Return the updated state with the new appliedFilter
+    return { appliedFilter: updatedFilter }
+  })
+},
+removeAppliedFilter: () => {
+  set({ appliedFilter: [] })
+},
+searchRestaurant: async (searchText: string, searchQuery: string, selectedCuisines: any) => {
+  try {
+    console.log("working 1");
+    
+    set({ loading: true });
+
+    const params = new URLSearchParams();
+    params.set("searchQuery", searchQuery);
+    params.set("selectedCuisines", selectedCuisines.join(","));
+
+    // await new Promise((resolve) => setTimeout(resolve, 2000));
+    const response = await axios.get(`${config.baseUri}/api/v1/restaurant/search/${searchText}?${params.toString()}`);
+    console.log('response =', response);
+    
+
+    if (response.data.success) {
+        set({ loading: false, searchedRestaurant: response.data });
+    }
+    
+  } catch (error) {
+    set({ loading: false });
+  }
+},
+
 }), {
   name: 'restaurant-name',
   storage: createJSONStorage(() => localStorage)

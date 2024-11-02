@@ -1,8 +1,7 @@
-// import { useRestaurantStore } from "@/store/useRestaurantStore";
-import { useState } from "react";
 import { Button } from "./ui/button";
 import { Checkbox } from "./ui/checkbox";
 import { Label } from "./ui/label";
+import { useRestaurantStore } from "@/store/restaurantStore";
 
 export type FilterOptionsState = {
   id: string;
@@ -17,30 +16,23 @@ const filterOptions: FilterOptionsState[] = [
 ];
 
 const FilterPage = () => {
-  // const { setAppliedFilter, appliedFilter, resetAppliedFilter } = useRestaurantStore();
-
-  // to be removed later starts
-    const [appliedFilter, setAppliedFilter] = useState<string[]>([]);
-    const resetAppliedFilter = () => {
-      setAppliedFilter([]);
-    };
-  // to be removed later ends
-
-  const appliedFilterHandler = (value: string[]) => {
-    setAppliedFilter(value);
+  const { manageAppliedFilter, appliedFilter, removeAppliedFilter } = useRestaurantStore();
+  
+  const appliedFilterHandler = (value: string) => {
+    manageAppliedFilter(value);
   };
   return (
     <div className="md:w-72">
       <div className="flex items-center justify-between">
         <h1 className="font-medium text-lg">Filter by cuisines</h1>
-        <Button variant={"link"} onClick={resetAppliedFilter}>Reset</Button>
+        <Button variant={"link"} onClick={removeAppliedFilter}>Clear Filters</Button>
       </div>
       {filterOptions.map((option) => (
         <div key={option.id} className="flex items-center space-x-2 my-5">
           <Checkbox
             id={option.id}
             checked={appliedFilter.includes(option.label)}
-            onClick={() => appliedFilterHandler([option.label])}
+            onClick={() => appliedFilterHandler(option.label)}
           />
           <Label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
             {option.label}

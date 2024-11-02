@@ -21,6 +21,7 @@ const HeroSection = () => {
             you.
           </p>
         </div>
+        {/* search input and button */}
         <div className="relative flex items-center gap-2">
           <Input
             type="text"
@@ -30,13 +31,18 @@ const HeroSection = () => {
             className="pl-10 shadow-lg"
           />
           <Search className="text-gray-500 absolute inset-y-2 left-2" />
-          <Button onClick={() => navigate(`/search/${searchText}`)} className="bg-orange hover:bg-hoverOrange">Search</Button>
+          <Button 
+            onClick={() => navigate(`/search/${searchText}`)} 
+            className="bg-orange hover:bg-hoverOrange"
+          >
+            Search
+          </Button>
         </div>
       </div>
       <div>
         <img 
         src={HeroImage} 
-        alt="" 
+        alt="hero image" 
         className="object-cover w-full max-h-[500px]"
         />
       </div>

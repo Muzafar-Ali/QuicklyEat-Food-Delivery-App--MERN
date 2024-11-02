@@ -1,63 +1,19 @@
 // import { useRestaurantStore } from "@/store/useRestaurantStore";
 
 import { Timer } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import RestuarantMenu from "./RestaurantMenu";
 import { Badge } from "../components/ui/badge";
+import { useRestaurantStore } from "@/store/restaurantStore";
 
 const RestaurantDetails = () => {
-  const params = useParams();
-  // const { singleRestaurant, getSingleRestaurant } = useRestaurantStore();
-
-  // to be removed later starts
-  const [singleRestaurant, setSingleRestaurant] = useState<any>({
-      imageUrl: "pic",
-      restaurantName: "one retaurant",
-      cuisines: ["Italian", "Chinese", "Mexican"],
-      deliveryTime: "8:10",
-      menus: [
-        {
-          _id:1,
-          name: "daal chawal",
-          description:" dfkjsldfj sdjfkljsd djfkdjfdf jdfkj",
-          price: 105,
-          image: "foodImage"
-        },
-        {
-          _id:1,
-          name: "daal chawal",
-          description:" dfkjsldfj sdjfkljsd djfkdjfdf jdfkj",
-          price: 105,
-          image: "foodImage"
-        },
-        {
-          _id:1,
-          name: "daal chawal",
-          description:" dfkjsldfj sdjfkljsd djfkdjfdf jdfkj",
-          price: 105,
-          image: "foodImage"
-        },
-        {
-          _id:1,
-          name: "daal chawal",
-          description:" dfkjsldfj sdjfkljsd djfkdjfdf jdfkj",
-          price: 105,
-          image: "foodImage"
-        },
-      ]
-  });
-  const getSingleRestaurant = (id: string) => {
-    
-  };
-  // to be removed later ends
-  
+  const params = useParams(); 
+  const { singleRestaurant, getSingleRestaurant } = useRestaurantStore();
 
   useEffect(() => {
     getSingleRestaurant(params.id!); 
-    
   }, [params.id]);
-  console.log(singleRestaurant);
   
   return (
     <div className="max-w-6xl mx-auto my-10">
