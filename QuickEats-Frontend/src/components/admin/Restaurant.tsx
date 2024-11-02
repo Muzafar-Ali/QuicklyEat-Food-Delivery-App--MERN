@@ -23,7 +23,7 @@ const Restaurant = () => {
     restaurant,
     updateRestaurant,
     createRestaurant,
-    getRestaurant,
+    getRestaurantbyUserId,
   } = useRestaurantStore();
 
   const changeEventHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -71,7 +71,7 @@ const Restaurant = () => {
 
   useEffect(() => {
     const fetchRestaurant = async () => {
-      await getRestaurant();
+      await getRestaurantbyUserId();
       if(restaurant){
         setInput({
           restaurantName: restaurant.restaurantName || "",

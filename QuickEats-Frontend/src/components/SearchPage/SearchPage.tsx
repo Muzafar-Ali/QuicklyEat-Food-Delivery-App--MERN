@@ -1,7 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 import FilterPage from "../FilterPage";
 import { Input } from "../ui/input";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
 import { Globe, MapPin, X } from "lucide-react";
@@ -11,77 +11,22 @@ import { AspectRatio } from "../ui/aspect-ratio";
 import { Restaurant } from "../../types/restaurantType";
 import SearchPageSkeleton from "./SearchPageSkeleton";
 import NoResultFound from "./NoResultFound";
+import { useRestaurantStore } from "@/store/restaurantStore";
 
 const SearchPage = () => {
   const params = useParams();
+  
   const [searchQuery, setSearchQuery] = useState<string>("");
-  // const {
-  //   loading,
-  //   searchedRestaurant,
-  //   searchRestaurant,
-  //   setAppliedFilter,
-  //   appliedFilter,
-  // } = useRestaurantStore();
-
-  // to be removed later starts
-    const [loading, setLoading] = useState<boolean>(false);
-    const [searchedRestaurant, setSearchedRestaurant] = useState<any>({
-      data: []
-    });
-    
-    const [appliedFilter, setAppliedFilter] = useState<string[]>([]);
-    const searchRestaurant = async (
-      text: string,
-      searchQuery: string,
-      appliedFilter: string[]
-    ) => {
-      setLoading(true);
-      try {
-        setSearchedRestaurant({ data: [
-            {
-              _id: 1,
-              imageUrl: "https://example.com/image.jpg",
-              restaurantName: "Restaurant one",
-              city:"mumbai",
-              country:"india",
-              cuisines: ["Italian", "Chinese", "Mexican"],           
-            },
-            {
-              _id: 1,
-              imageUrl: "https://example.com/image.jpg",
-              restaurantName: "Restaurant one",
-              city:"mumbai",
-              country:"india",
-              cuisines: ["Italian", "Chinese", "Mexican"],           
-            },
-            {
-              _id: 1,
-              imageUrl: "https://example.com/image.jpg",
-              restaurantName: "Restaurant one",
-              city:"mumbai",
-              country:"india",
-              cuisines: ["Italian", "Chinese", "Mexican"],           
-            },
-            {
-              _id: 1,
-              imageUrl: "https://example.com/image.jpg",
-              restaurantName: "Restaurant one",
-              city:"mumbai",
-              country:"india",
-            cuisines: ["Italian", "Chinese", "Mexican"],           
-          },
-        
-        ] });
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-  // to be removed later ends
+  const {
+    loading,
+    searchedRestaurant,
+    searchRestaurant,
+    manageAppliedFilter,
+    appliedFilter,
+  } = useRestaurantStore();  
+  console.log('searchedRestaurant', searchedRestaurant);
   
 
-  
   return (
     <div className="max-w-7xl mx-auto my-10">
       <div className="flex flex-col md:flex-row justify-between gap-10">
@@ -104,17 +49,16 @@ const SearchPage = () => {
               Search
             </Button>
           </div>
-          {/* Searched Items display here  */}
+          {/* searched items display starts*/}
           <div>
             <div className="flex flex-col gap-3 md:flex-row md:items-center md:gap-2 my-3">
               <h1 className="font-medium text-lg">
-                ({searchedRestaurant?.data.length}) Search result found
+                ({searchedRestaurant?.data?.length ??  0}) <span>Search result found</span> 
               </h1>
               <div className="flex flex-wrap gap-2 mb-4 md:mb-0">
-                {appliedFilter.map(
-                  (selectedFilter: string, idx: number) => (
+                {appliedFilter.map((selectedFilter: string, index: number) => (
                     <div
-                      key={idx}
+                      key={index}
                       className="relative inline-flex items-center max-w-full"
                     >
                       <Badge
@@ -124,7 +68,7 @@ const SearchPage = () => {
                         {selectedFilter}
                       </Badge>
                       <X
-                        // onClick={() => setAppliedFilter(selectedFilter)}
+                        onClick={() => manageAppliedFilter(selectedFilter)}
                         size={16}
                         className="absolute text-[#D19254] right-1 hover:cursor-pointer"
                       />
@@ -135,12 +79,10 @@ const SearchPage = () => {
             </div>
             {/* Restaurant Cards  */}
             <div className="grid md:grid-cols-3 gap-4">
-              {loading ? (
-                <SearchPageSkeleton />
-              ) : !loading && searchedRestaurant?.data.length === 0 ? (
+              {loading ? ( <SearchPageSkeleton /> ) : !loading && searchedRestaurant?.data?.length === 0 ? (
                 <NoResultFound searchText={params.text!} />
               ) : (
-                searchedRestaurant?.data.map((restaurant: Restaurant) => (
+                searchedRestaurant?.data?.map((restaurant: Restaurant) => (
                   <Card
                     key={restaurant._id}
                     className="bg-white dark:bg-gray-800 shadow-xl rounded-xl overflow-hidden hover:shadow-2xl transition-shadow duration-300"

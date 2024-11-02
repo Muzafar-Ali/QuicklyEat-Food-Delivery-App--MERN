@@ -12,10 +12,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Loader2, Plus } from "lucide-react";
 import React, { FormEvent, useState } from "react";
-import UpdateMenu from "./updateMenu";
 import { menuSchema, TMenuSchema } from "@/schema/menuSchema"; 
 import { useMenuStore } from "@/store/menuStore";
 import { useRestaurantStore } from "@/store/restaurantStore";
+import UpdateMenu from "./UpdateMenu";
 
 const AddMenu = () => {
   const [input, setInput] = useState<TMenuSchema>({
@@ -28,7 +28,7 @@ const AddMenu = () => {
   const [editOpen, setEditOpen] = useState<boolean>(false);
   const [selectedMenu, setSelectedMenu] = useState<any>();
   const [error, setError] = useState<Partial<TMenuSchema>>({});
-  const { loading, createMenu, del } = useMenuStore();
+  const { loading, createMenu } = useMenuStore();
   const {restaurant} = useRestaurantStore();
 
   const changeEventHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -174,7 +174,7 @@ const AddMenu = () => {
               </h1>
               <p className="text-sm tex-gray-600 mt-1">{menu.description}</p>
               <h2 className="text-md font-semibold mt-2">
-                Price: <span className="text-[#D19254]">80</span>
+                Price: <span className="text-[#D19254]">{menu.price}</span>
               </h2>
             </div>
             <Button

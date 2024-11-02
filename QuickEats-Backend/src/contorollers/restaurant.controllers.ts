@@ -46,7 +46,7 @@ export const createRestaurantHandler = async (req: Request<{}, {}, TRestaurant["
   }
 }
 
-export const getRestaurantHandler = async (req: Request, res: Response, next: NextFunction) => {
+export const getRestaurantbyUserIdHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const id = req.id;
     const restaurant = await RestaurantModel.findOne({user: id}).populate("menus")
@@ -59,6 +59,27 @@ export const getRestaurantHandler = async (req: Request, res: Response, next: Ne
     
   } catch (error) {
     console.error("getRestaurantHandler error = ", error);
+    next(error)
+  }
+}
+
+export const getSingleRestaurantHandler = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const restaurantId = req.params.id;
+    
+    const restaurant = await RestaurantModel.findById(restaurantId).populate({
+      path:'menus',
+      options:{createdAt:-1}
+    });
+    if(!restaurant) throw new ErrorHandler(404, "Restaurant not found");
+    
+    res.status(200).json({
+      success: true,
+      restaurant
+    })
+    
+  } catch (error) {
+    console.error("getSingleRestaurantHandler error = ", error);
     next(error)
   }
 }
@@ -149,25 +170,83 @@ export const updateOrderStatusHandler = async (reg: Request, res: Response, next
   }
 }
 
-export const getSingleRestaurantHandler = async (req: Request, res: Response, next: NextFunction) => {
+
+
+export const searchRestaurantHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const restaurantId = req.params.id;
-    
-    const restaurant = await RestaurantModel.findById(restaurantId).populate({
-      path:'menus',
-      options:{createdAt:-1}
-    });
-    if(!restaurant) throw new ErrorHandler(404, "Restaurant not found");
-    
-    res.status(200).json({
-      success: true,
-      restaurant
-    })
+    console.log("req.params.searchText = ", req.params.searchText);
+    const searchText = req.params.searchText || "";
+    const searchQuery = req.query.searchQuery as string || "";
+    const selectedCuisines = (req.query.selectedCuisines as string || "").split(",").filter(cuisine => cuisine);
+    const query: any = {};
+    // basic search based on searchText (name ,city, country)
+  if (searchText) {
+    query.$or = [
+      { restaurantName: { $regex: searchText, $options: 'i' } },
+      { city: { $regex: searchText, $options: 'i' } },
+      { country: { $regex: searchText, $options: 'i' } },
+    ]
+  }
+
+  // filter on the basis of searchQuery
+  if (searchQuery) {
+    query.$or = [
+      { restaurantName: { $regex: searchQuery, $options: 'i' } },
+      { cuisines: { $regex: searchQuery, $options: 'i' } }
+    ]
+  }
+  console.log('query after searchQuery', query);
+
+  // console.log(query);
+  // ["momos", "burger"]
+  if(selectedCuisines.length > 0){
+    query.cuisines = {$in: selectedCuisines}
+  }
+  console.log('query after selectedCuisines', query);
+  
+  const restaurants = await RestaurantModel.find(query);
+
+  res.status(200).json({
+    success:true,
+    data:restaurants
+  });
+  
+
+    // const searchText = req.params.searchText;
+    // const restaurant = await RestaurantModel.find({restaurantName: {$regex: searchText, $options: 'i'}})
+    // if(!restaurant) throw new ErrorHandler(404, "Restaurant not found");
+
+    // res.status(200).json({
+    //   success: true,
+    //   restaurant
+    // })
+    // if (searchText) {
+    //   query.$or = [
+    //     { restaurantName: { $regex: searchText, $options: 'i' } },
+    //     { city: { $regex: searchText, $options: 'i' } },
+    //     { country: { $regex: searchText, $options: 'i' } },
+    //   ];
+    // }
+    // if (searchQuery) {
+    //   query.$or = [
+    //     { restaurantName: { $regex: searchQuery, $options: 'i' } },
+    //     { city: { $regex: searchQuery, $options: 'i' } },
+    //     { country: { $regex: searchQuery, $options: 'i' } },
+    //   ];
+    // }
+
+    // if (selectedCuisines.length > 0) {
+    //   query.cuisines = { $in: selectedCuisines };
+    // }
+    // console.log("query =", query);
+    // const restaurant = await RestaurantModel.find(query).populate("menus");
+    // res.status(200).json({
+    //   success: true,
+    //   restaurant
+    // })
     
   } catch (error) {
-    console.error("getSingleRestaurantHandler error = ", error);
+    console.error("searchRestaurantHandler error = ", error);
     next(error)
   }
 }
-
-export const searchRestaurantHandler = async () => {}
