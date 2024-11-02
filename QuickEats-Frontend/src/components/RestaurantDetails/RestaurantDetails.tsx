@@ -4,7 +4,7 @@ import { Timer } from "lucide-react";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import RestuarantMenu from "./RestaurantMenu";
-import { Badge } from "../components/ui/badge";
+import { Badge } from "../ui/badge";
 import { useRestaurantStore } from "@/store/restaurantStore";
 
 const RestaurantDetails = () => {

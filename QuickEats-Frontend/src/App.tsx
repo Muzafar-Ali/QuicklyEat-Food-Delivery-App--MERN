@@ -9,13 +9,14 @@ import HomepageLayout from './components/Homepage/HomepageLayout'
 import HeroSection from './components/Homepage/HeroSection'
 import Profile from './components/Profile'
 import SearchPage from './components/SearchPage/SearchPage'
-import RestaurantDetails from './RestaurantDetails/RestaurantDetails'
+import RestaurantDetails from './components/RestaurantDetails/RestaurantDetails'
 import Cart from './components/cart/Cart'
 import ProtectedRoutes from './components/protectedRoutes/ProtectedRoutes'
 import AuthenticatedUser from './components/protectedRoutes/AuthenticatedUser'
 import AdminRoute from './components/protectedRoutes/AdminRoute'
 import Restaurant from './components/admin/Restaurant'
 import AddMenu from './components/admin/AddMenu'
+import Orders from './components/admin/Orders'
 
 
 const appRouter = createBrowserRouter([
@@ -43,10 +44,10 @@ const appRouter = createBrowserRouter([
         path: '/cart',
         element: <Cart/>
       },
-    //   {
-    //     path: '/orders',
-    //     element: <Orders/>
-    //   },
+      {
+        path: '/orders',
+        element: <Orders/>
+      },
     ]
   },
   {

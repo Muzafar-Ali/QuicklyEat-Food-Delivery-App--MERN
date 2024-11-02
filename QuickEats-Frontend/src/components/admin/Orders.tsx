@@ -7,15 +7,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useRestaurantStore } from "@/store/useRestaurantStore";
+import { useRestaurantStore } from "@/store/restaurantStore";
 import { useEffect } from "react";
 
 const Orders = () => {
-  const { restaurantOrder, getRestaurantOrders, updateRestaurantOrder } =
-    useRestaurantStore();
+  const { restaurantOrder, getRestaurantOrders, updateRestaurantOrderStatus } = useRestaurantStore();
 
   const handleStatusChange = async (id: string, status: string) => {
-    await updateRestaurantOrder(id, status);
+    await updateRestaurantOrderStatus(id, status);
   };
   useEffect(() => {
     getRestaurantOrders(); 
@@ -27,19 +26,19 @@ const Orders = () => {
       </h1>
       <div className="space-y-8">
         {/* Restaurant Orders diplay here  */}
-        {restaurantOrder.map((order) => (
-          <div className="flex flex-col md:flex-row justify-between items-start sm:items-center bg-white dark:bg-gray-800 shadow-lg rounded-xl p-6 sm:p-8 border border-gray-200 dark:border-gray-700">
+        {restaurantOrder?.map((order) => (
+          <div key={order._id} className="flex flex-col md:flex-row justify-between items-start sm:items-center bg-white dark:bg-gray-800 shadow-lg rounded-xl p-6 sm:p-8 border border-gray-200 dark:border-gray-700">
             <div className="flex-1 mb-6 sm:mb-0">
               <h1 className="text-xl font-semibold text-gray-800 dark:text-gray-100">
-                {order.deliveryDetails.name}
+                {order.deliveryDetails?.name}
               </h1>
               <p className="text-gray-600 dark:text-gray-400 mt-2">
                 <span className="font-semibold">Address: </span>
-                {order.deliveryDetails.address}
+                {order.deliveryDetails?.address}
               </p>
               <p className="text-gray-600 dark:text-gray-400 mt-2">
                 <span className="font-semibold">Total Amount: </span>
-                {order.totalAmount / 100}
+                <span>${order.totalAmount}</span>
               </p>
             </div>
             <div className="w-full sm:w-1/3">
@@ -47,9 +46,7 @@ const Orders = () => {
                 Order Status
               </Label>
               <Select
-                onValueChange={(newStatus) =>
-                  handleStatusChange(order._id, newStatus)
-                }
+                onValueChange={(newStatus) => handleStatusChange(order._id, newStatus)}
                 defaultValue={order.status}
               >
                 <SelectTrigger>
@@ -61,7 +58,7 @@ const Orders = () => {
                       "Pending",
                       "Confirmed",
                       "Preparing",
-                      "OutForDelivery",
+                      "OnTheWay",
                       "Delivered",
                     ].map((status: string, index: number) => (
                       <SelectItem key={index} value={status.toLowerCase()}>

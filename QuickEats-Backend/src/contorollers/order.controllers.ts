@@ -141,6 +141,28 @@ export const getOrderByUserIdHandler = async (req: Request, res: Response, next:
   }
 }
 
+export const updateOrderStatusHandler = async (reg: Request, res: Response, next: NextFunction) => {
+  try {
+    const { orderId } = reg.params;
+    const { status } = reg.body;
+
+    const order = await OrderModel.findById(orderId);
+    if(!order) throw new ErrorHandler(404, "Order not found");
+    
+    order.status = status;
+    await order.save();
+    
+    res.status(200).json({
+      success: true,
+      message: `Order status updated successfully to ${order.status}`,
+    })
+    
+  } catch (error) {
+    console.error("updateOrderStatusHandler error = ", error);
+    next(error)
+  }
+}
+
 // export const updateOrderHandler = async (req: Request, res: Response, next: NextFunction) => {
 //   try {
 //     const {id} = req.params;

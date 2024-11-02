@@ -6,14 +6,14 @@ import { Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarTrigger } fro
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
 import { useUserStore } from "@/store/userStore";
+import { useCartStore } from "@/store/cartStore";
 
 const Navbar = () => {
   const { user, loading, logout } = useUserStore();
-  // const { cart } = useCartStore();
+  const { cart } = useCartStore();
   // const {setTheme} = useThemeStore();
 
   // to be removed later starts
-  const cart = [];
   const setTheme = (theme: string) => {};
   // to be removed later ends
 

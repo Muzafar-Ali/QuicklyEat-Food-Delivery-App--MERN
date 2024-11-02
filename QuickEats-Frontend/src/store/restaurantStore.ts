@@ -1,16 +1,18 @@
 import config from "@/config/config";
-import { TMenuItem } from "@/types/restaurantType";
+import { TOrders } from "@/types/orderType";
+import { TMenuItem, TRestaurantState } from "@/types/restaurantType";
 import axios from "axios";
 import { toast } from "sonner";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
-export const useRestaurantStore = create<any>()(persist((set, get) => ({
+export const useRestaurantStore = create<TRestaurantState>()(persist((set, get) => ({
   loading: false,
   restaurant: null,
   appliedFilter: [],
   searchedRestaurant: null,
   singleRestaurant: null,
+  restaurantOrder: [],
   createRestaurant: async(FormData: FormData) => {
     try {
       set({ loading: true })
@@ -52,10 +54,10 @@ export const useRestaurantStore = create<any>()(persist((set, get) => ({
 },
 getSingleRestaurant: async (restaurantId: string) => {
   try {
-      const response = await axios.get(`${config.baseUri}/api/v1/restaurant/${restaurantId}`);
-      if (response.data.success) {
-          set({ singleRestaurant: response.data.restaurant })
-      }
+    const response = await axios.get(`${config.baseUri}/api/v1/restaurant/${restaurantId}`);
+    if (response.data.success) {
+      set({ singleRestaurant: response.data.restaurant })
+    }
   } catch (error) { }
 },
 updateRestaurant: async (formData: FormData) => {
@@ -97,6 +99,40 @@ updateMenuToRestaurant: (updatedMenu: TMenuItem) => {
     return state;
   })
 },
+getRestaurantOrders: async () => {
+  try {
+    const response = await axios.get(`${config.baseUri}/api/v1/restaurant/order`, {
+      withCredentials: true
+    });
+    
+    if (response.data.success) {
+      set({ restaurantOrder: response.data.order });
+    }
+  } catch (error: any) {
+    toast.error(error.response.data.message);
+    console.error(error);
+  }
+},
+updateRestaurantOrderStatus: async (orderId: string, status: string) => {
+  try {
+    const response = await axios.put(`${config.baseUri}/api/v1/order/status/${orderId}`, { status }, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      withCredentials: true
+    });
+
+    if (response.data.success) {
+      const updatedOrder = get().restaurantOrder.map((order: TOrders) => {
+        return order._id === orderId ? { ...order, status: response.data.status } : order;
+      })
+      set({ restaurantOrder: updatedOrder });
+      toast.success(response.data.message);
+    }
+  } catch (error: any) {
+    toast.error(error.response.data.message);
+  }
+},
 manageAppliedFilter: (selectedValue: string) => {
   set((state: any) => {
     // Check if the selectedValue is already in the appliedFilter array 
@@ -116,7 +152,7 @@ removeAppliedFilter: () => {
 },
 searchRestaurant: async (searchText: string, searchQuery: string, selectedCuisines: any) => {
   try {
-    console.log("working 1");
+    console.error("working 1");
     
     set({ loading: true });
 
@@ -126,7 +162,7 @@ searchRestaurant: async (searchText: string, searchQuery: string, selectedCuisin
 
     // await new Promise((resolve) => setTimeout(resolve, 2000));
     const response = await axios.get(`${config.baseUri}/api/v1/restaurant/search/${searchText}?${params.toString()}`);
-    console.log('response =', response);
+    console.error('response =', response);
     
 
     if (response.data.success) {
