@@ -174,12 +174,12 @@ export const updateOrderStatusHandler = async (reg: Request, res: Response, next
 
 export const searchRestaurantHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    console.log("req.params.searchText = ", req.params.searchText);
     const searchText = req.params.searchText || "";
     const searchQuery = req.query.searchQuery as string || "";
     const selectedCuisines = (req.query.selectedCuisines as string || "").split(",").filter(cuisine => cuisine);
     const query: any = {};
-    // basic search based on searchText (name ,city, country)
+
+  // basic search based on searchText (name ,city, country)
   if (searchText) {
     query.$or = [
       { restaurantName: { $regex: searchText, $options: 'i' } },
@@ -195,15 +195,11 @@ export const searchRestaurantHandler = async (req: Request, res: Response, next:
       { cuisines: { $regex: searchQuery, $options: 'i' } }
     ]
   }
-  console.log('query after searchQuery', query);
 
-  // console.log(query);
-  // ["momos", "burger"]
   if(selectedCuisines.length > 0){
     query.cuisines = {$in: selectedCuisines}
   }
-  console.log('query after selectedCuisines', query);
-  
+
   const restaurants = await RestaurantModel.find(query);
 
   res.status(200).json({

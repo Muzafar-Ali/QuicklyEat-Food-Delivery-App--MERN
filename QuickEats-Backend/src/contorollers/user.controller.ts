@@ -3,7 +3,7 @@ import ErrorHandler from "../utils/errorClass.js";
 import omit from "lodash/omit.js";
 import mongoose from "mongoose";
 import { NextFunction, Request, Response } from "express";
-import { TUser, TUserLogin, TVerifyEmail, verifyEmailSchema } from "../schema/user.schema.js";
+import { TUser, TUserLogin, TUserUpdate, TVerifyEmail, verifyEmailSchema } from "../schema/user.schema.js";
 import { createUser } from "../services/user.service.js";
 import { generateAndSetJwtToken } from "../utils/generateJwtToken.js";
 import { generateVerificationCode } from "../utils/generateVerificationToken.js";
@@ -151,4 +151,29 @@ export const resetPassword = async (req: Request, res: Response) => {}
 
 export const checkAuth = async (req: Request, res: Response) => {}
 
-export const updateProfile = async (req: Request, res: Response) => {}
+export const updateProfileHandler = async (req: Request<{}, {}, TUserUpdate["body"]>, res: Response, next: NextFunction) => {
+  try {
+    const userId = req.id;
+    const image = req.file;
+    const {fullname, email, contact, country } = req.body;
+
+    const updateData: any = {};
+    if (fullname) updateData.fullname = fullname;
+    if (email) updateData.email = email;
+    if (contact) updateData.contact = contact;
+    if (country) updateData.country = country;
+
+    const user = await UserModel.findByIdAndUpdate(userId, updateData, {new: true}).select("-password");
+    if(!user) throw new ErrorHandler(404, "User not found");
+
+    res.status(200).json({
+      success: true,
+      message: "Profile updated successfully",
+      user: user,
+    })
+    
+  } catch (error) {
+    console.log("updateProfileHandler error = ", error)
+    next(error)
+  }
+}

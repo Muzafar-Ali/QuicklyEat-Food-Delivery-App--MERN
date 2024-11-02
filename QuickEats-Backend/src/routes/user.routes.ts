@@ -1,8 +1,10 @@
 import { Router } from "express";
-import { forgotPasswordHandler, loginHanlder, logoutHandler, signupHandler, verifyEmailHandler } from "../contorollers/user.controller.js";
+import { forgotPasswordHandler, loginHanlder, logoutHandler, signupHandler, updateProfileHandler, verifyEmailHandler } from "../contorollers/user.controller.js";
 import createRateLimiter from "../utils/createRateLimiter.js";
 import validateRequestData from "../middlewares/validateRequestData.js";
-import userSchema, { loginSchema, verifyEmailSchema } from "../schema/user.schema.js";
+import userSchema, { loginSchema, userUpdateSchema, verifyEmailSchema } from "../schema/user.schema.js";
+import { isAuthenticated } from "../middlewares/isAuthenticated.js";
+import upload from "../middlewares/multer.middlewar2.js";
 
 const route = Router();
 
@@ -15,5 +17,6 @@ route.post('/login',  [validateRequestData(loginSchema), loginRateLimiter], logi
 route.post('/verify', validateRequestData(verifyEmailSchema), verifyEmailHandler);
 route.post('/forgot-password', forgotPasswordHandler)
 route.post('/logout', logoutHandler)
+route.put("/update", [isAuthenticated, validateRequestData(userUpdateSchema), upload.single("image")], updateProfileHandler);
 
 export default route;

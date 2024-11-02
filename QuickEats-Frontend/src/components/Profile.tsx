@@ -11,24 +11,10 @@ import { FormEvent, useRef, useState } from "react";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Button } from "./ui/button";
-// import { useUserStore } from "@/store/useUserStore";
+import { useUserStore } from "@/store/userStore";
 
 const Profile = () => {
-  // const {user, updateProfile} = useUserStore();
-
-  // to be removed later
-  const user = {
-    fullname: "John Doe",
-    email: "john@example.com",
-    address: "123 Main St",
-    city: "Anytown",
-    country: "USA",
-    profilePicture: "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-  };
-  const updateProfile = async (data: any) => {
-    console.log(data);
-  };
-  // to be removed later
+  const {user, updateProfile} = useUserStore();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [profileData, setProfileData] = useState({
@@ -40,8 +26,7 @@ const Profile = () => {
     profilePicture: user?.profilePicture || "",
   });
   const imageRef = useRef<HTMLInputElement | null>(null);
-  const [selectedProfilePicture, setSelectedProfilePicture] =
-    useState<string>( profileData.profilePicture || "");
+  const [selectedProfilePicture, setSelectedProfilePicture] = useState<string>( profileData.profilePicture || "");
  
   const fileChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -68,7 +53,7 @@ const Profile = () => {
     e.preventDefault();
     try {
       setIsLoading(true);
-      await updateProfile(profileData);
+      await updateProfile(profileData)
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
