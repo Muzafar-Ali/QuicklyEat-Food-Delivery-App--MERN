@@ -5,5 +5,5 @@ export const client = new MailtrapClient({token: config.mailtrapApiToken! });
 
 export const sender = {
   email: "mailtrap@demomailtrap.com",
-  name: "Patel MernStack",
+  name: "QuickEats Team",
 };

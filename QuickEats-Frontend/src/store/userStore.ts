@@ -34,7 +34,8 @@ export const useUserStore = create<TUserState>()(persist((set) => ({
       }
 
     } catch (error: any) {
-      toast.error(error.response.data.message)
+      const errorMessage = error.response?.data?.message ?? "server not responding. Please try again later.";
+      toast.error(errorMessage)
       set({ loading: false })
     }
   },
@@ -51,7 +52,7 @@ export const useUserStore = create<TUserState>()(persist((set) => ({
 
       if(response.data.success) {
         set({
-          user: response.data.user,
+          user: response?.data?.user,
           isAuthenticated: true,
           loading: false
         })
@@ -59,7 +60,8 @@ export const useUserStore = create<TUserState>()(persist((set) => ({
       }
 
     } catch (error: any) {
-      toast.error(error.response.data.message);
+      const errorMessage = error.response?.data?.message ?? "server not responding. Please try again later.";
+      toast.error(errorMessage)
       set({ loading: false })
     }
   },
@@ -70,7 +72,7 @@ export const useUserStore = create<TUserState>()(persist((set) => ({
       const response = await axios.post(`${config.baseUri}/api/v1/logout`);
       
       if(response.data.success) {
-        toast.success(response.data.message)
+        toast.success(response?.data?.message)
         set({
           user: null,
           isAuthenticated: false,
@@ -84,9 +86,11 @@ export const useUserStore = create<TUserState>()(persist((set) => ({
 
         return true;
       }
+      return false;
 
     } catch (error: any) {
-      toast.error(error.response.data.message);
+      const errorMessage = error.response?.data?.message ?? "server not responding. Please try again later.";
+      toast.error(errorMessage)
       set({ loading: false })
     }
   },
@@ -103,7 +107,8 @@ export const useUserStore = create<TUserState>()(persist((set) => ({
       }
 
     } catch (error: any) {
-      toast.error(error.response.data.message);
+      const errorMessage = error.response?.data?.message ?? "server not responding. Please try again later.";
+      toast.error(errorMessage)
       set({ loading: false });
     }
   },
@@ -112,7 +117,8 @@ export const useUserStore = create<TUserState>()(persist((set) => ({
     try {
       set({ loading: true });
       
-      const response = await axios.post(`${config.baseUri}/api/v1/reset-password/${token}`, { newPassword });
+      const response = await axios.post(`${config.baseUri}/api/v1//reset-password/${token}`, { newPassword });
+      
       if (response.data.success) {
         toast.success(response.data.message);
         set({ loading: false });
@@ -120,7 +126,8 @@ export const useUserStore = create<TUserState>()(persist((set) => ({
       }
       
     } catch (error: any) {
-      toast.error(error.response.data.message);
+      const errorMessage = error.response?.data?.message ?? "server not responding. Please try again later.";
+      toast.error(errorMessage)
       set({ loading: false });
     }
   },
@@ -145,7 +152,8 @@ export const useUserStore = create<TUserState>()(persist((set) => ({
       }
 
     } catch (error: any) {
-      toast.error(error.response.data.message)
+      const errorMessage = error.response?.data?.message ?? "server not responding. Please try again later.";
+      toast.error(errorMessage)
       set({ loading: false })
     } finally {
       set({ loading: false })
@@ -175,7 +183,8 @@ export const useUserStore = create<TUserState>()(persist((set) => ({
       return false;
 
     } catch (error: any) {
-      toast.error(error.response.data.message)
+      const errorMessage = error.response?.data?.message ?? "server not responding. Please try again later.";
+      toast.error(errorMessage)
       set({ loading: false })
       return false;
     }

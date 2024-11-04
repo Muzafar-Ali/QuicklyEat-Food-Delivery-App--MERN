@@ -88,7 +88,7 @@ export const createCheckoutSessionHandler = async (req: Request, res: Response, 
       success_url: `${config.clientUrl}/success`,
       cancel_url: `${config.clientUrl}/failed`,
       metadata: {
-        orderId: order._id.toString(),
+        orderId: order._id!.toString(),
         images: JSON.stringify(menuItems.map((item: any) => item.image))
       }
     });

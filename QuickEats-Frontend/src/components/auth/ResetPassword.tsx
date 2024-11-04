@@ -1,10 +1,16 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useUserStore } from "@/store/userStore";
 import { Loader2, LockKeyholeIcon } from "lucide-react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 const ResetPassword = () => {
+  const params = useParams();
+  console.log('params', params);
+  console.log('params code', params.resetCode);
+  
+  const { resetPassword } = useUserStore();
     const [newPassword, setNewPassword] = useState<string>("");
     const loading =  false;
 
@@ -29,7 +35,9 @@ const ResetPassword = () => {
             loading ? (
                 <Button disabled className="bg-orange hover:bg-hoverOrange"><Loader2 className="mr-2 h-4 w-4 animate-spin"/> Please wait</Button>
             ) : (
-                <Button className="bg-orange hover:bg-hoverOrange">Reset Password</Button>
+                <Button
+                  onClick={() => resetPassword(params.resetCode!, newPassword)} 
+                  className="bg-orange hover:bg-hoverOrange">Reset Password</Button>
             )
         }
         <span className="text-center">

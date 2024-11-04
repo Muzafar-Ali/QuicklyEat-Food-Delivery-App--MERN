@@ -132,7 +132,7 @@ export const generateWelcomeEmailHtml = (name: string) => {
         `;
 };
 
-export const generatePasswordResetEmailHtml = (resetURL: string) => {
+export const generatePasswordResetEmailHtml = (resetURL: string, name: string) => {
     return `
       <html>
         <head>
@@ -183,7 +183,7 @@ export const generatePasswordResetEmailHtml = (resetURL: string) => {
               <h1>Reset Your Password</h1>
             </div>
             <div class="email-body">
-              <p>Hi,</p>
+              <p>Hi ${name}</p>
               <p>We received a request to reset your password. Click the button below to reset it.</p>
               <a href="${resetURL}" class="button">Reset Password</a>
               <p>If you didn't request a password reset, please ignore this email.</p>
@@ -198,7 +198,7 @@ export const generatePasswordResetEmailHtml = (resetURL: string) => {
     `;
   };
 
-  export const generateResetSuccessEmailHtml = () => {
+  export const generateResetSuccessEmailHtml = (name: string) => {
     return `
       <html>
         <head>
@@ -239,7 +239,7 @@ export const generatePasswordResetEmailHtml = (resetURL: string) => {
               <h1>Password Reset Successful</h1>
             </div>
             <div class="email-body">
-              <p>Hi,</p>
+              <p>Hi ${name}</p>
               <p>Your password has been successfully reset. You can now log in with your new password.</p>
               <p>If you did not request this change, please contact our support team immediately.</p>
               <p>Thank you,<br/>The QuickEats Team</p>
