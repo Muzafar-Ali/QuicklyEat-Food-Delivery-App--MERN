@@ -29,7 +29,7 @@ export const createMenuHandler = async (req: Request<{}, {}, TMenu["body"]>, res
     if(!menu) throw new ErrorHandler(500, "Failed to create menu");
       
     // update menus in restaurant model
-    await updateRestaurantMenus( userId, menu._id)
+    await updateRestaurantMenus( userId, menu._id as any)
    
     res.status(201).json({
       success: true,

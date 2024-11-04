@@ -22,7 +22,7 @@ export type TUserState = {
   verifyEmail: (verificationCode: string) => Promise<boolean | undefined>;
   checkAuthentication: () => Promise<boolean | undefined>;
   logout: () => Promise<boolean | undefined>;
-  forgotPassword: (email:string) => Promise<boolean | undefined>; 
-  resetPassword?: (token:string, newPassword:string) => Promise<boolean | undefined>; 
-  updateProfile?: (input:any) => Promise<boolean | undefined>; 
+  forgotPassword: (email: string) => Promise<boolean | undefined>; 
+  resetPassword: (token: string, newPassword:string) => Promise<boolean | undefined>; 
+  updateProfile: (input: any) => Promise<boolean | undefined>;
 }

@@ -57,24 +57,27 @@ export const getOrderHandler = async ( req: Request, res: Response, next: NextFu
 
 export const createCheckoutSessionHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const {totalAmount} = req.body;
-    const CheckoutSession: TCheckoutSessionRequest = req.body;
+    const userId = req.id;
+    const { totalAmount } = req.body;
+    const checkoutSession: TCheckoutSessionRequest = req.body;
 
-    const restaurant = await RestaurantModel.findById(CheckoutSession.restaurantId).populate("menus")
+    const restaurant = await RestaurantModel.findById(checkoutSession.restaurantId).populate("menus")
     if(!restaurant) throw new ErrorHandler(404, "Restaurant not found");
-
+    
     // line items
     const menuItems = restaurant.menus;
-    const lineItems = createLineItems( CheckoutSession, menuItems );
     
+    const lineItems = createLineItems( checkoutSession, menuItems );
+
     const order = new OrderModel({
-      user: req.id,
-      restaurant: CheckoutSession.restaurantId,
-      deliveryDetails: CheckoutSession.deliveryDetails,
-      cartItems: CheckoutSession.cartItems,
+      user: userId,
+      restaurant: checkoutSession.restaurantId,
+      deliveryDetails: checkoutSession.deliveryDetails,
+      cartItems: checkoutSession.cartItems,
       totalAmount,
       status: "pending"
     });
+
     const session = await stripe.checkout.sessions.create({
       line_items: lineItems,
       mode: "payment",
@@ -85,7 +88,7 @@ export const createCheckoutSessionHandler = async (req: Request, res: Response, 
       success_url: `${config.clientUrl}/success`,
       cancel_url: `${config.clientUrl}/failed`,
       metadata: {
-        orderId: order._id.toString(),
+        orderId: order._id!.toString(),
         images: JSON.stringify(menuItems.map((item: any) => item.image))
       }
     });
@@ -137,6 +140,28 @@ export const getOrderByUserIdHandler = async (req: Request, res: Response, next:
 
   } catch (error) {
     console.error("getOrderByUserId error = ", error);
+    next(error)
+  }
+}
+
+export const updateOrderStatusHandler = async (reg: Request, res: Response, next: NextFunction) => {
+  try {
+    const { orderId } = reg.params;
+    const { status } = reg.body;
+
+    const order = await OrderModel.findById(orderId);
+    if(!order) throw new ErrorHandler(404, "Order not found");
+    
+    order.status = status;
+    await order.save();
+    
+    res.status(200).json({
+      success: true,
+      message: `Order status updated successfully to ${order.status}`,
+    })
+    
+  } catch (error) {
+    console.error("updateOrderStatusHandler error = ", error);
     next(error)
   }
 }

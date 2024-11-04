@@ -9,83 +9,46 @@ import { DialogTitle } from "@radix-ui/react-dialog";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { CheckoutSessionRequest } from "@/types/orderType";
-// import { useUserStore } from "@/store/useUserStore";
-// import { useCartStore } from "@/store/useCartStore";
-// import { useRestaurantStore } from "@/store/useRestaurantStore";
-// import { useOrderStore } from "@/store/useOrderStore";
 import { Loader2 } from "lucide-react";
+import { TCheckoutSessionRequest } from "@/types/orderType";
+import { useUserStore } from "@/store/userStore";
+import { useCartStore } from "@/store/cartStore";
+import { useRestaurantStore } from "@/store/restaurantStore";
+import { useOrderStore } from "@/store/orderStore";
 
-const CheckoutConfirmPage = ({
-  open,
-  setOpen,
-}: {
-  open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
-}) => {
-  // to be removed later starts
-    const cart: any[] = [
-      {
-        _id: "1",
-        name: "Pizza",
-        image: "https://example.com/pizza.jpg",
-        price: 10,
-        quantity: 2,
-      },
-      {
-        _id: "1",
-        name: "Pizza",
-        image: "https://example.com/pizza.jpg",
-        price: 10,
-        quantity: 2,
-      },
-      {
-        _id: "1",
-        name: "Pizza",
-        image: "https://example.com/pizza.jpg",
-        price: 10,
-        quantity: 2,
-      },
-    ];
-    const restaurant: any = {};
-    const createCheckoutSession = async (data: CheckoutSessionRequest) => {};
-    const loading = false;
-    const user: any = {};
-  // to be removed later ends
+const CheckoutConfirmPage = ({open, setOpen}: {open: boolean, setOpen: Dispatch<SetStateAction<boolean>>}) => {
+  const { user } = useUserStore();
+  const { cart } = useCartStore();
+  const { singleRestaurant } = useRestaurantStore();
+  const { createCheckoutSession, loading } = useOrderStore();
 
-  // const { user } = useUserStore();
-  const [input, setInput] = useState({
+  const [userInput, setInput] = useState({
     name: user?.fullname || "",
     email: user?.email || "",
-    contact: user?.contact|| "",
+    contact: user?.contact.toString()|| "",
     address: user?.address || "",
     city: user?.city || "",
     country: user?.country || "",
   });
-  // const { cart } = useCartStore();
-  // const { restaurant } = useRestaurantStore();
-  // const { createCheckoutSession, loading } = useOrderStore();
   
-
-
   const changeEventHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setInput({ ...input, [name]: value });
+    setInput({ ...userInput, [name]: value });
   };
+
   const checkoutHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // api implementation start from here
     try {
-      const checkoutData: CheckoutSessionRequest = {
+      const checkoutData: TCheckoutSessionRequest = {
         cartItems: cart.map((cartItem) => ({
           menuId: cartItem._id,
           name: cartItem.name,
           image: cartItem.image,
-          price: cartItem.price,
-          quantity: cartItem.quantity,
+          price: cartItem.price.toString(),
+          quantity: cartItem.quantity.toString(),
         })),
-        deliveryDetails: input,
-        restaurantId: restaurant?._id as string,
+        deliveryDetails: userInput,
+        restaurantId: singleRestaurant?._id as string,
       };
       await createCheckoutSession(checkoutData);
     } catch (error) {
@@ -110,7 +73,7 @@ const CheckoutConfirmPage = ({
             <Input
               type="text"
               name="name"
-              value={input.name}
+              value={userInput.name}
               onChange={changeEventHandler}
             />
           </div>
@@ -120,7 +83,7 @@ const CheckoutConfirmPage = ({
               disabled
               type="email"
               name="email"
-              value={input.email}
+              value={userInput.email}
               onChange={changeEventHandler}
             />
           </div>
@@ -129,7 +92,7 @@ const CheckoutConfirmPage = ({
             <Input
               type="text"
               name="contact"
-              value={input.contact}
+              value={userInput.contact}
               onChange={changeEventHandler}
             />
           </div>
@@ -138,7 +101,7 @@ const CheckoutConfirmPage = ({
             <Input
               type="text"
               name="address"
-              value={input.address}
+              value={userInput.address}
               onChange={changeEventHandler}
             />
           </div>
@@ -147,7 +110,7 @@ const CheckoutConfirmPage = ({
             <Input
               type="text"
               name="city"
-              value={input.city}
+              value={userInput.city}
               onChange={changeEventHandler}
             />
           </div>
@@ -156,7 +119,7 @@ const CheckoutConfirmPage = ({
             <Input
               type="text"
               name="country"
-              value={input.country}
+              value={userInput.country}
               onChange={changeEventHandler}
             />
           </div>

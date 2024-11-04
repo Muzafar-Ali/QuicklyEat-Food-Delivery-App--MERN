@@ -3,12 +3,12 @@ import ErrorHandler from "../utils/errorClass.js";
 import omit from "lodash/omit.js";
 import mongoose from "mongoose";
 import { NextFunction, Request, Response } from "express";
-import { TUser, TUserLogin, TVerifyEmail, verifyEmailSchema } from "../schema/user.schema.js";
+import { TUser, TUserLogin, TUserUpdate, TVerifyEmail, verifyEmailSchema } from "../schema/user.schema.js";
 import { createUser } from "../services/user.service.js";
 import { generateAndSetJwtToken } from "../utils/generateJwtToken.js";
 import { generateVerificationCode } from "../utils/generateVerificationToken.js";
 import config from "../config/config.js";
-import { sendVerificationEmail, sendWelcomeEmail } from "../mailtrap/emails.js";
+import { sendPasswordResetEmail, sendResetSuccessEmail, sendVerificationEmail, sendWelcomeEmail } from "../mailtrap/emails.js";
 
 export const signupHandler = async (req: Request<{}, {}, TUser["body"]>, res: Response, next: NextFunction) => {
   try {
@@ -22,9 +22,9 @@ export const signupHandler = async (req: Request<{}, {}, TUser["body"]>, res: Re
     const userId = user._id as mongoose.Types.ObjectId;
     generateAndSetJwtToken(res, userId);
 
-    // send welcome email
-    // await sendWelcomeEmail(user.email, user.fullname)
-
+    // send email to verify email 
+    await sendVerificationEmail(user.email, verificationCode)
+    
     res.status(201).json({ 
       success: true,
       message: 'User created successfully',
@@ -32,7 +32,7 @@ export const signupHandler = async (req: Request<{}, {}, TUser["body"]>, res: Re
     });
 
   } catch (error: any) {
-    console.log("signupHandler error = ", error)
+    console.error("signupHandler error = ", error)
     next(error);   
   }  
 }
@@ -40,8 +40,6 @@ export const signupHandler = async (req: Request<{}, {}, TUser["body"]>, res: Re
 export const loginHanlder = async (req: Request<{}, {}, TUserLogin["body"]>, res: Response, next: NextFunction) => {
   try {
     const { email, password } = req.body;
-  
-    if(!email || !password) throw new ErrorHandler(400, "Email and password are required");
 
     const user = await UserModel.findOne({ email });  
     if(!user) throw new ErrorHandler(404, "incorrect email or password");
@@ -62,7 +60,7 @@ export const loginHanlder = async (req: Request<{}, {}, TUserLogin["body"]>, res
     })
   
   } catch (error) {
-    console.log("loginHanlder error = ", error)
+    console.error("loginHanlder error = ", error)
     next(error)
  
   }
@@ -71,16 +69,15 @@ export const loginHanlder = async (req: Request<{}, {}, TUserLogin["body"]>, res
 export const verifyEmailHandler = async (req: Request<{}, {}, TVerifyEmail["body"]>, res: Response, next: NextFunction) => {
   try {    
     const { verificationCode } = req.body;
-    console.log('verificationCode', verificationCode);
     
-    if(!verificationCode) throw new ErrorHandler(400, "Verification token is required");
+    if(!verificationCode) throw new ErrorHandler(400, "Verification code is required");
     
     const user = await UserModel.findOne({
       verificationCode: verificationCode, 
       verificationCodeExpiresAt: {$gt: new Date()}
     }).select("-password");
 
-    if(!user) throw new ErrorHandler(404, "Invalid or expired verification token");
+    if(!user) throw new ErrorHandler(404, "Invalid or expired verification code");
     
     user.isVerified = true;
     user.verificationCode = null;
@@ -88,7 +85,7 @@ export const verifyEmailHandler = async (req: Request<{}, {}, TVerifyEmail["body
     await user.save();
     
     // send verification email
-    // await sendVerificationEmail(user.email, verificationToken)
+    await sendWelcomeEmail(user.email, user.fullname)
 
     res.status(200).json({
       success: true,
@@ -97,7 +94,7 @@ export const verifyEmailHandler = async (req: Request<{}, {}, TVerifyEmail["body
     })
 
   } catch (error) {
-    console.log("verifyEmailHandler error = ", error)
+    console.error("verifyEmailHandler error = ", error)
     next(error)
   }
 }
@@ -111,7 +108,7 @@ export const logoutHandler = async (_: Request, res: Response, next: NextFunctio
     });
 
   } catch (error) {
-    console.log("logoutHandler error = ", error)
+    console.error("logoutHandler error = ", error)
     next(error)
   }
 }
@@ -125,16 +122,14 @@ export const forgotPasswordHandler = async (req: Request, res: Response, next: N
 
     // const resetToken = Crypto.randomBytes(20).toString("hex");
     const resetToken = crypto.getRandomValues(new Uint8Array(20)).join('').toString();
-    console.log("resetToken = ", resetToken)
-
     const resetTokenExpiresAt = new Date(Date.now() + config.passwordResetTokenTokenExpiry); // 1 hour
 
     user.resetPasswordToken = resetToken,
     user.resetPasswordTokenExpiresAt = resetTokenExpiresAt,
     user.save();
 
-     // send reset paaword email
-    //  await sendPasswordResetEmail(user.email, `${process.env.FRONTEND_URL}/resetpassword/${resetToken}`); 
+    // send reset paaword email
+    await sendPasswordResetEmail(user.email, `${config.clientUrl}/reset-password/${resetToken}`, user.fullname); 
     
     res.status(200).json({
       success: true,
@@ -142,13 +137,66 @@ export const forgotPasswordHandler = async (req: Request, res: Response, next: N
     })
 
   } catch (error) {
-    console.log("forgotPasswordHandler error = ", error)
+    console.error("forgotPasswordHandler error = ", error)
     next(error)    
   }
 }
 
-export const resetPassword = async (req: Request, res: Response) => {}
+export const resetPasswordhandler = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { resteToken } = req.params;
+    const { newPassword } = req.body;
+
+    const user = await UserModel.findOne({ 
+      resetPasswordToken: resteToken, 
+      resetPasswordTokenExpiresAt: { $gt: Date.now() } 
+    });
+
+    if(!user) throw new ErrorHandler(404, "Invalid or expired token");
+
+    //update password: password will be updated from pre save hook
+    user.resetPasswordToken = undefined;
+    user.resetPasswordTokenExpiresAt = undefined;
+    await user.save();
+
+    // send success reset email
+    await sendResetSuccessEmail(user.email, user.fullname);
+
+    res.status(200).json({
+      success: true,
+      message: "Password reset successfully."
+    });
+  } catch (error) {
+    console.error("resetPasswordhandler error = ", error);
+    next(error)
+  }
+}
 
 export const checkAuth = async (req: Request, res: Response) => {}
 
-export const updateProfile = async (req: Request, res: Response) => {}
+export const updateProfileHandler = async (req: Request<{}, {}, TUserUpdate["body"]>, res: Response, next: NextFunction) => {
+  try {
+    const userId = req.id;
+    const image = req.file;
+    const {fullname, email, contact, country } = req.body;
+
+    const updateData: any = {};
+    if (fullname) updateData.fullname = fullname;
+    if (email) updateData.email = email;
+    if (contact) updateData.contact = contact;
+    if (country) updateData.country = country;
+
+    const user = await UserModel.findByIdAndUpdate(userId, updateData, {new: true}).select("-password");
+    if(!user) throw new ErrorHandler(404, "User not found");
+
+    res.status(200).json({
+      success: true,
+      message: "Profile updated successfully",
+      user: user,
+    })
+    
+  } catch (error) {
+    console.error("updateProfileHandler error = ", error)
+    next(error)
+  }
+}

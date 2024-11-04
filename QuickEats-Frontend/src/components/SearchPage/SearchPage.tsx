@@ -15,7 +15,6 @@ import { useRestaurantStore } from "@/store/restaurantStore";
 
 const SearchPage = () => {
   const params = useParams();
-  
   const [searchQuery, setSearchQuery] = useState<string>("");
   const {
     loading,
@@ -24,8 +23,6 @@ const SearchPage = () => {
     manageAppliedFilter,
     appliedFilter,
   } = useRestaurantStore();  
-  console.log('searchedRestaurant', searchedRestaurant);
-  
 
   return (
     <div className="max-w-7xl mx-auto my-10">

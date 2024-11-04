@@ -6,22 +6,25 @@ import { Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarTrigger } fro
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
 import { useUserStore } from "@/store/userStore";
+import { useCartStore } from "@/store/cartStore";
+import { useThemeStore } from "@/store/themStore";
+import logo from "../../assets/logo.png";
 
 const Navbar = () => {
   const { user, loading, logout } = useUserStore();
-  // const { cart } = useCartStore();
-  // const {setTheme} = useThemeStore();
-
-  // to be removed later starts
-  const cart = [];
-  const setTheme = (theme: string) => {};
-  // to be removed later ends
+  const { cart } = useCartStore();
+  const { setTheme } = useThemeStore();
 
   return (
     <div className="max-w-7xl mx-auto">
       <div className="flex items-center justify-between h-14">
-        <Link to="/">
-          <h1 className="font-bold md:font-extrabold text-2xl">QuickEats</h1>
+        <Link to="/" className="flex items-center space-x-2">
+          <img
+            src={logo} 
+            alt="logo"
+            className="w-[50px] h-[50px] md:w-[70px] md:h-[70px] rounded-full "
+          />
+          <h1 className="font-bold text-xl text-hoverOrange md:font-extrabold md:text-3xl font-nunito ">QuickEats</h1>
         </Link>
         <div className="hidden md:flex items-center gap-10">
           <div className="hidden md:flex items-center gap-6">

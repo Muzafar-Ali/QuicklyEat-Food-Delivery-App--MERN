@@ -1,4 +1,4 @@
-import { Orders } from "./orderType";
+import { TOrders } from "./orderType";
 
 export type TMenuItem = {
     _id: string;
@@ -25,20 +25,20 @@ export type TSearchedRestaurant = {
 
 export type TRestaurantState = {
     loading: boolean;
-    restaurant: Restaurant | null;
+    restaurant: Restaurant | null;zz
     searchedRestaurant: TSearchedRestaurant | null;
-    appliedFilter:string[];
+    appliedFilter: string[];
     singleRestaurant: Restaurant | null,
-    restaurantOrder:Orders[],
+    restaurantOrder: TOrders[],
     createRestaurant: (formData: FormData) => Promise<void>;
-    getRestaurant: () => Promise<void>;
+    getRestaurant?: () => Promise<void>;
     updateRestaurant: (formData: FormData) => Promise<void>;
     searchRestaurant: (searchText: string, searchQuery: string, selectedCuisines: any) => Promise<void>;
     addMenuToRestaurant: (menu: TMenuItem) => void;
     updateMenuToRestaurant: (menu: TMenuItem) => void;
-    setAppliedFilter: (value:string) => void;
-    resetAppliedFilter: () => void;
+    manageAppliedFilter: (value:string) => void;
+    removeAppliedFilter: () => void;
     getSingleRestaurant: (restaurantId:string) => Promise<void>;
     getRestaurantOrders: () => Promise<void>;
-    updateRestaurantOrder: (orderId:string, status:string) => Promise<void>;
+    updateRestaurantOrderStatus: (orderId:string, status:string) => Promise<void>;
 }

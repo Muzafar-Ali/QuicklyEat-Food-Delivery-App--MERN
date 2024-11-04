@@ -23,10 +23,7 @@ const VerifyEmail = () => {
     }
   };
 
-  const handleKeyDown = (
-    index: number,
-    e: React.KeyboardEvent<HTMLInputElement>
-  ) => {
+  const handleKeyDown = ( index: number, e: React.KeyboardEvent<HTMLInputElement> ) => {
     if (e.key === "Backspace" && !otp[index] && index > 0) {
       inputRef.current[index - 1].focus();
     }

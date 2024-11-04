@@ -5,22 +5,12 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Separator } from "../ui/separator";
 import { Link } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { useUserStore } from "@/store/userStore";
+import { useThemeStore } from "@/store/themStore";
 
 const MobileNavbar = () => {
-  // const { user, logout, loading } = useUserStore();
-  // const {setTheme} = useThemeStore();
-
-  // to be removed later starts
-  const user = {
-    name: "John Doe",
-    email: "john@example.com",
-    admin: true,
-    profilePicture: "pic"
-  };
-  const loading = false;
-  const logout = () => { };
-  const setTheme = (theme: string) => { };
-  // to be removed later ends
+  const { user, logout, loading } = useUserStore();
+  const {setTheme} = useThemeStore();
 
     return (
     <Sheet>
@@ -105,7 +95,7 @@ const MobileNavbar = () => {
               <AvatarImage src={user?.profilePicture} />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
-            <h1 className="font-bold">QuickEats</h1>
+            <h1 className="font-bold font-nunito">QuickEats</h1>
           </div>
           <SheetClose asChild>
             {loading ? (

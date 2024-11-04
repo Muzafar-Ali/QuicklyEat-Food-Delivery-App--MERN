@@ -1,29 +1,31 @@
-export type CheckoutSessionRequest = {
+
+export type TCheckoutSessionRequest = {
   cartItems:{
-      menuId:string;
-      name:string;
-      image:string;
-      price:string;
-      quantity:string;
+    menuId:string;
+    name:string;
+    image:string;
+    price:string;
+    quantity:string;
   }[];
   deliveryDetails:{
-      name:string;
-      email:string;
-      contact:string;
-      address:string;
-      city:string;
-      country:string
+    name:string;
+    email:string;
+    contact:string;
+    address:string;
+    city:string;
+    country:string
   },
   restaurantId:string;
 }
-export interface Orders extends CheckoutSessionRequest {
+export type TOrders =  TCheckoutSessionRequest & {
   _id:string;
   status:string;
   totalAmount:number;
 }
-export type OrderState = {
+
+export type TOrderState = {
   loading:boolean;
-  orders:Orders[];
-  createCheckoutSession: (checkoutSessionRequest:CheckoutSessionRequest) => Promise<void>;
+  orders: TOrders[];
+  createCheckoutSession: (checkoutSessionRequest: TCheckoutSessionRequest) => Promise<void>;
   getOrderDetails: () => Promise<void>;
 }

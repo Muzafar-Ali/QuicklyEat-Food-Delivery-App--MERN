@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { z } from "zod";
 
- const userSchema = z.object({
+ export const userSchema = z.object({
   body: z.object({
 
     fullname: z.string({
@@ -77,12 +77,46 @@ export const verifyEmailSchema = z.object({
   })
 })
 
+// update profile schema
+export const userUpdateSchema = z.object({
+  body: z.object({
+
+    fullname: z.string({
+      required_error: "Fullname is required",
+      invalid_type_error: "Fullname must be a character",
+    }).min(3,"Fullname must be at least 3 characters").optional(),
+  
+    email: z.string({
+      required_error: "Email is required",
+    }).email({ message: "Invalid email address",}).optional(),
+      
+    contact: z.number({
+      required_error: "Contact is required",
+      invalid_type_error: "Contact must be a number",
+    }).nonnegative("Contact must be a non-negative number").optional(),
+    
+    address: z.string({
+      required_error: "Address is required",
+    }).min(1, "Address is required").optional(),
+  
+    city: z.string({
+      required_error: "City is required",
+    }).min(1, "City is required").optional(),
+    
+    country: z.string().min(1, "Country is required").optional(),
+    
+    // profilePicture: z.string({
+    //   required_error: "Profile picture is required",
+    // }).url(),
+    
+    admin: z.boolean().default(false).optional(),
+  })
+});
+
 export type TUser = z.infer<typeof userSchema>;
 export type TUserLogin = z.infer<typeof loginSchema>;
 export type TVerifyEmail = z.infer<typeof verifyEmailSchema>;
-
-
-
+export type TUserUpdate = z.infer<typeof userUpdateSchema>;
 
 export default userSchema;
 
