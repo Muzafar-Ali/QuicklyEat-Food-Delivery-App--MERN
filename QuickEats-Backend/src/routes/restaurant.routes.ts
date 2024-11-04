@@ -3,6 +3,7 @@ import {
   createRestaurantHandler, 
   getRestaurantbyUserIdHandler, 
   getRestaurantOrderHandler, 
+  getRestaurantsHandler, 
   getSingleRestaurantHandler, 
   searchRestaurantHandler, 
   updateRestaurantHandler 
@@ -16,6 +17,7 @@ const route = Router();
 
 route.post("/", [isAuthenticated, upload.single("image"), validateRequestData(restaurantSchema)],  createRestaurantHandler);
 route.get("/", isAuthenticated, getRestaurantbyUserIdHandler);
+route.get("/all", getRestaurantsHandler);
 route.get("/order", isAuthenticated, getRestaurantOrderHandler);
 route.get("/:id", getSingleRestaurantHandler);
 route.put("/", [isAuthenticated, upload.single("image"), validateRequestData(updateRestaurantSchema)], updateRestaurantHandler);

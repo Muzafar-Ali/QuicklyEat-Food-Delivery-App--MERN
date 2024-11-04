@@ -57,7 +57,7 @@ getSingleRestaurant: async (restaurantId: string) => {
     const response = await axios.get(`${config.baseUri}/api/v1/restaurant/${restaurantId}`);
     if (response.data.success) {
       set({ singleRestaurant: response.data.restaurant })
-    }
+    }  
   } catch (error) { }
 },
 updateRestaurant: async (formData: FormData) => {
@@ -160,13 +160,11 @@ searchRestaurant: async (searchText: string, searchQuery: string, selectedCuisin
     params.set("searchQuery", searchQuery);
     params.set("selectedCuisines", selectedCuisines.join(","));
 
-    // await new Promise((resolve) => setTimeout(resolve, 2000));
     const response = await axios.get(`${config.baseUri}/api/v1/restaurant/search/${searchText}?${params.toString()}`);
     console.error('response =', response);
-    
 
     if (response.data.success) {
-        set({ loading: false, searchedRestaurant: response.data });
+      set({ loading: false, searchedRestaurant: response.data });
     }
     
   } catch (error) {

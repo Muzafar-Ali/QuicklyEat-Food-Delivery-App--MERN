@@ -91,10 +91,10 @@ const Profile = () => {
         </div>
       </div>
       <div className="grid md:grid-cols-4 md:gap-2 gap-3 my-10">
-        <div className="flex items-center gap-4 rounded-sm p-2 bg-gray-200">
+        <div className="flex items-center gap-4 rounded-sm p-2 bg-gray-200 dark:bg-gray-400">
           <Mail className="text-gray-500" />
           <div className="w-full">
-            <Label>Email</Label>
+            <Label className="">Email</Label>
             <input
             disabled
               name="email"
@@ -104,7 +104,7 @@ const Profile = () => {
             />
           </div>
         </div>
-        <div className="flex items-center gap-4 rounded-sm p-2 bg-gray-200">
+        <div className="flex items-center gap-4 rounded-sm p-2 bg-gray-200 dark:bg-gray-400">
           <LocateIcon className="text-gray-500" />
           <div className="w-full">
             <Label>Address</Label>
@@ -116,7 +116,7 @@ const Profile = () => {
             />
           </div>
         </div>
-        <div className="flex items-center gap-4 rounded-sm p-2 bg-gray-200">
+        <div className="flex items-center gap-4 rounded-sm p-2 bg-gray-200 dark:bg-gray-400">
           <MapPin className="text-gray-500" />
           <div className="w-full">
             <Label>City</Label>
@@ -128,7 +128,7 @@ const Profile = () => {
             />
           </div>
         </div>
-        <div className="flex items-center gap-4 rounded-sm p-2 bg-gray-200">
+        <div className="flex items-center gap-4 rounded-sm p-2 bg-gray-200 dark:bg-gray-400">
           <MapPinnedIcon className="text-gray-500" />
           <div className="w-full">
             <Label>Country</Label>

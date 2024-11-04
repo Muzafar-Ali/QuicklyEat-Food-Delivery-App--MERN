@@ -25,7 +25,7 @@ export type TSearchedRestaurant = {
 
 export type TRestaurantState = {
     loading: boolean;
-    restaurant: Restaurant | null;
+    restaurant: Restaurant | null;zz
     searchedRestaurant: TSearchedRestaurant | null;
     appliedFilter: string[];
     singleRestaurant: Restaurant | null,

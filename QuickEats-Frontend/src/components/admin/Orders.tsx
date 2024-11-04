@@ -12,13 +12,17 @@ import { useEffect } from "react";
 
 const Orders = () => {
   const { restaurantOrder, getRestaurantOrders, updateRestaurantOrderStatus } = useRestaurantStore();
-
+  console.log('restaurantOrder', restaurantOrder);
+  
+  
   const handleStatusChange = async (id: string, status: string) => {
     await updateRestaurantOrderStatus(id, status);
   };
   useEffect(() => {
     getRestaurantOrders(); 
   }, []);
+  console.log('restaurantOrder', restaurantOrder);
+  
   return (
     <div className="max-w-6xl mx-auto py-10 px-6">
       <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white mb-10">
@@ -30,7 +34,10 @@ const Orders = () => {
           <div key={order._id} className="flex flex-col md:flex-row justify-between items-start sm:items-center bg-white dark:bg-gray-800 shadow-lg rounded-xl p-6 sm:p-8 border border-gray-200 dark:border-gray-700">
             <div className="flex-1 mb-6 sm:mb-0">
               <h1 className="text-xl font-semibold text-gray-800 dark:text-gray-100">
-                {order.deliveryDetails?.name}
+                <span>Odered by: </span>{order.deliveryDetails?.name}
+              </h1>
+              <h1 className="text-xl font-semibold text-gray-800 dark:text-gray-100">
+                <span>order: </span>{order.cartItems[0].name}
               </h1>
               <p className="text-gray-600 dark:text-gray-400 mt-2">
                 <span className="font-semibold">Address: </span>

@@ -1,18 +1,19 @@
+
 export type TCheckoutSessionRequest = {
   cartItems:{
-      menuId:string;
-      name:string;
-      image:string;
-      price:string;
-      quantity:string;
+    menuId:string;
+    name:string;
+    image:string;
+    price:string;
+    quantity:string;
   }[];
   deliveryDetails:{
-      name:string;
-      email:string;
-      contact:string;
-      address:string;
-      city:string;
-      country:string
+    name:string;
+    email:string;
+    contact:string;
+    address:string;
+    city:string;
+    country:string
   },
   restaurantId:string;
 }

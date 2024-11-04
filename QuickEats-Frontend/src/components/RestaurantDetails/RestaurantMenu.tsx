@@ -1,13 +1,11 @@
 import { TMenuItem } from "@/types/restaurantType";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardFooter } from "../ui/card";
-import { useNavigate } from "react-router-dom";
 import { useCartStore } from "@/store/cartStore";
 import { toast } from "sonner";
 
 const RestaurantMenu = ({ menus }: { menus: TMenuItem[] }) => {
   const { addToCart } = useCartStore();
-  const navigate = useNavigate();
   
   return (
     <div className="md:p-4">

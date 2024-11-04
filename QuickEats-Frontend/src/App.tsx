@@ -48,6 +48,19 @@ const appRouter = createBrowserRouter([
         path: '/orders',
         element: <Orders/>
       },
+       // admin routes
+      {
+        path: "/admin/restaurant",
+        element:<AdminRoute><Restaurant/></AdminRoute>,
+      },
+      {
+        path: "/admin/menu",
+        element:<AdminRoute><AddMenu /></AdminRoute>,
+      },
+      {
+        path: "/admin/orders",
+        element:<AdminRoute><Orders /></AdminRoute>,
+      },
     ]
   },
   {
@@ -70,19 +83,6 @@ const appRouter = createBrowserRouter([
     path: '/verify-email',
     element: <VerifyEmail/>
   },
-   // admin routes
-   {
-    path: "/admin/restaurant",
-    element:<AdminRoute><Restaurant/></AdminRoute>,
-  },
-  {
-    path: "/admin/menu",
-    element:<AdminRoute><AddMenu /></AdminRoute>,
-  },
-  // {
-  //   path: "/admin/orders",
-  //   element:<AdminRoute><Orders /></AdminRoute>,
-  // },
 
 ])
 function App() {

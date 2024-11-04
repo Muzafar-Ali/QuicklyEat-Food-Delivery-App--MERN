@@ -22,6 +22,7 @@ const Cart = () => {
   let totalAmount = cart.reduce((acc: number, ele: { price: number; quantity: number; }) => {
     return acc + ele.price * ele.quantity;
   }, 0);
+  
   return (
     <div className="flex flex-col max-w-7xl mx-auto my-10">
       <div className="flex justify-end">
@@ -45,7 +46,7 @@ const Cart = () => {
         </TableHeader>
         <TableBody>
           {cart.map((item: CartItem) => (
-            <TableRow>
+            <TableRow key={item._id}>
               <TableCell>
                 <Avatar>
                   <AvatarImage src={item.image} alt="" />

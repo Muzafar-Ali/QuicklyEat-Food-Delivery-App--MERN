@@ -46,6 +46,21 @@ export const createRestaurantHandler = async (req: Request<{}, {}, TRestaurant["
   }
 }
 
+export const getRestaurantsHandler = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const restaurants = await RestaurantModel.find().populate("menus")
+
+    res.status(200).json({
+      success: true,
+      restaurants
+    })
+
+  } catch (error) {
+    console.error("getRestaurantsHansler error = ", error);
+    next(error)
+  }
+}
+
 export const getRestaurantbyUserIdHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const id = req.id;

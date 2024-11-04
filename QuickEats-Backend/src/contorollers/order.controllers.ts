@@ -57,24 +57,27 @@ export const getOrderHandler = async ( req: Request, res: Response, next: NextFu
 
 export const createCheckoutSessionHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const {totalAmount} = req.body;
-    const CheckoutSession: TCheckoutSessionRequest = req.body;
+    const userId = req.id;
+    const { totalAmount } = req.body;
+    const checkoutSession: TCheckoutSessionRequest = req.body;
 
-    const restaurant = await RestaurantModel.findById(CheckoutSession.restaurantId).populate("menus")
+    const restaurant = await RestaurantModel.findById(checkoutSession.restaurantId).populate("menus")
     if(!restaurant) throw new ErrorHandler(404, "Restaurant not found");
-
+    
     // line items
     const menuItems = restaurant.menus;
-    const lineItems = createLineItems( CheckoutSession, menuItems );
     
+    const lineItems = createLineItems( checkoutSession, menuItems );
+
     const order = new OrderModel({
-      user: req.id,
-      restaurant: CheckoutSession.restaurantId,
-      deliveryDetails: CheckoutSession.deliveryDetails,
-      cartItems: CheckoutSession.cartItems,
+      user: userId,
+      restaurant: checkoutSession.restaurantId,
+      deliveryDetails: checkoutSession.deliveryDetails,
+      cartItems: checkoutSession.cartItems,
       totalAmount,
       status: "pending"
     });
+
     const session = await stripe.checkout.sessions.create({
       line_items: lineItems,
       mode: "payment",
