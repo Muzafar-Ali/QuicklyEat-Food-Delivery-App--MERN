@@ -21,6 +21,7 @@ export const sendVerificationEmail = async (email: string, verificationCode: str
       throw new Error("Failed to send email verification")
     }
 }
+
 export const sendWelcomeEmail = async (email: string, name: string) => {
   const recipient = [{ email }];
   const htmlContent = generateWelcomeEmailHtml(name);

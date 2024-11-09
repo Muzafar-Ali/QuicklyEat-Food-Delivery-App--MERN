@@ -12,6 +12,7 @@ export const useRestaurantStore = create<TRestaurantState>()(persist((set, get) 
   appliedFilter: [],
   searchedRestaurant: null,
   singleRestaurant: null,
+  allRestaurant: null,
   restaurantOrder: [],
   createRestaurant: async(FormData: FormData) => {
     try {
@@ -47,7 +48,7 @@ export const useRestaurantStore = create<TRestaurantState>()(persist((set, get) 
       }
     } catch (error: any) {
       if (error.response.status === 404) {
-          set({ restaurant: null });
+        set({ restaurant: null });
       }
       set({ loading: false });
     }
@@ -58,7 +59,23 @@ getSingleRestaurant: async (restaurantId: string) => {
     if (response.data.success) {
       set({ singleRestaurant: response.data.restaurant })
     }  
-  } catch (error) { }
+  } catch (error) { 
+    console.error(error);
+  }
+},
+getAllRestaurant: async () => {
+  try {
+    set({ loading: true });
+    const response = await axios.get(`${config.baseUri}/api/v1/restaurant/all`);
+    if (response.data.success) {
+      set({ loading: false, allRestaurant: response.data.restaurants });
+    }
+
+  } catch (error) {
+    console.error(error);
+  } finally {
+    set({ loading: false });
+  }
 },
 updateRestaurant: async (formData: FormData) => {
   try {

@@ -48,8 +48,11 @@ export const createRestaurantHandler = async (req: Request<{}, {}, TRestaurant["
 
 export const getRestaurantsHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    console.log('all restuarant hit');
+    
     const restaurants = await RestaurantModel.find().populate("menus")
-
+    if(!restaurants) throw new ErrorHandler(404, "Restaurants not found");
+    
     res.status(200).json({
       success: true,
       restaurants

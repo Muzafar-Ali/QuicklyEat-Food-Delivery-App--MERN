@@ -61,7 +61,7 @@ const Cart = () => {
                   onClick={() => decreasetQuantity(item._id)}
                     size={"icon"}
                     variant={"outline"}
-                    className="rounded-full bg-gray-200"
+                    className="rounded-full bg-accent hover:bg-gray-400"
                   >
                     <Minus />
                   </Button>

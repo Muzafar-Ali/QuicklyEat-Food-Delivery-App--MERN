@@ -15,10 +15,6 @@ const restaurantSchema = new mongoose.Schema<TRestaurant>({
     type:String,
     required:true
   },
-  country:{
-    type:String,
-    required:true
-  },
   deliveryTime:{
     type:Number,
     required:true

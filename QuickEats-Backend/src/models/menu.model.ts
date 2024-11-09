@@ -18,6 +18,11 @@ const menuSchema = new mongoose.Schema<TMenuDocument>({
     type:String,
     required:true
   },
+  menuCategory: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "MenuCategory",
+    required: true
+  },
 },{timestamps:true});
 
 export const MenuModel = mongoose.model<TMenuDocument>("Menu", menuSchema);
