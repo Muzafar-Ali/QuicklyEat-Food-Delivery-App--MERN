@@ -1,15 +1,26 @@
 import mongoose from "mongoose";
 
 export type TMenu = {
-  // _id:mongoose.Schema.Types.ObjectId;
-  name:string;
-  description:string;
-  price:number;
-  image:string;
-  menuCategory:mongoose.Schema.Types.ObjectId;
+  title: string;      // E.g., "Burgers", "Fries", "Drinks"
+  description?: string;           
+  restaurant: mongoose.Schema.Types.ObjectId;  
+  menuItems: mongoose.Schema.Types.ObjectId[]; 
 }
 
-export type TMenuDocument = TMenu & Document & {
+export type TMenuDocument = TMenu & mongoose.Document & {
+  createdAt:Date;
+  updatedAt:Date;
+}
+
+export type TMenuItem = {
+  title: string;          // Name of the dish
+  price: number;               
+  description: string;    
+  image: string;               
+  menu: mongoose.Schema.Types.ObjectId;            
+}
+
+export type TMenuItemDocument = TMenuItem & mongoose.Document & {
   createdAt:Date;
   updatedAt:Date;
 }

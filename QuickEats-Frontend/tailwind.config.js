@@ -7,6 +7,9 @@ export default {
   ],
   theme: {
   	extend: {
+			screens: {
+        'xs': '320px', // Custom 'xs' breakpoint at 320px
+      },
 			fontFamily: {
         nunito: ['Nunito', 'sans-serif'],
 				roboto: ['Roboto', 'sans-serif'],

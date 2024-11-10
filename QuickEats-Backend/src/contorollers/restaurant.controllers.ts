@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express"
 import { TRestaurant, TUpdateRestaurant } from "../schema/restaurant.schema.js"
 import { createRestaurant, uploadImages } from "../services/restaurant.services.js";
-import { OrderModel } from "../models/order.model.js";
 import { replaceImageOnCloudinary } from "../utils/cloudinary/replaceImageOnCloudinary.js";
+import OrderModel from "../models/order.model.js";
 import ErrorHandler from "../utils/errorClass.js";
 import RestaurantModel from "../models/restaurant.model.js";
 import uploadImageToCloudinary from "../utils/cloudinary/uploadImageToCloudinary.js";
@@ -67,7 +67,14 @@ export const getRestaurantsHandler = async (req: Request, res: Response, next: N
 export const getRestaurantbyUserIdHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const id = req.id;
-    const restaurant = await RestaurantModel.findOne({user: id}).populate("menus")
+    const restaurant = await RestaurantModel.findOne({user: id}).populate({
+      path:'menus',
+      populate:{
+        path:'menuItems',
+      }
+    })
+    console.log('restaurant', restaurant);
+    
     if(!restaurant) throw new ErrorHandler(404, "Restaurant not found");
     
     res.status(200).json({
@@ -87,8 +94,11 @@ export const getSingleRestaurantHandler = async (req: Request, res: Response, ne
     
     const restaurant = await RestaurantModel.findById(restaurantId).populate({
       path:'menus',
-      options:{createdAt:-1}
+      populate:{
+        path:'menuItems',
+      }
     });
+
     if(!restaurant) throw new ErrorHandler(404, "Restaurant not found");
     
     res.status(200).json({

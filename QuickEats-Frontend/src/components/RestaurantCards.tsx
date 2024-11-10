@@ -33,7 +33,7 @@ const RestaurantCards = ({ restaurants, loading }: {restaurants: TAllRestaurants
                 </div>
               </div>
               <CardContent className="px-4">
-                <h1 className="text-2xl text-left capitalize font-bold font-roboto tracking-wide text-gray-900 dark:text-gray-100 line-clamp-1 mt-1">
+                <h1 className="text-2xl text-left capitalize font-bold font-roboto tracking-wide text-gray-700 dark:text-gray-200 line-clamp-1 mt-1">
                   {restaurant.restaurantName}
                 </h1>
                 <div className="flex items-center gap-2 mt-1 opacity-70">

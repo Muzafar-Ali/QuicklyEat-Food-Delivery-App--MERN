@@ -1,24 +1,8 @@
 import mongoose from "mongoose";
 import ErrorHandler from "../utils/errorClass.js";
+import { TCheckoutSessionRequest } from "../types/order.type.js";
 
-type CheckoutSessionRequest = {
-  cartItems: {
-      menuId: string;
-      name: string;
-      image: string;
-      price: number;
-      quantity: number
-  }[],
-  deliveryDetails: {
-      name: string;
-      email: string;
-      address: string;
-      city: string
-  },
-  restaurantId: string
-}
-
-export const createLineItems = (CheckoutSessionRequest: CheckoutSessionRequest, menuItems: any) => {
+export const createLineItems = (CheckoutSessionRequest: TCheckoutSessionRequest, menuItems: any) => {
 
   const lineItems = CheckoutSessionRequest.cartItems.map((cartItem: any ) => {
     const menuItem = menuItems.find((item: any) => item._id.toString() === cartItem.menuId);    

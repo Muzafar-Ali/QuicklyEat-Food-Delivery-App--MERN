@@ -79,10 +79,11 @@ userSchema.methods.comparePassword = async function (candidatePassword: string):
   try {
     return await bcrypt.compare(candidatePassword, user.password);
   } catch (error: any) {
-    console.error('compared password error = ', error); // Log the error if needed
+    console.error('compared password error = ', error); 
     return false;
   }
 };
 
 const UserModel = mongoose.model<TUserDocument>("User", userSchema);
+
 export default UserModel;

@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
-import { TRestaurant } from "../types/restaurant.type.js";
+import { TRestaurantDocument } from "../types/restaurant.type.js";
 
-const restaurantSchema = new mongoose.Schema<TRestaurant>({
+const restaurantSchema = new mongoose.Schema<TRestaurantDocument>({
   user:{
     type:mongoose.Schema.Types.ObjectId,
     ref:"User",
@@ -33,6 +33,6 @@ const restaurantSchema = new mongoose.Schema<TRestaurant>({
   }
 },{timestamps:true});
 
-const RestaurantModel = mongoose.model<TRestaurant>('Restaurant', restaurantSchema);
+const RestaurantModel = mongoose.model<TRestaurantDocument>('Restaurant', restaurantSchema);
 
 export default RestaurantModel;

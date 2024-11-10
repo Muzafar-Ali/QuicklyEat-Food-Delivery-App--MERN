@@ -45,20 +45,20 @@ const Cart = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {cart.map((item: CartItem) => (
+          {cart?.map((item: CartItem) => (
             <TableRow key={item._id}>
               <TableCell>
-                <Avatar>
+                <Avatar className="rounded-sm w-20 h-16">
                   <AvatarImage src={item.image} alt="" />
                   <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
               </TableCell>
-              <TableCell> {item.name}</TableCell>
-              <TableCell> {item.price}</TableCell>
+              <TableCell className="text-start"> {item.title}</TableCell>
+              <TableCell className="text-start"> {item.price}</TableCell>
               <TableCell>
                 <div className="w-fit flex items-center rounded-full border border-gray-100 dark:border-gray-800 shadow-md">
                   <Button
-                  onClick={() => decreasetQuantity(item._id)}
+                    onClick={() => decreasetQuantity(item._id)}
                     size={"icon"}
                     variant={"outline"}
                     className="rounded-full bg-accent hover:bg-gray-400"
@@ -83,7 +83,7 @@ const Cart = () => {
                   </Button>
                 </div>
               </TableCell>
-              <TableCell>{item.price * item.quantity}</TableCell>
+              <TableCell className="text-start">{item.price * item.quantity}</TableCell>
               <TableCell className="text-right">
                 <Button 
                   onClick={() => removeFromTheCart(item._id)}

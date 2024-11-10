@@ -1,30 +1,31 @@
 import { NextFunction, Request, Response } from "express";
-import { MenuModel } from "../models/menu.model.js";
 import { TId, TMenu } from "../schema/menu.schema.js";
 import { updateRestaurantMenus } from "../services/menu.services.js";
 import { replaceImageOnCloudinary } from "../utils/cloudinary/replaceImageOnCloudinary.js";
 import { deleteImageFromCloudinary } from "../utils/cloudinary/deleteImageFromCloudinary.js";
+import MenuModel  from "../models/menu.model.js";
 import RestaurantModel from "../models/restaurant.model.js";
 import ErrorHandler from "../utils/errorClass.js";
 import uploadImageToCloudinary from "../utils/cloudinary/uploadImageToCloudinary.js";
 
-export const createMenuHandler = async (req: Request<{}, {}, TMenu["body"]>, res: Response, next: NextFunction) => {
+export const createMenuHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = req.id;
-    const {name, price, description} = req.body;
-    const file = req.file;
+    const {title, price, description, menuItems, restaurant} = req.body;
+    // const file = req.file;
 
-    if(!file) throw new ErrorHandler(400, "Image is required");
+    // if(!file) throw new ErrorHandler(400, "Image is required");
 
-    const imageUrl = await uploadImageToCloudinary(file, name, "menu");
-    if(!imageUrl) throw new ErrorHandler(500, "Failed to upload image");
+    // const imageUrl = await uploadImageToCloudinary(file, title, "menu");
+    // if(!imageUrl) throw new ErrorHandler(500, "Failed to upload image");
 
     // create menu
     const menu = await MenuModel.create({
-      name, 
+      title, 
       price, 
       description,
-      image: imageUrl
+      menuItems,
+      restaurant
     });
     if(!menu) throw new ErrorHandler(500, "Failed to create menu");
       

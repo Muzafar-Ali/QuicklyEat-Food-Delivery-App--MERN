@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response } from "express";
-import { OrderModel } from "../models/order.model.js";
+import { createLineItems } from "../services/order.service.js";
+import { TCheckoutSessionRequest } from "../types/order.type.js";
 import ErrorHandler from "../utils/errorClass.js";
 import RestaurantModel from "../models/restaurant.model.js";
-import { createLineItems } from "../services/order.service.js";
+import OrderModel from "../models/order.model.js";
 import Stripe from "stripe";
 import config from "../config/config.js";
-import { TCheckoutSessionRequest } from "../types/order.type.js";
 
 
 const stripe = new Stripe(config.stripeSecretKey!);
