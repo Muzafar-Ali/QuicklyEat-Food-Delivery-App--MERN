@@ -17,6 +17,9 @@ import AdminRoute from './components/protectedRoutes/AdminRoute'
 import Restaurant from './components/admin/Restaurant'
 import AddMenu from './components/admin/AddMenu'
 import Orders from './components/admin/Orders'
+import { useEffect } from 'react'
+import { useThemeStore } from './store/themStore'
+import HomePage from './components/Homepage/HomePage'
 
 
 const appRouter = createBrowserRouter([
@@ -26,7 +29,7 @@ const appRouter = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <HeroSection/>
+        element: <HomePage/>
       },
       {
         path: '/profile',
@@ -86,6 +89,11 @@ const appRouter = createBrowserRouter([
 
 ])
 function App() {
+  const initializeTheme = useThemeStore((state:any) => state.initializeTheme);
+  useEffect(()=>{
+    initializeTheme();
+  },[])
+
   return (
     <>
       <RouterProvider router={appRouter}></RouterProvider>

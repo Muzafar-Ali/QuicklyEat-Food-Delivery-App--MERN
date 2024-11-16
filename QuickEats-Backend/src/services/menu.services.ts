@@ -1,4 +1,4 @@
-import { MenuModel } from "../models/menu.model.js";
+import MenuModel from "../models/menu.model.js";
 import mongoose from "mongoose";
 import RestaurantModel from "../models/restaurant.model.js";
 import ErrorHandler from "../utils/errorClass.js";

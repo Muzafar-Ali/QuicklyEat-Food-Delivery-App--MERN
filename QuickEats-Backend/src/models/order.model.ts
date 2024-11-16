@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
-import { TOrder } from "../types/order.type.js";
+import { TOrderDocument } from "../types/order.type.js";
 
-const orderSchema = new mongoose.Schema<TOrder>({
+const orderSchema = new mongoose.Schema<TOrderDocument>({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
@@ -16,16 +16,23 @@ const orderSchema = new mongoose.Schema<TOrder>({
     email:{type: String, required: true},
     name:{type: String, required: true},
     address:{type: String, required: true},
-    city:{type: String, required: true},
   },
-  cartItems:[
+  cartItems: [
     {
-      menuId:{type: String, required: true},
-      name:{type: String, required: true},
-      image:{type: String, required: true},
-      price:{type: Number, required: true},
-      quantity:{type: Number, required: true},
-    }
+      menuItem: { 
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'MenuItem', // Referencing MenuItem (not Menu)
+        required: true 
+      },
+      quantity: { 
+        type: Number, 
+        required: true 
+      },
+      price: { 
+        type: Number, 
+        required: true 
+      },
+    },
   ],
   totalAmount: Number,
   status:{
@@ -34,7 +41,8 @@ const orderSchema = new mongoose.Schema<TOrder>({
     required: true
   }
 
-
 }, { timestamps: true });
 
-export const OrderModel = mongoose.model<TOrder>("Order", orderSchema)
+const OrderModel = mongoose.model<TOrderDocument>("Order", orderSchema)
+
+export default OrderModel

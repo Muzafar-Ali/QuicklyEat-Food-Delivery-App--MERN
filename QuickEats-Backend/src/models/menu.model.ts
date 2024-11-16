@@ -2,22 +2,28 @@ import mongoose from "mongoose";
 import { TMenuDocument } from "../types/menu.type.js";
 
 const menuSchema = new mongoose.Schema<TMenuDocument>({
-  name:{
-    type:String,
-    required:true
+  title: {
+    type: String,
+    required: true, // E.g., "Burgers", "Fries", "Drinks"
+    trim: true,
   },
-  description:{
-    type:String,
-    required:true
+  description: {
+    type: String,
+    trim: true, // Optional section description, like "Our delicious range of burgers"
   },
-  price:{
-    type:Number,
-    required:true
+  restaurant: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Restaurant', // Reference to the restaurant this menu belongs to
+    required: true,
   },
-  image:{
-    type:String,
-    required:true
-  },
+  menuItems: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'MenuItem', // Reference to the MenuItem model
+  }],
+
 },{timestamps:true});
 
-export const MenuModel = mongoose.model<TMenuDocument>("Menu", menuSchema);
+
+const MenuModel = mongoose.model<TMenuDocument>('Menu', menuSchema);
+
+export default MenuModel;

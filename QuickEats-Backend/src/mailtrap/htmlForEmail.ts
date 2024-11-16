@@ -1,3 +1,5 @@
+import config from "../config/config.js";
+
 export const htmlContent: string = `
     <!DOCTYPE html>
     <html>
@@ -77,6 +79,7 @@ export const htmlContent: string = `
     `;
 
 export const generateWelcomeEmailHtml = (name: string) => {
+    const loginURL = `${config.clientUrl}/login`
     return `
           <html>
             <head>
@@ -118,6 +121,7 @@ export const generateWelcomeEmailHtml = (name: string) => {
                 </div>
                 <div class="email-body">
                   <p>Hi ${name},</p>
+                  <a href="${loginURL}" class="button">Please Login</a>
                   <p>Congratulations! Your email has been successfully verified.</p>
                   <p>We are excited to have you on board at QuickEats. Explore our platform and enjoy our services.</p>
                   <p>If you have any questions or need assistance, feel free to reach out to us.</p>
@@ -199,6 +203,7 @@ export const generatePasswordResetEmailHtml = (resetURL: string, name: string) =
   };
 
   export const generateResetSuccessEmailHtml = (name: string) => {
+    const loginURL = `${config.clientUrl}/login`
     return `
       <html>
         <head>
@@ -240,6 +245,7 @@ export const generatePasswordResetEmailHtml = (resetURL: string, name: string) =
             </div>
             <div class="email-body">
               <p>Hi ${name}</p>
+              <a href="${loginURL}" class="button">Please Login</a>
               <p>Your password has been successfully reset. You can now log in with your new password.</p>
               <p>If you did not request this change, please contact our support team immediately.</p>
               <p>Thank you,<br/>The QuickEats Team</p>
