@@ -1,5 +1,3 @@
-// import { useRestaurantStore } from "@/store/useRestaurantStore";
-
 import { Bike,  ShoppingBag, Timer } from "lucide-react";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";

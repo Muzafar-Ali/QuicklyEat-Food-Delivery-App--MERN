@@ -57,7 +57,8 @@ export const useRestaurantStore = create<TRestaurantState>()(persist((set, get) 
 getSingleRestaurant: async (restaurantId: string) => {
   try {
     const response = await axios.get(`${config.baseUri}/api/v1/restaurant/${restaurantId}`);
-
+    console.log('response.data', response.data);
+    
     if (response.data.success) {
       set({ singleRestaurant: response.data.restaurant })
     }  
@@ -169,21 +170,18 @@ manageAppliedFilter: (selectedValue: string) => {
 removeAppliedFilter: () => {
   set({ appliedFilter: [] })
 },
-searchRestaurant: async (searchText: string, searchQuery: string, selectedCuisines: any) => {
+searchRestaurant: async (searchQuery: string, cuisines: any) => {
   try {
-    console.error("working 1");
-    
     set({ loading: true });
 
     const params = new URLSearchParams();
     params.set("searchQuery", searchQuery);
-    params.set("selectedCuisines", selectedCuisines.join(","));
-
-    const response = await axios.get(`${config.baseUri}/api/v1/restaurant/search/${searchText}?${params.toString()}`);
-    console.error('response =', response);
+    params.set("cuisines", cuisines.join(","));   
+    
+    const response = await axios.get(`${config.baseUri}/api/v1/restaurant/search/?${params.toString()}`);
 
     if (response.data.success) {
-      set({ loading: false, searchedRestaurant: response.data });
+      set({ loading: false, searchedRestaurant: response.data.restaurants });
     }
     
   } catch (error) {

@@ -16,7 +16,7 @@ export type TMenu = {
   menuItems: TMenuItem[]
 }
 
-export type Restaurant = {
+export type TRestaurant = {
   _id: string;
   user: string;
   restaurantName: string;
@@ -29,25 +29,25 @@ export type Restaurant = {
 }
 
 export type TSearchedRestaurant = {
-  data:Restaurant[]
+  data: TRestaurant[]
 }
 
 export type TAllRestaurants = {
-  data: Restaurant[]
+  data: TRestaurant[]
 }
 
 export type TRestaurantState = {
   loading: boolean;
-  restaurant: Restaurant | null;
-  searchedRestaurant: TSearchedRestaurant | null;
+  restaurant: TRestaurant | null;
+  searchedRestaurant: TRestaurant[] | null;
   appliedFilter: string[];
-  singleRestaurant: Restaurant | null,
-  allRestaurant: Restaurant[] | null,
+  singleRestaurant: TRestaurant | null,
+  allRestaurant: TRestaurant[] | null,
   restaurantOrder: TOrders[],
   createRestaurant: (formData: FormData) => Promise<void>;
   getRestaurant?: () => Promise<void>;
   updateRestaurant: (formData: FormData) => Promise<void>;
-  searchRestaurant: (searchText: string, searchQuery: string, selectedCuisines: any) => Promise<void>;
+  searchRestaurant: (searchQuery: string, selectedCuisines: any) => Promise<void>;
   addMenuToRestaurant: (menu: TMenuItem) => void;
   updateMenuToRestaurant: (menu: TMenuItem) => void;
   manageAppliedFilter: (value:string) => void;
