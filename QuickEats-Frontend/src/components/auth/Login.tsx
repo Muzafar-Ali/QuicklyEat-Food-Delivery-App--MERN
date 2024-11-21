@@ -1,11 +1,11 @@
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
-import { TUserLogin, userLoginSchema } from '@/schema/userSchema'
 import { Separator } from '@radix-ui/react-separator'
 import { Loader2, LockKeyhole, Mail } from 'lucide-react'
 import { ChangeEvent, FormEvent, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useUserStore } from '@/store/userStore'
+import { TUserLogin, userLoginSchema } from '@/schema/userSchema'
 
 const Login = () => {
   const [input, setInput] = useState<TUserLogin>({
@@ -31,9 +31,10 @@ const Login = () => {
       return;
     }
     try {
-      const isLoginSuccesful =await login(input);
+      const isLoginSuccesful = await login(input);
       if(isLoginSuccesful) navigate("/");
-    } catch (error) {console.log(error);
+    } catch (error) {
+      console.error(error);
     }
   };
 

@@ -8,11 +8,8 @@ import { createJSONStorage, persist } from "zustand/middleware";
 
 export const useRestaurantStore = create<TRestaurantState>()(persist((set, get) => ({
   loading: false,
-  restaurant: null,
+  userRestaurant: null,
   appliedFilter: [],
-  searchedRestaurant: null,
-  singleRestaurant: null,
-  allRestaurant: null,
   restaurantOrder: [],
   createRestaurant: async(FormData: FormData) => {
     try {
@@ -27,7 +24,7 @@ export const useRestaurantStore = create<TRestaurantState>()(persist((set, get) 
       
       if(result.data.success) {
         toast.success(result.data.message);
-        set({ restaurant: result.data.restaurant, loading: false });
+        set({ loading: false });
       }
 
     } catch (error: any) {
@@ -45,35 +42,39 @@ export const useRestaurantStore = create<TRestaurantState>()(persist((set, get) 
       });
 
       if (response.data.success) {
-        set({ loading: false, restaurant: response.data.restaurant });
+        set({ loading: false, userRestaurant: response.data.restaurant });
       }
     } catch (error: any) {
       if (error.response.status === 404) {
-        set({ restaurant: null });
+        set({ userRestaurant: null });
       }
       set({ loading: false });
     }
 },
 getSingleRestaurant: async (restaurantId: string) => {
   try {
+    set({ loading: true });
     const response = await axios.get(`${config.baseUri}/api/v1/restaurant/${restaurantId}`);
-    console.log('response.data', response.data);
-    
+
     if (response.data.success) {
-      set({ singleRestaurant: response.data.restaurant })
+      set({ loading: false})
     }  
+    return response.data.restaurant;
   } catch (error) { 
     console.error(error);
+    set({ loading: false });
   }
 },
 getAllRestaurant: async () => {
   try {
     set({ loading: true });
+    
     const response = await axios.get(`${config.baseUri}/api/v1/restaurant/all`);
     if (response.data.success) {
-      set({ loading: false, allRestaurant: response.data.restaurants });
+      set({ loading: false });
     }
 
+    return response.data.restaurants;
   } catch (error) {
     console.error(error);
   } finally {
@@ -83,12 +84,14 @@ getAllRestaurant: async () => {
 updateRestaurant: async (formData: FormData) => {
   try {
     set({ loading: true });
+    
     const response = await axios.put(`${config.baseUri}/api/v1/restaurant`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       },
       withCredentials: true,
     });
+    
     if (response.data.success) {
       toast.success(response.data.message);
       set({ loading: false });
@@ -98,11 +101,32 @@ updateRestaurant: async (formData: FormData) => {
     set({ loading: false });
   }
 },
-addMenuToRestaurant: (menu: TMenuItem) => {
-  set((state: any) => ({
-    restaurant: state.restaurant ? { ...state.restaurant, menus: [...state.restaurant.menus, menu] } : null,
-  }))
+addMenuToRestaurant: async (menu: TMenuItem) => {
+  try {
+    set({ loading: true });
+
+    const response = await axios.put(`${config.baseUri}/api/v1/restaurant`, menu, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      withCredentials: true,
+    });
+
+    if (response.data.success) {
+      toast.success(response.data.message);
+      set({ loading: false });
+    }
+  } catch (error: any) {
+    toast.error(error.response.data.message);
+    set({ loading: false });
+  }
 },
+
+// addMenuToRestaurant: (menu: TMenuItem) => {
+//   set((state: any) => ({
+//     restaurant: state.restaurant ? { ...state.restaurant, menus: [...state.restaurant.menus, menu] } : null,
+//   }))
+// },
 updateMenuToRestaurant: (updatedMenu: TMenuItem) => {
   set((state: any) => {
       
@@ -170,18 +194,27 @@ manageAppliedFilter: (selectedValue: string) => {
 removeAppliedFilter: () => {
   set({ appliedFilter: [] })
 },
-searchRestaurant: async (searchQuery: string, cuisines: any) => {
+getSearchedRestaurant: async (searchQuery?: string) => {
   try {
     set({ loading: true });
-
     const params = new URLSearchParams();
-    params.set("searchQuery", searchQuery);
-    params.set("cuisines", cuisines.join(","));   
     
-    const response = await axios.get(`${config.baseUri}/api/v1/restaurant/search/?${params.toString()}`);
-
-    if (response.data.success) {
-      set({ loading: false, searchedRestaurant: response.data.restaurants });
+    if(get().appliedFilter.length > 0) {
+      params.set("cuisines", get().appliedFilter?.join(","));   
+      const response = await axios.get(`${config.baseUri}/api/v1/restaurant/search/?${params.toString()}`);
+      if (response.data.success) {
+        set({ loading: false });
+      }
+      return response.data.restaurants;
+    }
+    
+    if(searchQuery) {
+      params.set("searchQuery", searchQuery!);
+      const response = await axios.get(`${config.baseUri}/api/v1/restaurant/search/?${params.toString()}`);
+      if (response.data.success) {
+        set({ loading: false });
+      }
+      return response.data.restaurants;
     }
     
   } catch (error) {

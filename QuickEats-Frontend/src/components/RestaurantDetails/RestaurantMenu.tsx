@@ -6,12 +6,12 @@ import { toast } from "sonner";
 
 const RestaurantMenu = ({ menus }: { menus: TMenu[] }) => {
   const { addToCart } = useCartStore();
-  
+    
   return (
     <div className="mt-5">
-      {menus.map((menu) => (
+      {menus?.map((menu) => (
         <div className="flex flex-col items-start gap-4">
-          <h1 className="font-bold text-2xl font-roboto tracking-wide mt-5">{menu.title}</h1>
+          <h1 className="font-bold text-2xl font-roboto tracking-wide mt-5">{menu.name}</h1>
           <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-5">
             {menu?.menuItems?.map((item) => (
               <Card className="flex items-center justify-between space-x-2 lg:px-2 auto shadow-lg rounded-lg overflow-hidden " key={item._id}>

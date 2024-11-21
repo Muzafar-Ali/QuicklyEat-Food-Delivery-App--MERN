@@ -1,107 +1,46 @@
 import { useRestaurantStore } from "@/store/restaurantStore"
-import { useEffect, useState } from "react";
 import { Search, X } from "lucide-react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+import { useEffect, useState } from "react";
 import { TRestaurant } from "@/types/restaurantType";
 import RestaurantCards from "../RestaurantCards";
 import HeroSection from "./HeroSection"
 import FilterPage from "../FilterPage";
-import config from "@/config/config";
 
 const HomePage = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [restaurants, setRestaurants] = useState<TRestaurant[]>([])
-  const [searchedRestaurant, setSearchedRestaurant] = useState<TRestaurant[]>([])
-  const [loading, setLoading] = useState<boolean>(false)
+  const [searchedRestaurant, setSearchedRestaurant] = useState<TRestaurant[]>([]);
+  const [restaurants, setRestaurants] = useState<TRestaurant[]>([]);
+  const {appliedFilter, getSearchedRestaurant, getAllRestaurant, loading} = useRestaurantStore();
 
-  const {appliedFilter} = useRestaurantStore();
-
-  // Function to fetch restaurants based on search query
-  const getRestaurants = async () => {
-    try {
-      setLoading(true);
-      const response = await fetch(
-        `${config.baseUri}/api/v1/restaurant/search/?searchQuery=${searchQuery}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        }
-      );
-      const data = await response.json();
-      setSearchedRestaurant(data.restaurants);
-      setLoading(false);
-    } catch (error) {
-      console.error(error);
-      setLoading(false);
+  const handleSearchedRestaurants = async() => {
+    if (searchQuery) {
+      const restaurant = await getSearchedRestaurant(searchQuery);
+      setSearchedRestaurant(restaurant);
     }
-  };
+  }
+  
+  useEffect(() => {
+    const getRestaurants = async() => {
+      const restaurants = await getAllRestaurant();
+      setRestaurants(restaurants);
+    }
+    getRestaurants();
+  }, [])
 
   useEffect(() => {
-    if ( appliedFilter?.length > 0 ) {
-
-      const params = new URLSearchParams();
-      params.set("cuisines", appliedFilter?.join(","));
-
-      const getRestaurantsBySelectedCuisines = async () => {
-        try {
-          setLoading(true);
-          const response = await fetch(
-            `${config.baseUri}/api/v1/restaurant/search/?${params.toString()}`,
-            {
-              method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              credentials: "include",
-            }
-          );
-          const data = await response.json();
-          setSearchedRestaurant(data.restaurants);
-          setLoading(false);
-        } catch (error) {
-          console.error(error);
-          setLoading(false);
-        }
-      };
-
-      getRestaurantsBySelectedCuisines();
-    
-    } else {
+    if (appliedFilter?.length > 0) {
+      const getRestaurantsByMenu = async() => {
+        const restaurant = await getSearchedRestaurant();
+        setSearchedRestaurant(restaurant);
+      }
+      getRestaurantsByMenu();
+    }else {
       setSearchedRestaurant([]);
     }
   }, [appliedFilter])
-  
-  // fetch all restauranst
-  useEffect(() => {
-    const fetchRestaurants = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch(`${config.baseUri}/api/v1/restaurant/all`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        });
-
-        const data = await response.json();
-        setRestaurants(data.restaurants);
-        setLoading(false);
-
-      } catch (error) {
-        console.error(error);
-        setLoading(false);
-      }
-    };
-
-    fetchRestaurants();
-    
-  }, []);
-    
+      
   return (
     <div>
       <HeroSection/>
@@ -126,7 +65,7 @@ const HomePage = () => {
                   />
                 <Search 
                   className="text-gray-500 absolute inset-y-2 left-2 cursor-pointer"
-                  onClick={() => getRestaurants()}
+                  onClick={handleSearchedRestaurants}
                 />
               { searchQuery && (
                 <X size={20} className="absolute right-24 cursor-pointer"
@@ -138,7 +77,7 @@ const HomePage = () => {
                 />
               )}
               <Button
-                onClick={() => getRestaurants()}
+                onClick={handleSearchedRestaurants}
                 className="bg-orange hover:bg-hoverOrange"
               >
                 Search
@@ -146,8 +85,8 @@ const HomePage = () => {
               </>
             )}
           </div>
-          { searchedRestaurant && searchedRestaurant?.length > 0 ?(
-            <RestaurantCards restaurants={searchedRestaurant} loading={loading}/>
+          { searchedRestaurant && searchedRestaurant?.length > 0 ? (
+            <RestaurantCards restaurants={searchedRestaurant} loading={loading}/> 
           ): (
             <RestaurantCards restaurants={restaurants} loading={loading}/>
           )}

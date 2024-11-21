@@ -11,7 +11,7 @@ export type TMenuItem = {
 
 export type TMenu = {
   _id: string;
-  title: string;
+  name: string;
   description: string;
   menuItems: TMenuItem[]
 }
@@ -38,22 +38,20 @@ export type TAllRestaurants = {
 
 export type TRestaurantState = {
   loading: boolean;
-  restaurant: TRestaurant | null;
-  searchedRestaurant: TRestaurant[] | null;
+  userRestaurant: TRestaurant | null;
   appliedFilter: string[];
-  singleRestaurant: TRestaurant | null,
-  allRestaurant: TRestaurant[] | null,
   restaurantOrder: TOrders[],
   createRestaurant: (formData: FormData) => Promise<void>;
   getRestaurant?: () => Promise<void>;
+  getRestaurantbyUserId: () => Promise<void>;
+  getAllRestaurant: () => Promise<TRestaurant[]>
+  getRestaurantOrders: () => Promise<void>;
+  getSingleRestaurant: (restaurantId:string) => Promise<TRestaurant>;
+  getSearchedRestaurant: (searchQuery?: string) => Promise<TRestaurant[]>
   updateRestaurant: (formData: FormData) => Promise<void>;
-  searchRestaurant: (searchQuery: string, selectedCuisines: any) => Promise<void>;
   addMenuToRestaurant: (menu: TMenuItem) => void;
   updateMenuToRestaurant: (menu: TMenuItem) => void;
   manageAppliedFilter: (value:string) => void;
   removeAppliedFilter: () => void;
-  getSingleRestaurant: (restaurantId:string) => Promise<void>;
-  getAllRestaurant: () => Promise<void>;
-  getRestaurantOrders: () => Promise<void>;
   updateRestaurantOrderStatus: (orderId:string, status:string) => Promise<void>;
 }

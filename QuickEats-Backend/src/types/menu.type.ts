@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
 
 export type TMenu = {
-  title: string;      // E.g., "Burgers", "Fries", "Drinks"
-  description?: string;           
+  name: string;      // E.g., "Burgers", "Fries", "Drinks"
+  description?: string;
+  image: string;           
   restaurant: mongoose.Schema.Types.ObjectId;  
   menuItems: mongoose.Schema.Types.ObjectId[]; 
 }

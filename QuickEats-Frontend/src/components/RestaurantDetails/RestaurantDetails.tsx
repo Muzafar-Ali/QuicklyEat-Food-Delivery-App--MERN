@@ -1,17 +1,23 @@
 import { Bike,  ShoppingBag, Timer } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Badge } from "../ui/badge";
 import { Separator } from "../ui/separator";
 import { useRestaurantStore } from "@/store/restaurantStore";
 import RestuarantMenu from "./RestaurantMenu";
+import { TRestaurant } from "@/types/restaurantType";
 
 const RestaurantDetails = () => {
   const params = useParams(); 
-  const { singleRestaurant, getSingleRestaurant } = useRestaurantStore();
+  const [singleRestaurant, setSingleRestaurant] = useState<TRestaurant>();
+  const { getSingleRestaurant } = useRestaurantStore();
 
   useEffect(() => {
-    getSingleRestaurant(params.id!); 
+    const getRestaurant = async () => {
+      const singleRestaurant = await getSingleRestaurant(params.id!);
+      setSingleRestaurant(singleRestaurant);
+    } 
+    getRestaurant();
   }, [params.id]);
   
   return (
@@ -52,7 +58,7 @@ const RestaurantDetails = () => {
           </div>
         </section>
 
-        {/* desktopm section */}
+        {/* desktop section */}
         <section className="md:flex items-center gap-6 mb-5 hidden">
           <div>
             <img src={singleRestaurant?.imageUrl} className="w-40 h-40 object-cover rounded-lg"/>

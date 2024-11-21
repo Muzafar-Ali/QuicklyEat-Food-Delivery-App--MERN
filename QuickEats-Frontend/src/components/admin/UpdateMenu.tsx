@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { menuSchema, TMenuSchema } from "@/schema/menuSchema";
+import { menuSchema, TMenu, TMenuSchema } from "@/schema/menuSchema";
 import { useMenuStore } from "@/store/menuStore";
 import { TMenuItem } from "@/types/restaurantType";
 
@@ -22,15 +22,24 @@ import {
   useState,
 } from "react";
 
+
+type TSelectedMenu = {
+  description: string;
+  image: string;
+  name: string;
+  _id: string;
+
+}
+
+
 const UpdateMenu = ({ selectedMenu, editOpen, setEditOpen }: {
-  selectedMenu: TMenuItem;
+  selectedMenu: TSelectedMenu;
   editOpen: boolean;
   setEditOpen: Dispatch<SetStateAction<boolean>>;
 }) => {
   const [input, setInput] = useState<TMenuSchema>({
     name: "",
     description: "",
-    price: 0,
     image: undefined,
   });
   const [error, setError] = useState<Partial<TMenuSchema>>({});
@@ -55,7 +64,6 @@ const UpdateMenu = ({ selectedMenu, editOpen, setEditOpen }: {
       const formData = new FormData();
       formData.append("name", input.name);
       formData.append("description", input.description);
-      formData.append("price", input.price.toString());
       if(input.image){
         formData.append("image", input.image);
       }
@@ -69,7 +77,6 @@ const UpdateMenu = ({ selectedMenu, editOpen, setEditOpen }: {
     setInput({
       name: selectedMenu?.name || "",
       description: selectedMenu?.description || "",
-      price: selectedMenu?.price || 0,
       image: undefined,
     });
   }, [selectedMenu]);
@@ -105,17 +112,6 @@ const UpdateMenu = ({ selectedMenu, editOpen, setEditOpen }: {
               placeholder="Enter menu description"
             />
             {error && <span className="text-xs font-medium text-red-600">{error.description}</span>}
-          </div>
-          <div>
-            <Label>Price in (Rupees)</Label>
-            <Input
-              type="number"
-              name="price"
-              value={input.price}
-              onChange={changeEventHandler}
-              placeholder="Enter menu price"
-            />
-            {error && <span className="text-xs font-medium text-red-600">{error.price}</span>}
           </div>
           <div>
             <Label>Upload Menu Image</Label>

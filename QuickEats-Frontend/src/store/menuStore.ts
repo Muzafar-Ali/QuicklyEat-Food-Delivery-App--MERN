@@ -30,8 +30,7 @@ export const useMenuStore = create<MenuState>()(persist((set) => ({
         toast.success(result.data.message);
         set({ loading: false, menu: result.data.menu });
       }
-      // update restaurant 
-      useRestaurantStore.getState().addMenuToRestaurant(result.data.menu);
+      
     } catch (error: any) {
       toast.error(error.response.data.message);
       set({ loading: false });
@@ -52,7 +51,7 @@ export const useMenuStore = create<MenuState>()(persist((set) => ({
         set({loading:false, menu:result.data.menu});
       }
       // update restaurant menu
-      useRestaurantStore.getState().updateMenuToRestaurant(result.data.menu);
+      useRestaurantStore.getState().updateMenuToRestaurant(result.data.menu._id);
     } catch (error: any) {
       toast.error(error.response.data.message);
       set({ loading: false });

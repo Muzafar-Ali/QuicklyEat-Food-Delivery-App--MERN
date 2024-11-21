@@ -1,10 +1,10 @@
 import { create } from 'zustand'
 import { createJSONStorage, persist } from "zustand/middleware";
-import { TUserLogin, TUserSignup } from '@/schema/userSchema';
 import { toast } from 'sonner';
-import axios from 'axios';
-import config from '../config/config';
 import { TUserState } from '@/types/userType';
+import { TUserLogin, TUserSignup } from '@/schema/userSchema';
+import config from '../config/config';
+import axios from 'axios';
 
 
 export const useUserStore = create<TUserState>()(persist((set) => ({

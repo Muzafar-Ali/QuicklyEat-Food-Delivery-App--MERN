@@ -12,6 +12,15 @@ const filterOptions: FilterOptionsState[] = [
   { id: "burger", label: "Burger" },
   { id: "sandwich", label: "sandwich" },
   { id: "biryani", label: "Biryani" },
+  { id: "continental", label: "Continental" },
+  { id: "pizza", label: "pizza" },
+  { id: "broast", label: "broast" },
+  { id: "cake & bakery", label: "cake & Bakery" },
+  { id: "desserts", label: "Desserts" },
+  { id: "chinese", label: "Chinese" },
+  { id: "pakistani", label: "Pakistani" },
+  { id: "indian", label: "Indian" },
+  { id: "japanese", label: "Japanese" },
   { id: "momos", label: "Momos" },
 ];
 
@@ -21,6 +30,7 @@ const FilterPage = () => {
   const appliedFilterHandler = (value: string) => {
     manageAppliedFilter(value);
   };
+
   return (
     <div className="">
       <div className="flex items-center justify-between">

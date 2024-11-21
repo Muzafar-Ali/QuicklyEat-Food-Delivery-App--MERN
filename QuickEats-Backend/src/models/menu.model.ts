@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import { TMenuDocument } from "../types/menu.type.js";
 
 const menuSchema = new mongoose.Schema<TMenuDocument>({
-  title: {
+  name: {
     type: String,
     required: true, // E.g., "Burgers", "Fries", "Drinks"
     trim: true,
@@ -10,6 +10,10 @@ const menuSchema = new mongoose.Schema<TMenuDocument>({
   description: {
     type: String,
     trim: true, // Optional section description, like "Our delicious range of burgers"
+  },
+  image: {
+    type: String, // URL or path to the image
+    required: true,
   },
   restaurant: {
     type: mongoose.Schema.Types.ObjectId,

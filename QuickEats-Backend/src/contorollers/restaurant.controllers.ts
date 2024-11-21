@@ -24,8 +24,6 @@ export const createRestaurantHandler = async (req: Request<{}, {}, TRestaurant["
 
     // upload images to cloudinary directly
     const imageUrl = await uploadImageToCloudinary(image, restaurantName, "restaurant")
-    console.log('imageUrl cloudinary', imageUrl);
-    
     
     if(!imageUrl) throw new ErrorHandler(400, "Unable to upload images");
     
@@ -77,7 +75,6 @@ export const getRestaurantbyUserIdHandler = async (req: Request, res: Response, 
         path:'menuItems',
       }
     })
-    console.log('restaurant', restaurant);
     
     if(!restaurant) throw new ErrorHandler(404, "Restaurant not found");
     
@@ -193,7 +190,7 @@ export const searchRestaurantHandler = async (req: Request, res: Response, next:
         { restaurantName: { $regex: searchQuery, $options: 'i' } }, 
         { cuisines: { $regex: searchQuery, $options: 'i' } },          
         {
-          "menus.title": { $regex: searchQuery, $options: 'i' },      
+          "menus.name": { $regex: searchQuery, $options: 'i' },      
         },
         {
           "menus.description": { $regex: searchQuery, $options: 'i' }, 
@@ -206,7 +203,7 @@ export const searchRestaurantHandler = async (req: Request, res: Response, next:
       query.$and = query.$and || [];  // Initialize $and if not already defined
       query.$and.push({
         $or: selectedMenu.map(menu => ({
-          "menus.title": { $regex: menu, $options: 'i' },
+          "menus.name": { $regex: menu, $options: 'i' },
           "menus.description": { $regex: menu, $options: 'i' }
         }))
       });
