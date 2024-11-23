@@ -1,16 +1,14 @@
-import config from "@/config/config";
-import { TOrders } from "@/types/orderType";
 import { TMenuItem, TRestaurantState } from "@/types/restaurantType";
-import axios from "axios";
 import { toast } from "sonner";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
+import config from "@/config/config";
+import axios from "axios";
 
 export const useRestaurantStore = create<TRestaurantState>()(persist((set, get) => ({
   loading: false,
   userRestaurant: null,
   appliedFilter: [],
-  restaurantOrder: [],
   createRestaurant: async(FormData: FormData) => {
     try {
       set({ loading: true })
@@ -150,8 +148,10 @@ getRestaurantOrders: async () => {
     });
     
     if (response.data.success) {
-      set({ restaurantOrder: response.data.order });
+      set({ loading: false });
     }
+    
+    return response.data.order
   } catch (error: any) {
     toast.error(error.response.data.message);
     console.error(error);
@@ -165,14 +165,11 @@ updateRestaurantOrderStatus: async (orderId: string, status: string) => {
       },
       withCredentials: true
     });
-
+    
     if (response.data.success) {
-      const updatedOrder = get().restaurantOrder.map((order: TOrders) => {
-        return order._id === orderId ? { ...order, status: response.data.status } : order;
-      })
-      set({ restaurantOrder: updatedOrder });
       toast.success(response.data.message);
     }
+
   } catch (error: any) {
     toast.error(error.response.data.message);
   }

@@ -40,12 +40,11 @@ export type TRestaurantState = {
   loading: boolean;
   userRestaurant: TRestaurant | null;
   appliedFilter: string[];
-  restaurantOrder: TOrders[],
   createRestaurant: (formData: FormData) => Promise<void>;
   getRestaurant?: () => Promise<void>;
   getRestaurantbyUserId: () => Promise<void>;
   getAllRestaurant: () => Promise<TRestaurant[]>
-  getRestaurantOrders: () => Promise<void>;
+  getRestaurantOrders: () => Promise<TOrders[]>;
   getSingleRestaurant: (restaurantId:string) => Promise<TRestaurant>;
   getSearchedRestaurant: (searchQuery?: string) => Promise<TRestaurant[]>
   updateRestaurant: (formData: FormData) => Promise<void>;

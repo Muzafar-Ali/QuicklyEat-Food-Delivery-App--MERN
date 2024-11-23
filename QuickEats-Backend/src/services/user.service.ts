@@ -18,27 +18,9 @@ export const createUser = async (userData: TUser["body"], verificationCode: stri
   return omit(user.toJSON(), "password");
 
  } catch (error: any) {
-  console.log("createUser error = ", error)
+  console.error("createUser error = ", error)
   if(error instanceof ErrorHandler) throw error;
   throw new ErrorHandler(500, "Internal server error");
  }
  
 }
-
-// export const getUser = async ( email: string, password: string ) => {
-  
-//   try {
-//     const user = await UserModel.findOne({ email }).select("password");
-//     // if(!user) throw new ErrorHandler(404, "incorrect email or password");
-    
-//     const isPasswordValid = await user.comparePassword(password)
-//     // if(!isPasswordValid) throw new ErrorHandler(404, "incorrect email or password");
-    
-//     return user;
-    
-//   } catch (error) {
-//     if(error instanceof ErrorHandler) throw error;
-//     throw new ErrorHandler(500, "Internal server error");    
-//   }
-
-// }

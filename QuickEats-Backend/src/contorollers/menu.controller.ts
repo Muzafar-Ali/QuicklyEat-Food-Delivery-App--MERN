@@ -10,8 +10,6 @@ import uploadImageToCloudinary from "../utils/cloudinary/uploadImageToCloudinary
 
 export const createMenuHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    console.log('req.body', req.body);
-    
     const userId = req.id;
     const {name, description, menuItems, restaurant, image} = req.body;
     const file = req.file;
@@ -69,9 +67,9 @@ export const getMenuHandler = async (req: Request, res: Response, next: NextFunc
 export const getAllMenuHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const menus = await MenuModel.find();
-    if(!menus) throw new ErrorHandler(404, "Menu not found");
-    console.log('menus', menus);
     
+    if(!menus) throw new ErrorHandler(404, "Menu not found");
+
     res.status(200).json({
       success: true,
       message: "Menu fetched successfully",

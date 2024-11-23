@@ -13,13 +13,11 @@ import { Loader2 } from "lucide-react";
 import { TCheckoutSessionRequest } from "@/types/orderType";
 import { useUserStore } from "@/store/userStore";
 import { useCartStore } from "@/store/cartStore";
-import { useRestaurantStore } from "@/store/restaurantStore";
 import { useOrderStore } from "@/store/orderStore";
 
 const CheckoutConfirmPage = ({open, setOpen}: {open: boolean, setOpen: Dispatch<SetStateAction<boolean>>}) => {
   const { user } = useUserStore();
-  const { cart } = useCartStore();
-  const { singleRestaurant } = useRestaurantStore();
+  const { cart, restaurantId } = useCartStore();
   const { createCheckoutSession, loading } = useOrderStore();
 
   const [userInput, setInput] = useState({
@@ -41,14 +39,18 @@ const CheckoutConfirmPage = ({open, setOpen}: {open: boolean, setOpen: Dispatch<
     try {
       const checkoutData: TCheckoutSessionRequest = {
         cartItems: cart.map((cartItem) => ({
-          menuId: cartItem._id,
-          name: cartItem.name,
+          menuItemId: cartItem._id,
+          name: cartItem.title,
           image: cartItem.image,
           price: cartItem.price.toString(),
           quantity: cartItem.quantity.toString(),
+          // totalAmount: (cartItem.price * cartItem.quantity).toString(),
         })),
         deliveryDetails: userInput,
-        restaurantId: singleRestaurant?._id as string,
+        restaurantId: restaurantId,
+        totalAmount: cart.reduce((acc, ele) => {
+          return acc + ele.price * ele.quantity;
+        }, 0).toString(),
       };
       await createCheckoutSession(checkoutData);
     } catch (error) {

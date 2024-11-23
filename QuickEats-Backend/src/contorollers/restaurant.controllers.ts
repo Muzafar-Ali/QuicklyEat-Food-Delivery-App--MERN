@@ -160,16 +160,30 @@ export const updateRestaurantHandler = async (req: Request<{},{},TUpdateRestaura
 export const getRestaurantOrderHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = req.id;
-
+    
     const restaurant = await RestaurantModel.findOne({ user: userId })
     if(!restaurant) throw new ErrorHandler(404, "Restaurant not found");
 
-    const order = await OrderModel.find({restaurant: restaurant._id}).populate("restaurant").populate("user")
+    const order = await OrderModel.find({restaurant: restaurant._id})
+    .populate("restaurant")
+    .populate("user")
+    .populate("cartItems.menuItemId")
+    .sort({status: -1});
+
     if(!order || order.length === 0) throw new ErrorHandler(404, "No orders found");
+    
+    // Sort orders based on the natural order of status in the enum
+    const sortedOrders = order.sort((a, b) => {
+      const statusOrder = ["pending", "confirmed", "preparing", "onTheWay", "delivered"]; // order display sequence
+      const statusAIndex = statusOrder.indexOf(a.status);
+      const statusBIndex = statusOrder.indexOf(b.status);
+
+      return statusAIndex - statusBIndex;  // Ascending order based on the index
+    });
     
     res.status(200).json({
       success: true,
-      order
+      order: sortedOrders
     })
     
   } catch (error) {

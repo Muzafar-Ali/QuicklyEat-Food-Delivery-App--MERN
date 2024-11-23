@@ -1,13 +1,16 @@
 import { CartState } from "@/types/cartType";
 import { TMenuItem } from "@/types/restaurantType";
+import { stat } from "fs";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
 
-export const useCartStore = create<CartState>()(persist((set) => ({
+export const useCartStore = create<CartState>()(persist((set, get) => ({
   cart: [],
-  addToCart: (item: TMenuItem) => {
+  restaurantId: '',
+  addToCart: (item: TMenuItem, restaurantId: string) => {
     set((state) => {
+      state.restaurantId = restaurantId;
       const exisitingItem = state.cart.find((cartItem) => cartItem._id === item._id);
       if (exisitingItem) {
         // already added in cart then inc qty
@@ -19,17 +22,20 @@ export const useCartStore = create<CartState>()(persist((set) => ({
         // add cart
         return {
           cart: [...state.cart, { ...item, quantity: 1 }]
-        }
-      }
+        };
+      };
     })
   },
   clearCart: () => {
-    set({ cart: [] });
+    set({ cart: [], restaurantId: '' });
   },
   removeFromTheCart: (id: string) => {
     set((state) => ({
       cart: state.cart.filter((item) => item._id !== id)
     }))
+    if(get().cart.length === 0){
+      set({restaurantId: ''})
+    }
   },
   increaseQuantity: (id: string) => {
     set((state) => ({
@@ -43,7 +49,7 @@ export const useCartStore = create<CartState>()(persist((set) => ({
   }
 }),
   {
-    name: 'cart-name',
+    name: 'cartitems',
     storage: createJSONStorage(() => localStorage)
   }
 ))

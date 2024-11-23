@@ -58,7 +58,7 @@ const RestaurantDetails = () => {
           </div>
         </section>
 
-        {/* desktop section */}
+        {/* desktopm section */}
         <section className="md:flex items-center gap-6 mb-5 hidden">
           <div>
             <img src={singleRestaurant?.imageUrl} className="w-40 h-40 object-cover rounded-lg"/>
@@ -88,7 +88,7 @@ const RestaurantDetails = () => {
         
         {/* menu and dishes */}
         <section className="w-full">
-          <RestuarantMenu menus={singleRestaurant?.menus!}/>
+          <RestuarantMenu menus={singleRestaurant?.menus!} restaurantId={singleRestaurant?._id!}/>
         </section>
       </div>
     </div>

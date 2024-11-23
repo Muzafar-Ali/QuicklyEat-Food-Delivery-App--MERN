@@ -61,13 +61,17 @@ export const createCheckoutSessionHandler = async (req: Request, res: Response, 
     const { totalAmount } = req.body;
     const checkoutSession: TCheckoutSessionRequest = req.body;
 
-    const restaurant = await RestaurantModel.findById(checkoutSession.restaurantId).populate("menus")
+    const restaurant = await RestaurantModel.findById(checkoutSession.restaurantId).populate({
+      path: "menus",
+      populate: {
+        path: "menuItems",
+      }
+    })
     if(!restaurant) throw new ErrorHandler(404, "Restaurant not found");
     
     // line items
-    const menuItems = restaurant.menus;
-    
-    const lineItems = createLineItems( checkoutSession, menuItems );
+    const menus = restaurant.menus;   
+    const lineItems = createLineItems( checkoutSession, menus );
 
     const order = new OrderModel({
       user: userId,
@@ -89,7 +93,7 @@ export const createCheckoutSessionHandler = async (req: Request, res: Response, 
       cancel_url: `${config.clientUrl}/failed`,
       metadata: {
         orderId: order._id!.toString(),
-        images: JSON.stringify(menuItems.map((item: any) => item.image))
+        images: JSON.stringify(menus.flatMap((menuItem: any) => menuItem.image))
       }
     });
     
@@ -110,13 +114,26 @@ export const createCheckoutSessionHandler = async (req: Request, res: Response, 
 
 export const getAllOrderHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const orders = await OrderModel.find().populate("user").populate("restaurant");
+    const orders = await OrderModel.find()
+    .populate("user")
+    .populate("restaurant")
+    .populate("cartItems.menuItemId")
+    
     if(!orders) throw new ErrorHandler(404, "Order not found");
+
+    // Sort orders based on the natural order of status in the enum
+    const sortedOrders = orders.sort((a, b) => {
+      const statusOrder = ["pending", "confirmed", "preparing", "onTheWay", "delivered"]; // order display sequence
+      const statusAIndex = statusOrder.indexOf(a.status);
+      const statusBIndex = statusOrder.indexOf(b.status);
+
+      return statusAIndex - statusBIndex;  // Ascending order based on the index
+    });
 
     res.status(200).json({
       success: true,
       message: "Order found successfully",
-      orders
+      orders: sortedOrders
     });
 
   } catch (error) {

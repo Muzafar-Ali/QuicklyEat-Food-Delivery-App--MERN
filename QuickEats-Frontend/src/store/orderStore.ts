@@ -1,12 +1,12 @@
-import config from "@/config/config";
 import { TCheckoutSessionRequest, TOrderState } from "@/types/orderType";
-import axios from "axios";
+import { toast } from "sonner";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
+import config from "@/config/config";
+import axios from "axios";
 
 export const useOrderStore = create<TOrderState>()(persist((set => ({
   loading: false,
-  orders: [],
   createCheckoutSession: async (checkoutSession: TCheckoutSessionRequest) => {
     try {
       set({ loading: true });
@@ -17,25 +17,36 @@ export const useOrderStore = create<TOrderState>()(persist((set => ({
         withCredentials: true
       });
       
+      if(response.data.success) {
+        toast.success(response.data.message);
+      }
+      
       window.location.href = response.data.session.url;
       set({ loading: false });
 
-    } catch (error) {
+    } catch (error: any) {
+      toast.error(error.response.data.message);
       console.error(error);
       set({ loading: false });
     }
   },
   getOrderDetails: async () => {
     try {
-      set({loading:true});
-      const response = await axios.get(`${config.baseUri}/api/v1/order`);
-    
-      set({loading:false, orders:response.data.order});
+      set({loading: true});
+      const response = await axios.get(`${config.baseUri}/api/v1/order/all`, {
+        withCredentials: true
+      });
+      if(response.data.success) {
+        set({loading: false});
+      }
+
+      return response.data.orders;
+      
     } catch (error) {
-      set({loading:false});
+      set({loading: false});
     }
   }
 })), {
-  name: 'order-name',
+  name: 'order',
   storage: createJSONStorage(() => localStorage)
 }))

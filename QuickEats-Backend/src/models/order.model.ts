@@ -19,7 +19,7 @@ const orderSchema = new mongoose.Schema<TOrderDocument>({
   },
   cartItems: [
     {
-      menuItem: { 
+      menuItemId: { 
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'MenuItem', // Referencing MenuItem (not Menu)
         required: true 
