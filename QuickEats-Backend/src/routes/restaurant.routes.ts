@@ -19,9 +19,9 @@ route.post("/", [isAuthenticated, upload.single("image"), validateRequestData(re
 route.get("/", isAuthenticated, getRestaurantbyUserIdHandler);
 route.get("/all", getRestaurantsHandler);
 route.get("/order", isAuthenticated, getRestaurantOrderHandler);
+route.get("/search/", searchRestaurantHandler);
 route.get("/:id", getSingleRestaurantHandler);
 route.put("/", [isAuthenticated, upload.single("image"), validateRequestData(updateRestaurantSchema)], updateRestaurantHandler);
-route.get("/search/:searchText", searchRestaurantHandler);
 // router.route("/search/:searchText").get(isAuthenticated, searchRestaurant);
 
 export default route;

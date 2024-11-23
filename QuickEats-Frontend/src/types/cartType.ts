@@ -6,7 +6,8 @@ export type CartItem = TMenuItem & {
 
 export type CartState = {
     cart: CartItem[];
-    addToCart:(item: TMenuItem) => void;
+    restaurantId: string;
+    addToCart:(item: TMenuItem, restaurantId: string) => void;
     clearCart: () => void;
     removeFromTheCart: (id: string) => void;
     increaseQuantity: (id: string) => void;

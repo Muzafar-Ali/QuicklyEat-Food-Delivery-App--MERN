@@ -9,11 +9,11 @@ import { Link } from "react-router-dom"
 const RestaurantCards = ({ restaurants, loading }: {restaurants: TAllRestaurants["data"] | null, loading: boolean}) => {
   return (
     <>
-      <div className="grid md:grid-cols-4 gap-4">
+      <div className="grid md:grid-cols-3 gap-4">
         {loading ? ( <SearchPageSkeleton /> )  : 
         (
           restaurants?.map((restaurant) => (
-          <Link to={`/restaurant/${restaurant._id}`}>
+          <Link to={`/restaurant/${restaurant._id}`} key={restaurant._id}>
             <Card
             key={restaurant._id}
             className="bg-white dark:bg-gray-800 shadow-xl rounded-xl overflow-hidden hover:shadow-2xl transition-shadow duration-300"

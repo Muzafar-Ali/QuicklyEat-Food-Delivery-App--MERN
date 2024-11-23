@@ -1,19 +1,14 @@
-import config from "@/config/config";
-import { TOrders } from "@/types/orderType";
 import { TMenuItem, TRestaurantState } from "@/types/restaurantType";
-import axios from "axios";
 import { toast } from "sonner";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
+import config from "@/config/config";
+import axios from "axios";
 
 export const useRestaurantStore = create<TRestaurantState>()(persist((set, get) => ({
   loading: false,
-  restaurant: null,
+  userRestaurant: null,
   appliedFilter: [],
-  searchedRestaurant: null,
-  singleRestaurant: null,
-  allRestaurant: null,
-  restaurantOrder: [],
   createRestaurant: async(FormData: FormData) => {
     try {
       set({ loading: true })
@@ -27,7 +22,7 @@ export const useRestaurantStore = create<TRestaurantState>()(persist((set, get) 
       
       if(result.data.success) {
         toast.success(result.data.message);
-        set({ restaurant: result.data.restaurant, loading: false });
+        set({ loading: false });
       }
 
     } catch (error: any) {
@@ -45,34 +40,39 @@ export const useRestaurantStore = create<TRestaurantState>()(persist((set, get) 
       });
 
       if (response.data.success) {
-        set({ loading: false, restaurant: response.data.restaurant });
+        set({ loading: false, userRestaurant: response.data.restaurant });
       }
     } catch (error: any) {
       if (error.response.status === 404) {
-        set({ restaurant: null });
+        set({ userRestaurant: null });
       }
       set({ loading: false });
     }
 },
 getSingleRestaurant: async (restaurantId: string) => {
   try {
+    set({ loading: true });
     const response = await axios.get(`${config.baseUri}/api/v1/restaurant/${restaurantId}`);
 
     if (response.data.success) {
-      set({ singleRestaurant: response.data.restaurant })
+      set({ loading: false})
     }  
+    return response.data.restaurant;
   } catch (error) { 
     console.error(error);
+    set({ loading: false });
   }
 },
 getAllRestaurant: async () => {
   try {
     set({ loading: true });
+    
     const response = await axios.get(`${config.baseUri}/api/v1/restaurant/all`);
     if (response.data.success) {
-      set({ loading: false, allRestaurant: response.data.restaurants });
+      set({ loading: false });
     }
 
+    return response.data.restaurants;
   } catch (error) {
     console.error(error);
   } finally {
@@ -82,12 +82,14 @@ getAllRestaurant: async () => {
 updateRestaurant: async (formData: FormData) => {
   try {
     set({ loading: true });
+    
     const response = await axios.put(`${config.baseUri}/api/v1/restaurant`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       },
       withCredentials: true,
     });
+    
     if (response.data.success) {
       toast.success(response.data.message);
       set({ loading: false });
@@ -97,11 +99,32 @@ updateRestaurant: async (formData: FormData) => {
     set({ loading: false });
   }
 },
-addMenuToRestaurant: (menu: TMenuItem) => {
-  set((state: any) => ({
-    restaurant: state.restaurant ? { ...state.restaurant, menus: [...state.restaurant.menus, menu] } : null,
-  }))
+addMenuToRestaurant: async (menu: TMenuItem) => {
+  try {
+    set({ loading: true });
+
+    const response = await axios.put(`${config.baseUri}/api/v1/restaurant`, menu, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      withCredentials: true,
+    });
+
+    if (response.data.success) {
+      toast.success(response.data.message);
+      set({ loading: false });
+    }
+  } catch (error: any) {
+    toast.error(error.response.data.message);
+    set({ loading: false });
+  }
 },
+
+// addMenuToRestaurant: (menu: TMenuItem) => {
+//   set((state: any) => ({
+//     restaurant: state.restaurant ? { ...state.restaurant, menus: [...state.restaurant.menus, menu] } : null,
+//   }))
+// },
 updateMenuToRestaurant: (updatedMenu: TMenuItem) => {
   set((state: any) => {
       
@@ -125,8 +148,10 @@ getRestaurantOrders: async () => {
     });
     
     if (response.data.success) {
-      set({ restaurantOrder: response.data.order });
+      set({ loading: false });
     }
+    
+    return response.data.order
   } catch (error: any) {
     toast.error(error.response.data.message);
     console.error(error);
@@ -140,14 +165,11 @@ updateRestaurantOrderStatus: async (orderId: string, status: string) => {
       },
       withCredentials: true
     });
-
+    
     if (response.data.success) {
-      const updatedOrder = get().restaurantOrder.map((order: TOrders) => {
-        return order._id === orderId ? { ...order, status: response.data.status } : order;
-      })
-      set({ restaurantOrder: updatedOrder });
       toast.success(response.data.message);
     }
+
   } catch (error: any) {
     toast.error(error.response.data.message);
   }
@@ -169,21 +191,27 @@ manageAppliedFilter: (selectedValue: string) => {
 removeAppliedFilter: () => {
   set({ appliedFilter: [] })
 },
-searchRestaurant: async (searchText: string, searchQuery: string, selectedCuisines: any) => {
+getSearchedRestaurant: async (searchQuery?: string) => {
   try {
-    console.error("working 1");
-    
     set({ loading: true });
-
     const params = new URLSearchParams();
-    params.set("searchQuery", searchQuery);
-    params.set("selectedCuisines", selectedCuisines.join(","));
-
-    const response = await axios.get(`${config.baseUri}/api/v1/restaurant/search/${searchText}?${params.toString()}`);
-    console.error('response =', response);
-
-    if (response.data.success) {
-      set({ loading: false, searchedRestaurant: response.data });
+    
+    if(get().appliedFilter.length > 0) {
+      params.set("cuisines", get().appliedFilter?.join(","));   
+      const response = await axios.get(`${config.baseUri}/api/v1/restaurant/search/?${params.toString()}`);
+      if (response.data.success) {
+        set({ loading: false });
+      }
+      return response.data.restaurants;
+    }
+    
+    if(searchQuery) {
+      params.set("searchQuery", searchQuery!);
+      const response = await axios.get(`${config.baseUri}/api/v1/restaurant/search/?${params.toString()}`);
+      if (response.data.success) {
+        set({ loading: false });
+      }
+      return response.data.restaurants;
     }
     
   } catch (error) {

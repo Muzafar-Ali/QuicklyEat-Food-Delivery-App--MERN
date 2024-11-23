@@ -4,14 +4,14 @@ import { Card, CardContent } from "../ui/card";
 import { useCartStore } from "@/store/cartStore";
 import { toast } from "sonner";
 
-const RestaurantMenu = ({ menus }: { menus: TMenu[] }) => {
+const RestaurantMenu = ({ menus, restaurantId }: { menus: TMenu[], restaurantId: string }) => {
   const { addToCart } = useCartStore();
   
   return (
     <div className="mt-5">
-      {menus.map((menu) => (
+      {menus?.map((menu) => (
         <div className="flex flex-col items-start gap-4">
-          <h1 className="font-bold text-2xl font-roboto tracking-wide mt-5">{menu.title}</h1>
+          <h1 className="font-bold text-2xl font-roboto tracking-wide mt-5">{menu.name}</h1>
           <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-5">
             {menu?.menuItems?.map((item) => (
               <Card className="flex items-center justify-between space-x-2 lg:px-2 auto shadow-lg rounded-lg overflow-hidden " key={item._id}>
@@ -24,7 +24,7 @@ const RestaurantMenu = ({ menus }: { menus: TMenu[] }) => {
                     <p className="text-sm lg:text-base text-gray-600 line-clamp-2">{item.description}</p>
                   <Button
                     onClick={() => {
-                      addToCart(item);
+                      addToCart(item, restaurantId);
                       toast.success("item added to cart");
                     }}
                     className="w-1/2 md:w-3/4 bg-orange hover:bg-hoverOrange text-xs md:text-sm"

@@ -28,7 +28,7 @@ export type TOrderDocument = TOrder & mongoose.Document & {
 
 export type TCheckoutSessionRequest = {
   cartItems: {
-    menuItem: mongoose.Schema.Types.ObjectId;  
+    menuItemId: mongoose.Schema.Types.ObjectId;  
     quantity: number;                          
   }[],
   deliveryDetails: {

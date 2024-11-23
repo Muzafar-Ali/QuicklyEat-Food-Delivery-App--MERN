@@ -12,7 +12,7 @@ declare global {
 
 export const isAuthenticated = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const token = req.cookies.token;
+    const token = req.cookies.token;  
  
     if (!token) {
       res.status(401).json({

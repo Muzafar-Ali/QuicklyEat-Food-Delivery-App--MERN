@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useRestaurants } from "@/hooks/useRestaurant";
 import { restaurantSchema, TRestaurantSchema } from "@/schema/restaurantSchema";
-
 import { useRestaurantStore } from "@/store/restaurantStore";
 
 import { Loader2 } from "lucide-react";
@@ -20,12 +20,11 @@ const Restaurant = () => {
   const [errors, setErrors] = useState<Partial<TRestaurantSchema>>({});
   const {
     loading,
-    restaurant,
+    userRestaurant,
     updateRestaurant,
     createRestaurant,
-    getRestaurantbyUserId,
   } = useRestaurantStore();
-
+  
   const changeEventHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type } = e.target;
     setInput({ ...input, [name]: type === "number" ? Number(value) : value });
@@ -57,7 +56,7 @@ const Restaurant = () => {
         formData.append("image", input.image);
       }
       
-      if (restaurant) {
+      if (userRestaurant) {
         // update
         await updateRestaurant(formData);
       } else {
@@ -68,19 +67,19 @@ const Restaurant = () => {
       console.error(error);
     }
   };
-
+  
+  
   useEffect(() => {
     const fetchRestaurant = async () => {
-      await getRestaurantbyUserId();
-      if(restaurant){
+      if(userRestaurant){
         setInput({
-          restaurantName: restaurant.restaurantName || "",
-          city: restaurant.city || "",
-          country: restaurant.country || "",
-          deliveryTime: restaurant.deliveryTime || 0,
-          cuisines: restaurant.cuisines
-            ? restaurant.cuisines.map((cuisine: string) => cuisine)
-            : [],
+          restaurantName: userRestaurant.restaurantName || "",
+          city: userRestaurant.city || "",
+          country: userRestaurant.country || "",
+          deliveryTime: userRestaurant.deliveryTime || 0,
+          cuisines: userRestaurant.cuisines
+          ? userRestaurant.cuisines.map((cuisine: string) => cuisine)
+          : [],
           image: undefined,
         });
       };
@@ -88,7 +87,7 @@ const Restaurant = () => {
     fetchRestaurant();
     
   }, []);
-
+  
   return (
     <div className="max-w-6xl mx-auto my-10">
       <div>
@@ -202,9 +201,7 @@ const Restaurant = () => {
                 </Button>
               ) : (
                 <Button className="bg-orange hover:bg-hoverOrange">
-                  {restaurant
-                    ? "Update Your Restaurant"
-                    : "Add Your Restaurant"}
+                  {userRestaurant ? "Update Your Restaurant" : "Add Your Restaurant"}
                 </Button>
               )}
             </div>

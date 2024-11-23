@@ -27,10 +27,10 @@ const restaurantSchema = new mongoose.Schema<TRestaurantDocument>({
     type:mongoose.Schema.Types.ObjectId, 
     ref:'Menu'
   }],
-  imageUrl:{
-    type:String,
-    required:true
-  }
+    imageUrl:{
+      type:String,
+      required:true
+    }
 },{timestamps:true});
 
 const RestaurantModel = mongoose.model<TRestaurantDocument>('Restaurant', restaurantSchema);

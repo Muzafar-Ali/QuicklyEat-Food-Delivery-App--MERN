@@ -12,24 +12,25 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Loader2, Plus } from "lucide-react";
 import React, { FormEvent, useState } from "react";
-import { menuSchema, TMenuSchema } from "@/schema/menuSchema"; 
+import { menuSchema, TMenu } from "@/schema/menuSchema"; 
 import { useMenuStore } from "@/store/menuStore";
 import { useRestaurantStore } from "@/store/restaurantStore";
 import UpdateMenu from "./UpdateMenu";
+import { useNavigate } from "react-router-dom";
 
 const AddMenu = () => {
-  const [input, setInput] = useState<TMenuSchema>({
+  const navigate = useNavigate();
+  const [input, setInput] = useState<TMenu>({
     name: "",
     description: "",
-    price: 0,
     image: undefined,
   });
   const [open, setOpen] = useState<boolean>(false);
   const [editOpen, setEditOpen] = useState<boolean>(false);
   const [selectedMenu, setSelectedMenu] = useState<any>();
-  const [error, setError] = useState<Partial<TMenuSchema>>({});
+  const [error, setError] = useState<Partial<TMenu>>({});
   const { loading, createMenu } = useMenuStore();
-  const {restaurant} = useRestaurantStore();
+  const {userRestaurant} = useRestaurantStore();
 
   const changeEventHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type } = e.target;
@@ -41,19 +42,21 @@ const AddMenu = () => {
     const result = menuSchema.safeParse(input);
     if (!result.success) {
       const fieldErrors = result.error.formErrors.fieldErrors;
-      setError(fieldErrors as Partial<TMenuSchema>);
+      setError(fieldErrors as Partial<TMenu>);
       return;
     }
     // api calling
-    try {
+    try {   
       const formData = new FormData();
       formData.append("name", input.name);
+      formData.append("restaurant", userRestaurant?._id as string);
       formData.append("description", input.description);
-      formData.append("price", input.price.toString());
       if(input.image){
         formData.append("image", input.image);
       }
+
       await createMenu(formData);
+      navigate("/")
     } catch (error) {
       console.log(error);
     }
@@ -112,21 +115,6 @@ const AddMenu = () => {
                 )}
               </div>
               <div>
-                <Label>Price in (Rupees)</Label>
-                <Input
-                  type="number"
-                  name="price"
-                  value={input.price}
-                  onChange={changeEventHandler}
-                  placeholder="Enter menu price"
-                />
-                {error && (
-                  <span className="text-xs font-medium text-red-600">
-                    {error.price}
-                  </span>
-                )}
-              </div>
-              <div>
                 <Label>Upload Menu Image</Label>
                 <Input
                   type="file"
@@ -160,7 +148,7 @@ const AddMenu = () => {
           </DialogContent>
         </Dialog>
       </div>
-      {restaurant?.menus.map((menu: any, idx: number) => (
+      {userRestaurant?.menus.map((menu: any, idx: number) => (
         <div key={idx} className="mt-6 space-y-4">
           <div className="flex flex-col md:flex-row md:items-center md:space-x-4 md:p-4 p-2 shadow-md rounded-lg border">
             <img
@@ -169,13 +157,10 @@ const AddMenu = () => {
               className="md:h-24 md:w-24 h-16 w-full object-cover rounded-lg"
             />
             <div className="flex-1">
-              <h1 className="text-lg font-semibold text-gray-800">
+              <h1 className="text-lg font-semibold">
                 {menu.name}
               </h1>
               <p className="text-sm tex-gray-600 mt-1">{menu.description}</p>
-              <h2 className="text-md font-semibold mt-2">
-                Price: <span className="text-[#D19254]">{menu.price}</span>
-              </h2>
             </div>
             <Button
               onClick={() => {

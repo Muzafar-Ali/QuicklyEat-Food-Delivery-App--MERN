@@ -10,8 +10,17 @@ export type FilterOptionsState = {
 // agar applied filter k andr ye item exixt krta hia toh iska mtlb checked hai
 const filterOptions: FilterOptionsState[] = [
   { id: "burger", label: "Burger" },
-  { id: "thali", label: "Thali" },
+  { id: "sandwich", label: "sandwich" },
   { id: "biryani", label: "Biryani" },
+  { id: "continental", label: "Continental" },
+  { id: "pizza", label: "pizza" },
+  { id: "broast", label: "broast" },
+  { id: "cake & bakery", label: "cake & Bakery" },
+  { id: "desserts", label: "Desserts" },
+  { id: "chinese", label: "Chinese" },
+  { id: "pakistani", label: "Pakistani" },
+  { id: "indian", label: "Indian" },
+  { id: "japanese", label: "Japanese" },
   { id: "momos", label: "Momos" },
 ];
 
@@ -21,8 +30,9 @@ const FilterPage = () => {
   const appliedFilterHandler = (value: string) => {
     manageAppliedFilter(value);
   };
+
   return (
-    <div className="md:w-72">
+    <div className="">
       <div className="flex items-center justify-between">
         <h1 className="font-medium text-lg">Filter by cuisines</h1>
         <Button variant={"link"} onClick={removeAppliedFilter}>Clear Filters</Button>

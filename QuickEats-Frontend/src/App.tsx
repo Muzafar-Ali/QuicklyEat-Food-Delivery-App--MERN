@@ -1,12 +1,14 @@
 import './App.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { useEffect } from 'react'
+import { useThemeStore } from './store/themStore'
+import HomePage from './components/Homepage/HomePage'
 import Login from './components/auth/Login'
 import Signup from './components/auth/Signup'
 import ForgotPassword from './components/auth/ForgotPassword'
 import ResetPassword from './components/auth/ResetPassword'
 import VerifyEmail from './components/auth/VerifyEmail'
 import HomepageLayout from './components/Homepage/HomepageLayout'
-import HeroSection from './components/Homepage/HeroSection'
 import Profile from './components/Profile'
 import SearchPage from './components/SearchPage/SearchPage'
 import RestaurantDetails from './components/RestaurantDetails/RestaurantDetails'
@@ -17,9 +19,8 @@ import AdminRoute from './components/protectedRoutes/AdminRoute'
 import Restaurant from './components/admin/Restaurant'
 import AddMenu from './components/admin/AddMenu'
 import Orders from './components/admin/Orders'
-import { useEffect } from 'react'
-import { useThemeStore } from './store/themStore'
-import HomePage from './components/Homepage/HomePage'
+import Success from './components/Success'
+import OrderStatus from './components/OrderStatus'
 
 
 const appRouter = createBrowserRouter([
@@ -48,8 +49,12 @@ const appRouter = createBrowserRouter([
         element: <Cart/>
       },
       {
-        path: '/orders',
-        element: <Orders/>
+        path: "/order/status",
+        element: <OrderStatus />,
+      },
+      {
+        path: "/success",
+        element: <Success />,
       },
        // admin routes
       {

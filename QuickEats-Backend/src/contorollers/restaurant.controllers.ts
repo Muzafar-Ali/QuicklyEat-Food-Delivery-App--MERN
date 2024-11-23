@@ -24,8 +24,6 @@ export const createRestaurantHandler = async (req: Request<{}, {}, TRestaurant["
 
     // upload images to cloudinary directly
     const imageUrl = await uploadImageToCloudinary(image, restaurantName, "restaurant")
-    console.log('imageUrl cloudinary', imageUrl);
-    
     
     if(!imageUrl) throw new ErrorHandler(400, "Unable to upload images");
     
@@ -48,9 +46,13 @@ export const createRestaurantHandler = async (req: Request<{}, {}, TRestaurant["
 
 export const getRestaurantsHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    console.log('all restuarant hit');
     
-    const restaurants = await RestaurantModel.find().populate("menus")
+    const restaurants = await RestaurantModel.find().populate({
+      path:'menus',
+      populate:{
+        path:'menuItems',
+      }
+    });
     if(!restaurants) throw new ErrorHandler(404, "Restaurants not found");
     
     res.status(200).json({
@@ -73,7 +75,6 @@ export const getRestaurantbyUserIdHandler = async (req: Request, res: Response, 
         path:'menuItems',
       }
     })
-    console.log('restaurant', restaurant);
     
     if(!restaurant) throw new ErrorHandler(404, "Restaurant not found");
     
@@ -159,16 +160,30 @@ export const updateRestaurantHandler = async (req: Request<{},{},TUpdateRestaura
 export const getRestaurantOrderHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = req.id;
-
+    
     const restaurant = await RestaurantModel.findOne({ user: userId })
     if(!restaurant) throw new ErrorHandler(404, "Restaurant not found");
 
-    const order = await OrderModel.find({restaurant: restaurant._id}).populate("restaurant").populate("user")
+    const order = await OrderModel.find({restaurant: restaurant._id})
+    .populate("restaurant")
+    .populate("user")
+    .populate("cartItems.menuItemId")
+    .sort({status: -1});
+
     if(!order || order.length === 0) throw new ErrorHandler(404, "No orders found");
+    
+    // Sort orders based on the natural order of status in the enum
+    const sortedOrders = order.sort((a, b) => {
+      const statusOrder = ["pending", "confirmed", "preparing", "onTheWay", "delivered"]; // order display sequence
+      const statusAIndex = statusOrder.indexOf(a.status);
+      const statusBIndex = statusOrder.indexOf(b.status);
+
+      return statusAIndex - statusBIndex;  // Ascending order based on the index
+    });
     
     res.status(200).json({
       success: true,
-      order
+      order: sortedOrders
     })
     
   } catch (error) {
@@ -179,60 +194,118 @@ export const getRestaurantOrderHandler = async (req: Request, res: Response, nex
 
 export const searchRestaurantHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const searchText = req.params.searchText || "";
-    const searchQuery = req.query.searchQuery as string || "";
-    const selectedCuisines = (req.query.selectedCuisines as string || "").split(",").filter(cuisine => cuisine);
-    const query: any = {};
+    const searchQuery = req.query.searchQuery as string || "";  // Search term for restaurant name
+    const selectedMenu = (req.query.cuisines as string || "").split(",").filter(cuisine => cuisine);  // Selected cuisines as array
 
-  // basic search based on searchText (name ,city, country)
-  if (searchText) {
-    query.$or = [
-      { restaurantName: { $regex: searchText, $options: 'i' } },
-      { city: { $regex: searchText, $options: 'i' } },
-      { country: { $regex: searchText, $options: 'i' } },
-    ]
-  }
+    const query: any = {};  // Initialize query object
 
-  // filter on the basis of searchQuery
-  if (searchQuery) {
-    query.$or = [
-      { restaurantName: { $regex: searchQuery, $options: 'i' } },
-      { cuisines: { $regex: searchQuery, $options: 'i' } }
-    ]
-  }
+    if (searchQuery) {
+      query.$or = [
+        { restaurantName: { $regex: searchQuery, $options: 'i' } }, 
+        { cuisines: { $regex: searchQuery, $options: 'i' } },          
+        {
+          "menus.name": { $regex: searchQuery, $options: 'i' },      
+        },
+        {
+          "menus.description": { $regex: searchQuery, $options: 'i' }, 
+        },
+      ];
+    }
 
-  if(selectedCuisines.length > 0){
-    query.cuisines = {$in: selectedCuisines}
-  }
-
-  const restaurants = await RestaurantModel.find(query);
-
-  res.status(200).json({
-    success:true,
-    data:restaurants
-  });
-     
-  } catch (error) {
-    console.error("searchRestaurantHandler error = ", error);
-    next(error)
-  }
-}
-
-export const getRestaurantOrders = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const userId = req.id;
-    const restaurant = await RestaurantModel.findOne({ user: userId });
-    if (!restaurant) throw new ErrorHandler(404, "Restaurant not found");
-
-    const orders = await OrderModel.find({ restaurant: restaurant._id }).populate('restaurant').populate('user');
-    if (!orders) throw new ErrorHandler(404, "Orders not found");
+    if (selectedMenu.length > 0) {
+      // Adding conditions for selectedMenu
+      query.$and = query.$and || [];  // Initialize $and if not already defined
+      query.$and.push({
+        $or: selectedMenu.map(menu => ({
+          "menus.name": { $regex: menu, $options: 'i' },
+          "menus.description": { $regex: menu, $options: 'i' }
+        }))
+      });
+    }
+    
+    // If there is a search query or selected menu, fetch the results
+    const restaurants = await RestaurantModel.aggregate([
+      {
+        $lookup: {
+          from: "menus",  // Assuming "menus" is the related collection
+          localField: "menus",
+          foreignField: "_id",
+          as: "menus"
+        }
+      },
+      {
+        $match: query  // Apply the combined query
+      }
+    ]);
 
     res.status(200).json({
       success: true,
-      orders
+      restaurants,
     });
   } catch (error) {
-    console.error("getRestaurantOrder error = ", error);
-    next(error);  
+    console.error("searchRestaurantHandler error = ", error);
+    next(error);
   }
-}
+};
+
+// export const searchRestaurantHandler2 = async (req: Request, res: Response, next: NextFunction) => {
+//   try {
+//     const searchQuery = req.query.searchQuery as string || "";  // Search term for restaurant name
+//     const selectedMenu = (req.query.cuisines as string || "").split(",").filter(cuisine => cuisine);  // Selected cuisines as array
+
+//     const query: any = {};  // Initialize query object
+//     console.log('searchQuery',  searchQuery);
+
+//     let restaurants;    
+    
+//     // Search by restaurantName or cuisines if a searchQuery is provided
+//     if (searchQuery) {
+//       console.log('search query block');
+      
+//       query.$or = [
+//         { restaurantName: { $regex: searchQuery, $options: 'i' } },  // Case-insensitive match for restaurant name
+//         { cuisines: { $regex: searchQuery, $options: 'i' } },          // Case-insensitive match for cuisines
+//         {
+//           "menus.title": { $regex: searchQuery, $options: 'i' },      // Case-insensitive match for menu titles
+//         },
+//         {
+//           "menus.description": { $regex: searchQuery, $options: 'i' }, // Case-insensitive match for menu descriptions
+//         },
+//       ];
+//       console.log('query', query);
+      
+//       restaurants = await RestaurantModel.find(query)
+//     }
+
+//     if(selectedMenu && selectedMenu.length !==0) {
+//       console.log('selected menu block');
+
+//       restaurants = await RestaurantModel.aggregate([
+//         { 
+//           $lookup : {
+//             from: "menus",
+//             localField: "menus",
+//             foreignField: "_id",
+//             as: "menus"
+//           }
+//         },
+//         {
+//           $match: {
+//             $or: selectedMenu.map(menu => ({
+//               "menus.title": { $regex: menu, $options: 'i' },
+//               "menus.description": { $regex: menu, $options: 'i' }
+//             }))
+//           }
+//         }
+//       ])
+//     }
+        
+//     res.status(200).json({
+//       success: true,
+//       restaurants,
+//     });
+//   } catch (error) {
+//     console.error("searchRestaurantHandler error = ", error);
+//     next(error);
+//   }
+// };

@@ -11,21 +11,21 @@ import uploadImageToCloudinary from "../utils/cloudinary/uploadImageToCloudinary
 export const createMenuHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = req.id;
-    const {title, price, description, menuItems, restaurant} = req.body;
-    // const file = req.file;
+    const {name, description, menuItems, restaurant, image} = req.body;
+    const file = req.file;
 
-    // if(!file) throw new ErrorHandler(400, "Image is required");
+    if(!file) throw new ErrorHandler(400, "Image is required");
 
-    // const imageUrl = await uploadImageToCloudinary(file, title, "menu");
-    // if(!imageUrl) throw new ErrorHandler(500, "Failed to upload image");
+    const imageUrl = await uploadImageToCloudinary(file, name, "menu");
+    if(!imageUrl) throw new ErrorHandler(500, "Failed to upload image");
 
     // create menu
     const menu = await MenuModel.create({
-      title, 
-      price, 
+      name, 
       description,
       menuItems,
-      restaurant
+      restaurant,
+      image: imageUrl
     });
     if(!menu) throw new ErrorHandler(500, "Failed to create menu");
       
@@ -62,6 +62,24 @@ export const getMenuHandler = async (req: Request, res: Response, next: NextFunc
   console.error("getMenuHandler error = ", error);
   next(error)
  }
+}
+
+export const getAllMenuHandler = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const menus = await MenuModel.find();
+    
+    if(!menus) throw new ErrorHandler(404, "Menu not found");
+
+    res.status(200).json({
+      success: true,
+      message: "Menu fetched successfully",
+      menu: menus,
+    })
+
+  } catch (error) {
+    console.error("getAllMenuHadler error = ", error);
+    next(error)
+  }
 }
 
 export const updateMenuHandler = async (req: Request<TId["params"]>, res: Response, next: NextFunction) => {
