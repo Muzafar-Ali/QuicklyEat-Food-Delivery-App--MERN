@@ -16,6 +16,13 @@ export type TMenu = {
   menuItems: TMenuItem[]
 }
 
+export type TReviews = {
+  _id: string;
+  user: string;
+  rating: number;
+  comment: string;
+}
+
 export type TRestaurant = {
   _id: string;
   user: string;
@@ -23,9 +30,14 @@ export type TRestaurant = {
   city: string;
   country: string;
   deliveryTime: number;
+  minimumOrder: number;
+  deliveryCharges: number;
   cuisines: string[];
   menus: TMenu[];
   imageUrl: string;
+  reviews: TReviews[];
+  averageRating: number;
+  topRestuarant: boolean;
 }
 
 export type TSearchedRestaurant = {

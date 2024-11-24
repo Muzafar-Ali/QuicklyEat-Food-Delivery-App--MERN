@@ -11,7 +11,7 @@ import uploadImageToCloudinary from "../utils/cloudinary/uploadImageToCloudinary
 export const createMenuHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = req.id;
-    const {name, description, menuItems, restaurant, image} = req.body;
+    const {name, description, menuItems, restaurant } = req.body;
     const file = req.file;
 
     if(!file) throw new ErrorHandler(400, "Image is required");

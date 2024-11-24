@@ -23,7 +23,7 @@ export const signupHandler = async (req: Request<{}, {}, TUser["body"]>, res: Re
     generateAndSetJwtToken(res, userId);
 
     // send email to verify email 
-    await sendVerificationEmail(user.email, verificationCode)
+    // await sendVerificationEmail(user.email, verificationCode)
     
     res.status(201).json({ 
       success: true,
@@ -85,7 +85,7 @@ export const verifyEmailHandler = async (req: Request<{}, {}, TVerifyEmail["body
     await user.save();
     
     // send verification email
-    await sendWelcomeEmail(user.email, user.fullname)
+    // await sendWelcomeEmail(user.email, user.fullname)
 
     res.status(200).json({
       success: true,

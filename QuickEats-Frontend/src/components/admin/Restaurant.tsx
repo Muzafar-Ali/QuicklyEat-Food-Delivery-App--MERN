@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useRestaurants } from "@/hooks/useRestaurant";
 import { restaurantSchema, TRestaurantSchema } from "@/schema/restaurantSchema";
 import { useRestaurantStore } from "@/store/restaurantStore";
 
@@ -14,6 +13,8 @@ const Restaurant = () => {
     city: "",
     country: "",
     deliveryTime: 0,
+    minimumOrder: 0,
+    deliveryCharges: 0,
     cuisines: [],
     image: undefined,
   });
@@ -23,6 +24,7 @@ const Restaurant = () => {
     userRestaurant,
     updateRestaurant,
     createRestaurant,
+    getRestaurantbyUserId
   } = useRestaurantStore();
   
   const changeEventHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,7 +49,10 @@ const Restaurant = () => {
       formData.append("city", input.city);
       formData.append("country", input.country);
       formData.append("deliveryTime", input.deliveryTime.toString());
-
+      formData.append("minimumOrder", input.minimumOrder.toString());
+      if (input.deliveryCharges) {
+        formData.append("deliveryCharges", input.deliveryCharges.toString());
+      }
       input.cuisines.forEach(cuisine => {
         formData.append("cuisines[]", cuisine); // Append each cuisine individually
       });
@@ -70,13 +75,17 @@ const Restaurant = () => {
   
   
   useEffect(() => {
+    
     const fetchRestaurant = async () => {
+      await getRestaurantbyUserId();
       if(userRestaurant){
         setInput({
           restaurantName: userRestaurant.restaurantName || "",
           city: userRestaurant.city || "",
           country: userRestaurant.country || "",
           deliveryTime: userRestaurant.deliveryTime || 0,
+          minimumOrder: userRestaurant.minimumOrder || 0,
+          deliveryCharges: userRestaurant.deliveryCharges || 0,
           cuisines: userRestaurant.cuisines
           ? userRestaurant.cuisines.map((cuisine: string) => cuisine)
           : [],
@@ -153,6 +162,36 @@ const Restaurant = () => {
                 {errors && (
                   <span className="text-xs text-red-600 font-medium">
                     {errors.deliveryTime}
+                  </span>
+                )}
+              </div>
+              <div>
+                <Label>Delivery charges</Label>
+                <Input
+                  type="number"
+                  name="deliveryCharges"
+                  value={input.deliveryCharges}
+                  onChange={changeEventHandler}
+                  placeholder="Enter your delivery time"
+                />
+                {errors && (
+                  <span className="text-xs text-red-600 font-medium">
+                    {errors.deliveryCharges}
+                  </span>
+                )}
+              </div>
+              <div>
+                <Label>minimum Order</Label>
+                <Input
+                  type="number"
+                  name="minimumOrder"
+                  value={input.minimumOrder}
+                  onChange={changeEventHandler}
+                  placeholder="Enter your delivery time"
+                />
+                {errors && (
+                  <span className="text-xs text-red-600 font-medium">
+                    {errors.minimumOrder}
                   </span>
                 )}
               </div>

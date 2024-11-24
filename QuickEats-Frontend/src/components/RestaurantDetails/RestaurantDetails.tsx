@@ -6,6 +6,7 @@ import { Separator } from "../ui/separator";
 import { useRestaurantStore } from "@/store/restaurantStore";
 import RestuarantMenu from "./RestaurantMenu";
 import { TRestaurant } from "@/types/restaurantType";
+import StarsAndReviews from "./StarsAndReviews";
 
 const RestaurantDetails = () => {
   const params = useParams(); 
@@ -24,6 +25,7 @@ const RestaurantDetails = () => {
     <div className="max-w-6xl mx-auto my-10">
       {/* Restaurant Details */}
       <div className="w-full">
+        
         {/* mobile section */}
         <section className="flex flex-col  gap-6 mb-5 md:hidden">
           <div className="flex space-x-4">
@@ -53,6 +55,9 @@ const RestaurantDetails = () => {
                 <div className="flex items-center space-x-2">
                   <ShoppingBag size={16}/> <span>Min.order $20</span>
                 </div>
+                <div className="flex items-center gap-2">
+                <StarsAndReviews reviews={singleRestaurant?.reviews} averageRating={singleRestaurant?.averageRating} restaurantId={singleRestaurant?._id!}/>
+              </div>
               </div>
             </div>
           </div>
@@ -80,6 +85,9 @@ const RestaurantDetails = () => {
               <div className="flex items-center gap-2">
                 <Bike size={18}/> <span className="text-[#D19254] text-base">Free delivery</span>
                 <ShoppingBag size={16}/> <span>Min.order $20</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <StarsAndReviews reviews={singleRestaurant?.reviews} averageRating={singleRestaurant?.averageRating} restaurantId={singleRestaurant?._id!}/>
               </div>
             </div>
           </div>

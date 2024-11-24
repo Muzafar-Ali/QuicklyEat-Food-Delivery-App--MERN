@@ -11,6 +11,7 @@ import userRoutes from './routes/user.routes.js';
 import restaurantRoutes from './routes/restaurant.routes.js';
 import menuRoutes from './routes/menu.routes.js';
 import orderRoutes from './routes/order.routes.js';
+import reviewRoutes from './routes/reviews.routes.js';
 
 const app = express();
 const port = config.port;
@@ -36,6 +37,7 @@ app.use('/api/v1', userRoutes);
 app.use('/api/v1/restaurant', restaurantRoutes);
 app.use('/api/v1/menu', menuRoutes);
 app.use('/api/v1/order', orderRoutes);
+app.use('/api/v1/review', reviewRoutes);
 
 // Error middleware 
 app.use(errorMiddleware)

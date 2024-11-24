@@ -145,14 +145,28 @@ export const getAllOrderHandler = async (req: Request, res: Response, next: Next
 export const getOrderByUserIdHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = req.id;
+    
+    const orders = await OrderModel.find({user: userId})
+    .populate("user")
+    .populate("restaurant")
+    .populate("cartItems.menuItemId")
+    
+    if(!orders) throw new ErrorHandler(404, "Order not found");
+    console.log('orders', orders);
+    
+    // Sort orders based on the natural order of status in the enum
+    const sortedOrders = orders.sort((a, b) => {
+      const statusOrder = ["pending", "confirmed", "preparing", "onTheWay", "delivered"]; // order display sequence
+      const statusAIndex = statusOrder.indexOf(a.status);
+      const statusBIndex = statusOrder.indexOf(b.status);
 
-    const order = await OrderModel.find({user: userId}).populate("user").populate("restaurant");
-    if(!order) throw new ErrorHandler(404, "Order not found");
+      return statusAIndex - statusBIndex;  // Ascending order based on the index
+    });
 
     res.status(200).json({
       success: true,
       message: "Order found successfully",
-      order
+      order: sortedOrders
     });
 
   } catch (error) {

@@ -19,6 +19,14 @@ const restaurantSchema = new mongoose.Schema<TRestaurantDocument>({
     type:Number,
     required:true
   },
+  minimumOrder:{
+    type:Number,
+    required:true
+  },
+  deliveryCharges: {
+    type: Number,
+    default: 0
+  },
   cuisines:[{
     type:String, 
     required:true
@@ -27,10 +35,22 @@ const restaurantSchema = new mongoose.Schema<TRestaurantDocument>({
     type:mongoose.Schema.Types.ObjectId, 
     ref:'Menu'
   }],
-    imageUrl:{
-      type:String,
-      required:true
-    }
+  imageUrl:{
+    type:String,
+    required:true
+  },
+  reviews: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Review"  // Reference to the Review model
+  }],
+  averageRating: {
+    type: Number,
+    default: 0
+  },
+  topRestuarant:{
+    type:Boolean,
+    default:false
+  }
 },{timestamps:true});
 
 const RestaurantModel = mongoose.model<TRestaurantDocument>('Restaurant', restaurantSchema);

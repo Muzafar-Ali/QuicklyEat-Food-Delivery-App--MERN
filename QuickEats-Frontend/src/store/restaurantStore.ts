@@ -220,6 +220,6 @@ getSearchedRestaurant: async (searchQuery?: string) => {
 },
 
 }), {
-  name: 'restaurant-name',
+  name: 'restaurant',
   storage: createJSONStorage(() => localStorage)
 }))

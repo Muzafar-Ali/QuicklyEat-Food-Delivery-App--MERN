@@ -14,7 +14,6 @@ export const createRestaurantHandler = async (req: Request<{}, {}, TRestaurant["
     const id = req.id;
     
     const restaurantExist = await RestaurantModel.findOne({user: req.id})
-    
     if (restaurantExist) throw new ErrorHandler(409, "Restaurant already exist for this user"); // each user is allowed to create only one restaurant
  
     if(!image) throw new ErrorHandler(400, "Please upload a restaurant image");
@@ -22,13 +21,14 @@ export const createRestaurantHandler = async (req: Request<{}, {}, TRestaurant["
     // upload images to cloudinary from local folder
     // const imageUrl = await uploadImages(restaurantName)
 
+    // upload images to cloudinary from local folder
+    // const restaurant = await createRestaurant(req.body, id, imageUrl[0])
+    
     // upload images to cloudinary directly
     const imageUrl = await uploadImageToCloudinary(image, restaurantName, "restaurant")
     
     if(!imageUrl) throw new ErrorHandler(400, "Unable to upload images");
     
-    // upload images to cloudinary from local folder
-    // const restaurant = await createRestaurant(req.body, id, imageUrl[0])
     
     const restaurant = await createRestaurant(req.body, id, imageUrl)
 
@@ -47,12 +47,20 @@ export const createRestaurantHandler = async (req: Request<{}, {}, TRestaurant["
 export const getRestaurantsHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
     
-    const restaurants = await RestaurantModel.find().populate({
+    const restaurants = await RestaurantModel.find()
+    .populate({
       path:'menus',
       populate:{
         path:'menuItems',
       }
+    })
+    .populate({
+      path: 'reviews',
+      populate: {
+        path: 'userId',
+      }
     });
+    
     if(!restaurants) throw new ErrorHandler(404, "Restaurants not found");
     
     res.status(200).json({
@@ -93,10 +101,17 @@ export const getSingleRestaurantHandler = async (req: Request, res: Response, ne
   try {
     const restaurantId = req.params.id;
     
-    const restaurant = await RestaurantModel.findById(restaurantId).populate({
+    const restaurant = await RestaurantModel.findById(restaurantId)
+    .populate({
       path:'menus',
       populate:{
         path:'menuItems',
+      }
+    })
+    .populate({
+      path: 'reviews',
+      populate: {
+        path: 'userId',
       }
     });
 
@@ -114,10 +129,10 @@ export const getSingleRestaurantHandler = async (req: Request, res: Response, ne
 }
 
 export const updateRestaurantHandler = async (req: Request<{},{},TUpdateRestaurant["body"]>, res: Response, next: NextFunction) => {
-  try {
+  try {    
     const userId = req.id;
     const image = req.file;
-    const {city, country, cuisines, deliveryTime, menus, restaurantName} = req.body;   
+    const {city, country, cuisines, deliveryTime, menus, restaurantName, deliveryCharges, minimumOrder} = req.body;   
 
     // Create an update object only with fields that are provided
     const updateData: any = {};
@@ -127,6 +142,8 @@ export const updateRestaurantHandler = async (req: Request<{},{},TUpdateRestaura
     if (deliveryTime) updateData.deliveryTime = deliveryTime;
     if (menus) updateData.menus = menus;
     if (restaurantName) updateData.restaurantName = restaurantName;
+    if (deliveryCharges) updateData.deliveryCharges = deliveryCharges;
+    if (minimumOrder) updateData.minimumOrder = minimumOrder;
 
     // update restaurant image    
     if (image) {
@@ -137,7 +154,7 @@ export const updateRestaurantHandler = async (req: Request<{},{},TUpdateRestaura
       const imageUrl = await replaceImageOnCloudinary(extractedPublicId, restaurantName, image, subFolder)
       updateData.imageUrl = imageUrl;
     }
-
+    
     const restaurant = await RestaurantModel.findOneAndUpdate(
       {user: userId}, 
       updateData, 

@@ -32,7 +32,7 @@ const FilterPage = () => {
   };
 
   return (
-    <div className="">
+    <div className="border rounded-lg px-4 max-h-[400px] overflow-y-auto">
       <div className="flex items-center justify-between">
         <h1 className="font-medium text-lg">Filter by cuisines</h1>
         <Button variant={"link"} onClick={removeAppliedFilter}>Clear Filters</Button>
