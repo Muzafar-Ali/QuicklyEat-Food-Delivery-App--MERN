@@ -16,6 +16,6 @@ route.put("/:id", [isAuthenticated, validateRequestData(idSchema), upload.single
 route.delete("/:id", [isAuthenticated, validateRequestData(idSchema)],  deleteMenuHandler)
 
 // menut item routes
-route.post("/item", createMenuItemHandler)
+route.post("/item", [isAuthenticated, upload.single("image")], createMenuItemHandler)
 
 export default route;

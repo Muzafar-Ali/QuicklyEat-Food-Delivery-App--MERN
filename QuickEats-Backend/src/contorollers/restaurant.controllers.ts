@@ -25,7 +25,8 @@ export const createRestaurantHandler = async (req: Request<{}, {}, TRestaurant["
     // const restaurant = await createRestaurant(req.body, id, imageUrl[0])
     
     // upload images to cloudinary directly
-    const imageUrl = await uploadImageToCloudinary(image, restaurantName, "restaurant")
+    const subFolder = "restaurant"
+    const imageUrl = await uploadImageToCloudinary(image, restaurantName, subFolder)
     
     if(!imageUrl) throw new ErrorHandler(400, "Unable to upload images");
     

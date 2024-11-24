@@ -12,23 +12,25 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Loader2, Plus } from "lucide-react";
 import React, { FormEvent, useState } from "react";
-import { menuSchema, TMenu } from "@/schema/menuSchema"; 
+import { menuSchema, TMenuSchema } from "@/schema/menuSchema"; 
 import { useMenuStore } from "@/store/menuStore";
 import { useRestaurantStore } from "@/store/restaurantStore";
 import UpdateMenu from "./UpdateMenu";
 import { useNavigate } from "react-router-dom";
+import AddMenuItems from "./AddMenuItems";
 
 const AddMenu = () => {
   const navigate = useNavigate();
-  const [input, setInput] = useState<TMenu>({
+  const [input, setInput] = useState<TMenuSchema>({
     name: "",
     description: "",
     image: undefined,
   });
   const [open, setOpen] = useState<boolean>(false);
   const [editOpen, setEditOpen] = useState<boolean>(false);
+  const [addMenuItemOpen, setAddMenuItemOpen] = useState<boolean>(false);
   const [selectedMenu, setSelectedMenu] = useState<any>();
-  const [error, setError] = useState<Partial<TMenu>>({});
+  const [error, setError] = useState<Partial<TMenuSchema>>({});
   const { loading, createMenu } = useMenuStore();
   const {userRestaurant} = useRestaurantStore();
 
@@ -42,7 +44,7 @@ const AddMenu = () => {
     const result = menuSchema.safeParse(input);
     if (!result.success) {
       const fieldErrors = result.error.formErrors.fieldErrors;
-      setError(fieldErrors as Partial<TMenu>);
+      setError(fieldErrors as Partial<TMenuSchema>);
       return;
     }
     // api calling
@@ -165,6 +167,16 @@ const AddMenu = () => {
             <Button
               onClick={() => {
                 setSelectedMenu(menu);
+                setAddMenuItemOpen(true);
+              }}
+              size={"sm"}
+              className="bg-orange hover:bg-hoverOrange mt-2"
+            >
+              Add Menu Items
+            </Button>
+            <Button
+              onClick={() => {
+                setSelectedMenu(menu);
                 setEditOpen(true);
               }}
               size={"sm"}
@@ -189,6 +201,11 @@ const AddMenu = () => {
         selectedMenu={selectedMenu}
         editOpen={editOpen}
         setEditOpen={setEditOpen}
+      />
+      <AddMenuItems
+        menuId={selectedMenu?._id}
+        addMenuItemOpen={addMenuItemOpen}
+        setAddMenuItemOpen={setAddMenuItemOpen}
       />
     </div>
   );

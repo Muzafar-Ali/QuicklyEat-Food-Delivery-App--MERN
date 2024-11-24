@@ -11,6 +11,7 @@ type MenuState = {
   createMenu: (formData: FormData) => Promise<void>;
   updateMenu: (menuId: string, formData: FormData) => Promise<void>;
   deleteMenu: (menuId: string, formData: FormData) => Promise<void>;
+  createMenuItem: (formData: FormData) => Promise<boolean>;
 }
 
 export const useMenuStore = create<MenuState>()(persist((set) => ({
@@ -19,7 +20,7 @@ export const useMenuStore = create<MenuState>()(persist((set) => ({
   createMenu: async (formData: FormData) => {
     try {
       set({ loading: true });
-      const result = await axios.post(`${config.baseUri}/api/v1/menu`, formData, {
+      const result = await axios.post(`${config.baseUri}/api/v1/menu/item`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -70,6 +71,28 @@ export const useMenuStore = create<MenuState>()(persist((set) => ({
       }
       // update restaurant menu
       useRestaurantStore.getState().deleteMenuToRestaurant(menuId);
+    } catch (error: any) {
+      toast.error(error.response.data.message);
+      set({ loading: false });
+    }
+  }, 
+  createMenuItem: async (formData: FormData) => {
+    try {
+      set({ loading: true });
+      const result = await axios.post(`${config.baseUri}/api/v1/menu/item`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        withCredentials: true,
+      });
+      
+      console.log('result', result.data);
+      
+      if(result.data.success){
+        toast.success(result.data.message);
+        set({loading:false});
+        return true;
+      }
     } catch (error: any) {
       toast.error(error.response.data.message);
       set({ loading: false });
