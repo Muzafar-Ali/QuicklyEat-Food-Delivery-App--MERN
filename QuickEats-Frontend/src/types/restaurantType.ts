@@ -1,4 +1,5 @@
-import { TMenu, TMenuItem } from "./MenuType";
+
+import { TMenu, TMenuItem } from "./menuType";
 import { TOrders } from "./orderType";
 
 export type TReviews = {

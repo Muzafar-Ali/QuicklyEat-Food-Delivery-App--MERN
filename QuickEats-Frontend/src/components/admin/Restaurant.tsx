@@ -49,7 +49,9 @@ const Restaurant = () => {
       formData.append("city", input.city);
       formData.append("country", input.country);
       formData.append("deliveryTime", input.deliveryTime.toString());
-      formData.append("minimumOrder", input.minimumOrder.toString());
+      if(input.minimumOrder) {
+        formData.append("minimumOrder", input.minimumOrder.toString());
+      }
       if (input.deliveryCharges) {
         formData.append("deliveryCharges", input.deliveryCharges.toString());
       }

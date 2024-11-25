@@ -30,6 +30,7 @@ export const userSignupSchema = z.object({
     required_error: "Contact is required",
     invalid_type_error: "Contact must be a number",
   }).nonnegative("Contact must be a non-negative number"),
+  admin: z.boolean().optional(),
 });
 
 export type TUserSignup = z.infer<typeof userSignupSchema>;

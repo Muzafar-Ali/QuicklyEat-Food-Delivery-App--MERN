@@ -30,7 +30,13 @@ const Navbar = () => {
           <div className="hidden md:flex items-center gap-6">
             <Link to="/">Home</Link>
             <Link to="/profile">Profile</Link>
-            <Link to="/order/status">Order</Link>
+            <Link to="/order/status">Your Orders</Link>
+
+            {!user?.admin && (
+              <Link to="/admin/restaurant">
+                <Button variant={"secondary"} className="border border-black border-opacity-20 dark:border-white dark:border-opacity-20 hover:scale-105 transition-all duration-200">List Your Restaurant</Button>
+              </Link>
+            )}
 
             {user?.admin && (
               <Menubar>

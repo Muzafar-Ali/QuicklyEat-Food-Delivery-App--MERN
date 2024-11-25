@@ -164,6 +164,8 @@ export const useUserStore = create<TUserState>()(persist((set) => ({
   },
   
   updateProfile: async (userInut: TUserSignup) => {
+    console.log('userInut', userInut);
+    
     try {
       set({ loading: true })
       

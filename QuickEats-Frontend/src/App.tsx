@@ -56,10 +56,11 @@ const appRouter = createBrowserRouter([
         path: "/success",
         element: <Success />,
       },
+
        // admin routes
       {
         path: "/admin/restaurant",
-        element:<AdminRoute><Restaurant/></AdminRoute>,
+        element:<Restaurant/>,
       },
       {
         path: "/admin/menu",

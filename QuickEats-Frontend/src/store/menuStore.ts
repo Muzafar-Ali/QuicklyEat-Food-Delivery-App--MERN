@@ -8,7 +8,7 @@ import config from "@/config/config";
 type MenuState = {
   loading: boolean,
   menu: null,
-  createMenu: (formData: FormData) => Promise<void>;
+  createMenu: (formData: FormData) => Promise<boolean>;
   updateMenu: (menuId: string, formData: FormData) => Promise<void>;
   deleteMenu: (menuId: string, formData: FormData) => Promise<void>;
   createMenuItem: (formData: FormData) => Promise<boolean>;
@@ -20,7 +20,7 @@ export const useMenuStore = create<MenuState>()(persist((set) => ({
   createMenu: async (formData: FormData) => {
     try {
       set({ loading: true });
-      const result = await axios.post(`${config.baseUri}/api/v1/menu/item`, formData, {
+      const result = await axios.post(`${config.baseUri}/api/v1/menu`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -30,6 +30,7 @@ export const useMenuStore = create<MenuState>()(persist((set) => ({
       if (result.data.success) {
         toast.success(result.data.message);
         set({ loading: false, menu: result.data.menu });
+        return result.data.success;
       }
       
     } catch (error: any) {
@@ -91,7 +92,7 @@ export const useMenuStore = create<MenuState>()(persist((set) => ({
       if(result.data.success){
         toast.success(result.data.message);
         set({loading:false});
-        return true;
+        return result.data.success;
       }
     } catch (error: any) {
       toast.error(error.response.data.message);

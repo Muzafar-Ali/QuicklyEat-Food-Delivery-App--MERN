@@ -178,13 +178,16 @@ export const updateProfileHandler = async (req: Request<{}, {}, TUserUpdate["bod
   try {
     const userId = req.id;
     const image = req.file;
-    const {fullname, email, contact, country } = req.body;
+    const {fullname, email, contact, country, admin, address, city } = req.body;
 
     const updateData: any = {};
     if (fullname) updateData.fullname = fullname;
     if (email) updateData.email = email;
     if (contact) updateData.contact = contact;
     if (country) updateData.country = country;
+    if (admin) updateData.admin = admin;
+    if (address) updateData.address = address;
+    if (city) updateData.city = city;
 
     const user = await UserModel.findByIdAndUpdate(userId, updateData, {new: true}).select("-password");
     if(!user) throw new ErrorHandler(404, "User not found");

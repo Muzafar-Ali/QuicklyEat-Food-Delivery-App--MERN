@@ -57,8 +57,9 @@ const AddMenu = () => {
         formData.append("image", input.image);
       }
 
-      await createMenu(formData);
-      navigate("/")
+      const success = await createMenu(formData);
+      if(success) navigate("/")
+        
     } catch (error) {
       console.log(error);
     }

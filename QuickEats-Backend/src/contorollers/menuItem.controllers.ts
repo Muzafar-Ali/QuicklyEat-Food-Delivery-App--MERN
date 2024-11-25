@@ -9,7 +9,6 @@ export const createMenuItemHandler = async (req: Request, res: Response, next: N
   try {
     const {title, price, description, menu} = req.body;
     const image = req.file;   
-    console.log('menu', menu);
     
     if(!title || !price || !description || !menu ) throw new ErrorHandler(400, "All fields are required");
     if(!image) throw new ErrorHandler(400, "Please upload a restaurant image");

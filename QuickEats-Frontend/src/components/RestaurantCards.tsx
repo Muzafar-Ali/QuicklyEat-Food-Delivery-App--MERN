@@ -10,14 +10,14 @@ import SearchPageSkeleton from "./SearchPage/SearchPageSkeleton"
 const RestaurantCards = ({ restaurants, loading }: {restaurants: TAllRestaurants["data"] | null, loading: boolean}) => {
   return (
     <>
-      <div className="grid md:grid-cols-3 gap-4">
+      <div className="grid md:grid-cols-3 gap-x-4 gap-y-6 w-full">
         {loading ? ( <SearchPageSkeleton /> )  : 
         (
           restaurants?.map((restaurant) => (
           <div key={restaurant?._id}>
             <Card
             key={restaurant._id}
-            className="bg-white dark:bg-gray-800 shadow-xl rounded-xl overflow-hidden hover:shadow-2xl transition-shadow duration-300"
+            className="bg-white dark:bg-gray-800 shadow-xl rounded-xl overflow-hidden hover:shadow-2xl transition-shadow duration-300 border border-black border-opacity-20 dark:border-opacity-20 dark:border-white"
             >
               <Link to={`/restaurant/${restaurant?._id}`} className="relative">
                 <AspectRatio ratio={16 / 10}>

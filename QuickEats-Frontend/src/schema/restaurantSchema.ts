@@ -19,9 +19,8 @@ export const restaurantSchema = z.object({
   }).positive(),
 
   minimumOrder: z.number({
-    required_error: "Delivery time is required",
     invalid_type_error: "Delivery time must be a number"
-  }).positive(),
+  }).default(0).optional(),
 
   deliveryCharges: z.number({
     invalid_type_error: "Delivery charges must be a number"

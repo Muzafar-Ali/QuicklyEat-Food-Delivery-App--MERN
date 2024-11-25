@@ -21,7 +21,7 @@ const restaurantSchema = new mongoose.Schema<TRestaurantDocument>({
   },
   minimumOrder:{
     type:Number,
-    required:true
+    default:0
   },
   deliveryCharges: {
     type: Number,

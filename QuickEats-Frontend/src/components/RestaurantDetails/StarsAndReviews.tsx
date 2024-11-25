@@ -63,10 +63,10 @@ const StarsAndReviews = ({reviews, averageRating, restaurantId}: { reviews: any,
     <div className="flex items-center gap-2">
       <div className="flex items-center gap-1">
         <Star fill="orange" size={15}/>
-        <div className="text-sm">{averageRating?.toFixed(1)} / 5</div>
+        <div className="text-sm">{averageRating?.toFixed(1)}<span>/5</span></div>
+        <div className="text-sm text-gray-400">({reviews?.length})</div>
       </div>
       <div className="flex items-center gap-1">
-        <div className="text-sm">({reviews?.length})</div>
         <Dialog>
           <DialogTrigger className="text-[#D19254] text-base hover:scale-110  transition-all duration-200">See reviews</DialogTrigger>
           <DialogContent className="w-full h-[550px] overflow-auto">

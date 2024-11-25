@@ -44,9 +44,9 @@ const HomePage = () => {
   return (
     <div>
       <HeroSection/>
-      <div className="flex gap-5">
+      <div className="flex gap-14 w-full">
         <FilterPage/>
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 w-full">
           {/* search input */}
           <div className="flex items-center gap-2 relative">
             {appliedFilter?.length > 0 ? (
@@ -85,9 +85,10 @@ const HomePage = () => {
               </>
             )}
           </div>
-          { searchedRestaurant && searchedRestaurant?.length > 0 ? (
+          { searchedRestaurant && searchedRestaurant?.length > 0 && (
             <RestaurantCards restaurants={searchedRestaurant} loading={loading}/> 
-          ): (
+          )}
+          { searchedRestaurant?.length < 1 && appliedFilter.length < 1 &&  restaurants?.length > 0 && (
             <RestaurantCards restaurants={restaurants} loading={loading}/>
           )}
         </div>

@@ -1,7 +1,9 @@
-import { TMenuItem, TRestaurantState } from "@/types/restaurantType";
+import { TRestaurantState } from "@/types/restaurantType";
+import { TMenuItem } from "@/types/menuType";
 import { toast } from "sonner";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
+import { useUserStore } from "./userStore";
 import config from "@/config/config";
 import axios from "axios";
 
@@ -23,6 +25,7 @@ export const useRestaurantStore = create<TRestaurantState>()(persist((set, get) 
       if(result.data.success) {
         toast.success(result.data.message);
         set({ loading: false });
+        useUserStore.getState().updateProfile({admin:true})
       }
 
     } catch (error: any) {
