@@ -1,10 +1,10 @@
 import { Router } from "express";
 import { createMenuHandler, deleteMenuHandler, getAllMenuHandler, getMenuHandler, updateMenuHandler } from "../contorollers/menu.controller.js";
+import { createMenuItemHandler, getAllMenuItemsHandler } from "../contorollers/menuItem.controllers.js";
 import { isAuthenticated } from "../middlewares/isAuthenticated.js";
 import { idSchema } from "../schema/menu.schema.js";
 import upload from "../middlewares/multer.middlewar2.js";
 import validateRequestData from "../middlewares/validateRequestData.js";
-import { createMenuItemHandler } from "../contorollers/menuItem.controllers.js";
 
 
 const route = Router();

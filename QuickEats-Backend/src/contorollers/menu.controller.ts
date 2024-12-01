@@ -67,13 +67,12 @@ export const getMenuHandler = async (req: Request, res: Response, next: NextFunc
 export const getAllMenuHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const menus = await MenuModel.find();
-    
     if(!menus) throw new ErrorHandler(404, "Menu not found");
 
     res.status(200).json({
       success: true,
       message: "Menu fetched successfully",
-      menu: menus,
+      menus: menus,
     })
 
   } catch (error) {

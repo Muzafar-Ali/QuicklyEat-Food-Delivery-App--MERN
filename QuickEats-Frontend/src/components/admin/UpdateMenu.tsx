@@ -9,9 +9,8 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { menuSchema, TMenu, TMenuSchema } from "@/schema/menuSchema";
+import { menuSchema, TMenuSchema } from "@/schema/menuSchema";
 import { useMenuStore } from "@/store/menuStore";
-import { TMenuItem } from "@/types/restaurantType";
 
 import { Loader2 } from "lucide-react";
 import {

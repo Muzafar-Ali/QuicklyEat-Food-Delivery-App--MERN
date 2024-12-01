@@ -9,8 +9,9 @@ const HomepageLayout = () => {
         <header>
             <Navbar/>
         </header>
+
         {/* Main content  */} 
-        <div className="flex-1">
+        <div className="flex-1 mt-[30px]">
             <Outlet/>
         </div>
 

@@ -1,3 +1,4 @@
+import { filterOptions } from "@/utils/filterOptions";
 import { Button } from "./ui/button";
 import { Checkbox } from "./ui/checkbox";
 import { Label } from "./ui/label";
@@ -7,35 +8,19 @@ export type FilterOptionsState = {
   id: string;
   label: string;
 };
-// agar applied filter k andr ye item exixt krta hia toh iska mtlb checked hai
-const filterOptions: FilterOptionsState[] = [
-  { id: "burger", label: "Burger" },
-  { id: "sandwich", label: "sandwich" },
-  { id: "biryani", label: "Biryani" },
-  { id: "continental", label: "Continental" },
-  { id: "pizza", label: "pizza" },
-  { id: "broast", label: "broast" },
-  { id: "cake & bakery", label: "cake & Bakery" },
-  { id: "desserts", label: "Desserts" },
-  { id: "chinese", label: "Chinese" },
-  { id: "pakistani", label: "Pakistani" },
-  { id: "indian", label: "Indian" },
-  { id: "japanese", label: "Japanese" },
-  { id: "momos", label: "Momos" },
-];
 
 const FilterPage = () => {
   const { manageAppliedFilter, appliedFilter, removeAppliedFilter } = useRestaurantStore();
-  
-  const appliedFilterHandler = (value: string) => {
+
+  const appliedFilterHandler = (value: string) => {    
     manageAppliedFilter(value);
   };
 
   return (
-    <div className="border rounded-lg px-4 max-h-[500px] min-w-[250px] overflow-y-auto hidden lg:block ">
+    <div className="border rounded-lg px-4 max-h-[500px] min-w-[250px] overflow-y-auto hidden lg:block fixed ">
       <div className="flex items-center justify-between">
         <h1 className="font-medium md:font-bold text-lg">Filters</h1>
-        <Button variant={"link"} onClick={removeAppliedFilter}>Clear Filters</Button>
+        <Button variant={"link"} onClick={removeAppliedFilter} className="text-hoverOrange text-sm">Clear Filters x</Button>
       </div>
       {filterOptions.map((option) => (
         <div key={option.id} className="flex items-center space-x-2 my-5">

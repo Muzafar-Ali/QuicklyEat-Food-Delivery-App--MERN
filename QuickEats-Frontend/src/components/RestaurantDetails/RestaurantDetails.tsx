@@ -7,6 +7,7 @@ import { useRestaurantStore } from "@/store/restaurantStore";
 import RestuarantMenu from "./RestaurantMenu";
 import { TRestaurant } from "@/types/restaurantType";
 import StarsAndReviews from "./StarsAndReviews";
+import { restaurantSchema } from "@/schema/restaurantSchema";
 
 const RestaurantDetails = () => {
   const params = useParams(); 
@@ -22,7 +23,7 @@ const RestaurantDetails = () => {
   }, [params.id]);
   
   return (
-    <div className="max-w-6xl mx-auto my-10">
+    <div className="max-w-6xl mx-auto my-20">
       {/* Restaurant Details */}
       <div className="w-full">
         
@@ -84,7 +85,9 @@ const RestaurantDetails = () => {
               </div>
               <div className="flex items-center gap-2">
                 <Bike size={18}/> <span className="text-[#D19254] text-base">Free delivery</span>
-                <ShoppingBag size={16}/> <span>Min.order $20</span>
+                <ShoppingBag size={16}/> <span>Min.order 
+                  {singleRestaurant?.minimumOrder === 0 ? '': <span> $</span>} 
+                  {singleRestaurant?.minimumOrder === 0 ? "No requirement -": singleRestaurant?.minimumOrder}</span>
               </div>
               <div className="flex items-center gap-2">
                 <StarsAndReviews reviews={singleRestaurant?.reviews} averageRating={singleRestaurant?.averageRating} restaurantId={singleRestaurant?._id!}/>

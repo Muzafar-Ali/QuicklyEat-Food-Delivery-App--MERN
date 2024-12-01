@@ -1,9 +1,7 @@
-import { TMenu } from "@/types/restaurantType";
-import { Button } from "../ui/button";
+import { TMenu } from "@/types/menuType";
 import { Card, CardContent } from "../ui/card";
 import { useCartStore } from "@/store/cartStore";
 import { toast } from "sonner";
-import { Plus } from "lucide-react";
 
 const RestaurantMenu = ({ menus, restaurantId }: { menus: TMenu[], restaurantId: string }) => {
   const { addToCart } = useCartStore();
@@ -11,11 +9,11 @@ const RestaurantMenu = ({ menus, restaurantId }: { menus: TMenu[], restaurantId:
   return (
     <div className="mt-5">
       {menus?.map((menu) => (
-        <div className="flex flex-col items-start gap-4">
+        <div key={menu._id} className="flex flex-col items-start gap-4">
           <h1 className="font-bold text-2xl font-roboto tracking-wide mt-16 opacity-80">{menu.name}</h1>
           
           <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-5">
-            {menu?.menuItems?.map((item) => (
+            {menu?.menuItems?.map((item: any) => (
               <Card className="flex items-center justify-between space-x-2 lg:px-2 auto shadow-lg rounded-lg overflow-hidden relative" key={item._id}>
                 <div className="flex-1 text-start justify-start">
                   <CardContent className="flex flex-col gap-2 max-lg:p-2">

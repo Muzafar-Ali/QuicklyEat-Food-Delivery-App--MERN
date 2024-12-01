@@ -9,9 +9,11 @@ type MenuState = {
   loading: boolean,
   menu: null,
   createMenu: (formData: FormData) => Promise<boolean>;
+  getAllMenus: () => Promise<any>;
   updateMenu: (menuId: string, formData: FormData) => Promise<void>;
   deleteMenu: (menuId: string, formData: FormData) => Promise<void>;
   createMenuItem: (formData: FormData) => Promise<boolean>;
+
 }
 
 export const useMenuStore = create<MenuState>()(persist((set) => ({
@@ -33,6 +35,22 @@ export const useMenuStore = create<MenuState>()(persist((set) => ({
         return result.data.success;
       }
       
+    } catch (error: any) {
+      toast.error(error.response.data.message);
+      set({ loading: false });
+    }
+  },
+  getAllMenus: async () => {
+    try {
+      set({ loading: true });
+      const result = await axios.get(`${config.baseUri}/api/v1/menu/all`);
+
+      if(result.data.success){
+        set({loading:false});
+        return result.data.menus;
+      }
+      set({ loading: false });
+      return;
     } catch (error: any) {
       toast.error(error.response.data.message);
       set({ loading: false });
@@ -98,7 +116,7 @@ export const useMenuStore = create<MenuState>()(persist((set) => ({
       toast.error(error.response.data.message);
       set({ loading: false });
     }
-  }
+  },
 }), {
   name: "menu-name",
   storage: createJSONStorage(() => localStorage)

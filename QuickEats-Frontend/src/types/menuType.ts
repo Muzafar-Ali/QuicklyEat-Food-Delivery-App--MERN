@@ -10,7 +10,9 @@ export type TMenuItem = {
 
 export type TMenu = {
   _id: string;
+  restaurant: string;  
   name: string;
   description: string;
+  image: string;           
   menuItems: TMenuItem[]
 }

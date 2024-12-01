@@ -41,3 +41,20 @@ export const createMenuItemHandler = async (req: Request, res: Response, next: N
     next(error)
   }
 }
+
+export const getAllMenuItemsHandler = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const menuItems = await MenuItemModel.find();
+
+    if(!menuItems) throw new ErrorHandler(404, "No menu items found");
+
+    res.status(200).json({
+      success: true,
+      message: "Menu Items fetched successfully",
+      menuItems
+    })
+  } catch (error) {
+    console.error("getAllMenuItems error = ", error);
+    next(error)
+  }
+}

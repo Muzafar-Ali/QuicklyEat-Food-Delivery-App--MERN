@@ -67,7 +67,7 @@ const AddMenu = () => {
   };
   
   return (
-    <div className="max-w-6xl mx-auto my-10">
+    <div className="max-w-6xl mx-auto my-20">
       <div className="flex justify-between">
         <h1 className="font-bold md:font-extrabold text-lg md:text-2xl">
           Available Menus

@@ -61,7 +61,7 @@ const Profile = () => {
   };
 
   return (
-    <form onSubmit={updateProfileHandler} className="max-w-7xl mx-auto my-5">
+    <form onSubmit={updateProfileHandler} className="max-w-7xl mx-auto my-20">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Avatar className="relative md:w-28 md:h-28 w-20 h-20">

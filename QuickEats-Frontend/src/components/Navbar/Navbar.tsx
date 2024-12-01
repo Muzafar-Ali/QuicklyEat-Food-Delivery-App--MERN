@@ -16,7 +16,7 @@ const Navbar = () => {
   const { setTheme } = useThemeStore();
 
   return (
-    <div className="max-w-7xl mx-auto">
+    <div className="max-w-[1350px] mx-auto w-full bg-white dark:bg-black fixed z-10 py-4">
       <div className="flex items-center justify-between h-14">
         <Link to="/" className="flex items-center space-x-2">
           <img

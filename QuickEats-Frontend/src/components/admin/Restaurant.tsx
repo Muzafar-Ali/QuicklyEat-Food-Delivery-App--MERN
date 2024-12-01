@@ -100,7 +100,7 @@ const Restaurant = () => {
   }, []);
   
   return (
-    <div className="max-w-6xl mx-auto my-10">
+    <div className="max-w-6xl mx-auto my-20">
       <div>
         <div>
           <h1 className="font-extrabold text-2xl mb-5">Add Restaurants</h1>
