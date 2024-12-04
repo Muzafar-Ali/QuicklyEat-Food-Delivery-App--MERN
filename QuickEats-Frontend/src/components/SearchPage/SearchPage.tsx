@@ -1,9 +1,8 @@
 import { Link, useParams } from "react-router-dom";
-import FilterPage from "../FilterPage";
+import FilterPage from "../FilterPage/FilterPageDesktop";
 import { Input } from "../ui/input";
 import { useState } from "react";
 import { Button } from "../ui/button";
-import { Badge } from "../ui/badge";
 import { Globe, MapPin, X } from "lucide-react";
 import { Card, CardContent, CardFooter } from "../ui/card";
 import { AspectRatio } from "../ui/aspect-ratio";
@@ -19,13 +18,10 @@ const SearchPage = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const {
     loading,
-    searchedRestaurant,
-    searchRestaurant,
     manageAppliedFilter,  
     appliedFilter,
   } = useRestaurantStore();  
 
-  console.log('searchedRestaurant', searchedRestaurant);
   const [kya, setKya] = useState<string>('')
   
   return (

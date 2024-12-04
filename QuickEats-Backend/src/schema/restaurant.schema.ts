@@ -22,6 +22,14 @@ const restaurantSchema = z.object({
     deliveryTime: z.string().refine((val) => !isNaN(Number(val)), {
       message: "Delivery time must be a number"
     }).transform((val) => Number(val)), // Converts string to number after validation
+   
+    minimumOrder: z.string().refine((val) => !isNaN(Number(val)), {
+      message: "Delivery time must be a number"
+    }).transform((val) => Number(val)).optional(), // Converts string to number after validation
+    
+    deliveryCharges: z.string().refine((val) => !isNaN(Number(val)), {
+      message: "Delivery time must be a number"
+    }).transform((val) => Number(val)).optional(), // Converts string to number after validation
 
     cuisines: z.string({
       required_error: 'At least one cuisine is required',
@@ -63,6 +71,14 @@ export const updateRestaurantSchema = z.object({
     // After validation, transform the string into a number to match the restaurant model requirements.
     deliveryTime: z.string().refine((val) => !isNaN(Number(val)), {
       message: "Delivery time must be a number"
+    }).transform((val) => Number(val)).optional(), // Converts string to number after validation
+
+    minimumOrder: z.string().refine((val) => !isNaN(Number(val)), {
+      message: "Delivery time must be a number"
+    }).transform((val) => Number(val)).optional(), // Converts string to number after validation
+    
+    deliveryCharges: z.string().refine((val) => !isNaN(Number(val)), {
+      message: "Delivery charges must be a number"
     }).transform((val) => Number(val)).optional(), // Converts string to number after validation
 
     cuisines: z.string({

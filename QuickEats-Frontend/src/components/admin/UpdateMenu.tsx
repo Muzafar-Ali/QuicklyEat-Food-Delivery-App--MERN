@@ -9,9 +9,8 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { menuSchema, TMenu, TMenuSchema } from "@/schema/menuSchema";
+import { menuSchema, TMenuSchema } from "@/schema/menuSchema";
 import { useMenuStore } from "@/store/menuStore";
-import { TMenuItem } from "@/types/restaurantType";
 
 import { Loader2 } from "lucide-react";
 import {
@@ -32,11 +31,17 @@ type TSelectedMenu = {
 }
 
 
-const UpdateMenu = ({ selectedMenu, editOpen, setEditOpen }: {
-  selectedMenu: TSelectedMenu;
-  editOpen: boolean;
-  setEditOpen: Dispatch<SetStateAction<boolean>>;
+const UpdateMenu = (
+  { 
+    selectedMenu, 
+    editOpen, 
+    setEditOpen 
+  }: {
+    selectedMenu: TSelectedMenu;
+    editOpen: boolean;
+    setEditOpen: Dispatch<SetStateAction<boolean>>;
 }) => {
+  
   const [input, setInput] = useState<TMenuSchema>({
     name: "",
     description: "",
@@ -59,7 +64,7 @@ const UpdateMenu = ({ selectedMenu, editOpen, setEditOpen }: {
       return;
     }
      
-    // api ka kaam start from here
+
     try {
       const formData = new FormData();
       formData.append("name", input.name);

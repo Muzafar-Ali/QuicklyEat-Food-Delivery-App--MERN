@@ -12,7 +12,7 @@ export const updateRestaurantMenus = async (id: string, _id: mongoose.Schema.Typ
     restaurantMenu.push(_id);
     restaurant.menus = restaurantMenu;
     await restaurant.save();
-    
+    return true
   } catch (error) {
     console.error("updateRestaurantMenus error = ", error);
     throw error;

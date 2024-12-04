@@ -44,22 +44,26 @@ type TRestaurantData = {
   city: string, 
   country: string, 
   cuisines: string[], 
+  minimumOrder?: number,
   deliveryTime: number, 
+  deliveryCharges?: number
   menus?: string[], 
   restaurantName: string
 }
 
 export const createRestaurant = async ( restaurantData: TRestaurantData, userId: string, images: (string | undefined)) => {
   try {
-    const {city, country, cuisines, deliveryTime, menus, restaurantName } = restaurantData
-
+    const {city, country, cuisines, deliveryTime, menus, restaurantName, minimumOrder, deliveryCharges} = restaurantData
+   
     const restaurant = await RestaurantModel.create({
       user: userId,
       restaurantName,
       city,
       country,
       cuisines,
+      minimumOrder,
       deliveryTime,
+      deliveryCharges,
       imageUrl: images,
     });
     

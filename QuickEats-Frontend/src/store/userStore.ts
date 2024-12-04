@@ -5,6 +5,7 @@ import { TUserState } from '@/types/userType';
 import { TUserLogin, TUserSignup } from '@/schema/userSchema';
 import config from '../config/config';
 import axios from 'axios';
+import { useRestaurantStore } from './restaurantStore';
 
 
 export const useUserStore = create<TUserState>()(persist((set) => ({
@@ -79,6 +80,8 @@ export const useUserStore = create<TUserState>()(persist((set) => ({
           loading: false
         })
 
+        useRestaurantStore.getState().userRestaurant = null
+        
         // Clear the cookie
         document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         // Clear the local storage entry
@@ -161,6 +164,8 @@ export const useUserStore = create<TUserState>()(persist((set) => ({
   },
   
   updateProfile: async (userInut: TUserSignup) => {
+    console.log('userInut', userInut);
+    
     try {
       set({ loading: true })
       

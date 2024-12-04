@@ -23,7 +23,7 @@ export const signupHandler = async (req: Request<{}, {}, TUser["body"]>, res: Re
     generateAndSetJwtToken(res, userId);
 
     // send email to verify email 
-    await sendVerificationEmail(user.email, verificationCode)
+    // await sendVerificationEmail(user.email, verificationCode)
     
     res.status(201).json({ 
       success: true,
@@ -85,7 +85,7 @@ export const verifyEmailHandler = async (req: Request<{}, {}, TVerifyEmail["body
     await user.save();
     
     // send verification email
-    await sendWelcomeEmail(user.email, user.fullname)
+    // await sendWelcomeEmail(user.email, user.fullname)
 
     res.status(200).json({
       success: true,
@@ -102,7 +102,8 @@ export const verifyEmailHandler = async (req: Request<{}, {}, TVerifyEmail["body
 export const logoutHandler = async (_: Request, res: Response, next: NextFunction) => {
   try {
     // res.cookie("token", "", { expires: new Date(Date.now()) });
-     res.clearCookie("token").status(200).json({
+    res.clearCookie("token");
+    res.status(200).json({
       success: true, 
       message: "Logged out successfully"
     });
@@ -178,13 +179,16 @@ export const updateProfileHandler = async (req: Request<{}, {}, TUserUpdate["bod
   try {
     const userId = req.id;
     const image = req.file;
-    const {fullname, email, contact, country } = req.body;
+    const {fullname, email, contact, country, admin, address, city } = req.body;
 
     const updateData: any = {};
     if (fullname) updateData.fullname = fullname;
     if (email) updateData.email = email;
     if (contact) updateData.contact = contact;
     if (country) updateData.country = country;
+    if (admin) updateData.admin = admin;
+    if (address) updateData.address = address;
+    if (city) updateData.city = city;
 
     const user = await UserModel.findByIdAndUpdate(userId, updateData, {new: true}).select("-password");
     if(!user) throw new ErrorHandler(404, "User not found");

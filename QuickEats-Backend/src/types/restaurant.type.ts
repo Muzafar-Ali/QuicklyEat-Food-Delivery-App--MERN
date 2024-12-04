@@ -6,9 +6,14 @@ export type TRestaurant = {
   city:string;
   country:string;
   deliveryTime:number;
+  minimumOrder:number;
+  deliveryCharges: number;
   cuisines: string[];
   imageUrl:string;
-  menus:mongoose.Schema.Types.ObjectId[]
+  menus:mongoose.Schema.Types.ObjectId[];
+  reviews:mongoose.Schema.Types.ObjectId[];
+  averageRating: number;
+  topRestuarant: boolean;
 }
 
 export type TRestaurantDocument = TRestaurant & mongoose.Document & {

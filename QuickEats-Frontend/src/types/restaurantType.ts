@@ -1,19 +1,12 @@
+
+import { TMenu, TMenuItem } from "./menuType";
 import { TOrders } from "./orderType";
 
-export type TMenuItem = {
+export type TReviews = {
   _id: string;
-  title: string;
-  description: string;
-  price: number;
-  image: string;
-  menu: string;
-}
-
-export type TMenu = {
-  _id: string;
-  name: string;
-  description: string;
-  menuItems: TMenuItem[]
+  user: string;
+  rating: number;
+  comment: string;
 }
 
 export type TRestaurant = {
@@ -23,9 +16,14 @@ export type TRestaurant = {
   city: string;
   country: string;
   deliveryTime: number;
+  minimumOrder: number;
+  deliveryCharges: number;
   cuisines: string[];
   menus: TMenu[];
   imageUrl: string;
+  reviews: TReviews[];
+  averageRating: number;
+  topRestuarant: boolean;
 }
 
 export type TSearchedRestaurant = {

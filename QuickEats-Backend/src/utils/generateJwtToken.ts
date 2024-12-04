@@ -1,6 +1,5 @@
 import jwt from "jsonwebtoken";
 import { Response } from "express";
-import { TUserDocument } from "../types/user.type.js";
 import config from "../config/config.js";
 import mongoose, { Types } from "mongoose";
 

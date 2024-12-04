@@ -24,7 +24,7 @@ const Cart = () => {
   }, 0);
   
   return (
-    <div className="flex flex-col max-w-7xl mx-auto my-10">
+    <div className="flex flex-col max-w-7xl mx-auto my-20">
       <div className="flex justify-end">
         <Button 
           onClick={() => clearCart()}

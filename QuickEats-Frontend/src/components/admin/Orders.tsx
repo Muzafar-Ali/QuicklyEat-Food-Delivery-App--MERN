@@ -26,10 +26,9 @@ const Orders = () => {
     };
     getOrders(); 
   }, []);
-  console.log("restaurantOrder", restaurantOrder);
   
   return (
-    <div className="max-w-6xl mx-auto py-10 px-6">
+    <div className="max-w-6xl mx-auto py-10 px-6 my-20">
       <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white mb-10">
         Orders Overview
       </h1>
@@ -52,7 +51,7 @@ const Orders = () => {
                 <div>
                   <h1 className="text-base md:text-lg">Order Items: </h1>
                   <div className="flex flex-col">
-                    {order.cartItems.map((item, index) => (
+                    {order?.cartItems?.map((item, index) => (
                       <Orderitems key={index} item={item} />
                     ))}
                   </div>

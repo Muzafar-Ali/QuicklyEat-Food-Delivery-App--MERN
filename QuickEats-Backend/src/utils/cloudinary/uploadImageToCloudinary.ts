@@ -20,7 +20,7 @@ import config from "../../config/config.js";
       // Folder structure setup for cloudinary
       const baseFolder = "QuickEats";
       let subFolder = subfolderName;
-      const slug = title.toLowerCase().split(" ").join("-");
+      const slug = title.toLowerCase().split(" ").join("-").replace(/[^a-z0-9-]/g, "");
   
       // Determine public ID for upload
       // If updating, use the existing public ID; otherwise, create a new one based on title and subfolder
@@ -46,7 +46,7 @@ import config from "../../config/config.js";
       return uploadResponse.secure_url;
       
     } catch (error) {
-      console.error(error);
+      console.error('uploadImageToCloudinary error', error);
       throw new Error("Failed to upload image on cloudinary");    
     }
   };

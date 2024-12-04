@@ -28,6 +28,7 @@ export type TOrderState = {
   loading:boolean;
   createCheckoutSession: (checkoutSessionRequest: TCheckoutSessionRequest) => Promise<void>;
   getOrderDetails: () => Promise<[]>;
+  getOrderByUserId: () => Promise<[]>;
 }
 
 export type TOrder = {

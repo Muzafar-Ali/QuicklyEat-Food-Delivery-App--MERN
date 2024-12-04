@@ -1,11 +1,10 @@
 import { TCheckoutSessionRequest, TOrderState } from "@/types/orderType";
 import { toast } from "sonner";
 import { create } from "zustand";
-import { createJSONStorage, persist } from "zustand/middleware";
 import config from "@/config/config";
 import axios from "axios";
 
-export const useOrderStore = create<TOrderState>()(persist((set => ({
+export const useOrderStore = create<TOrderState>()((set => ({
   loading: false,
   createCheckoutSession: async (checkoutSession: TCheckoutSessionRequest) => {
     try {
@@ -45,8 +44,22 @@ export const useOrderStore = create<TOrderState>()(persist((set => ({
     } catch (error) {
       set({loading: false});
     }
+  },
+  getOrderByUserId: async () => {
+    try {
+      set({loading: true});
+      const response = await axios.get(`${config.baseUri}/api/v1/order/user`, {
+        withCredentials: true
+      });
+      
+      if(response.data.success) {
+        set({loading: false});
+      }
+
+      return response.data.order;
+      
+    } catch (error) {
+      set({loading: false});
+    }
   }
-})), {
-  name: 'order',
-  storage: createJSONStorage(() => localStorage)
-}))
+})),)

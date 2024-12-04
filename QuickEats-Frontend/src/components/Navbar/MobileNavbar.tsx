@@ -54,7 +54,7 @@ const MobileNavbar = () => {
             className="flex items-center gap-4 hover:bg-gray-200 px-3 py-2 rounded-lg cursor-pointer hover:text-gray-900 font-medium"
           >
             <HandPlatter />
-            <span>Order</span>
+            <span>Your Orders</span>
           </Link>
           <Link
             to="/cart"
@@ -63,6 +63,17 @@ const MobileNavbar = () => {
             <ShoppingCart />
             <span>Cart (0)</span>
           </Link>
+          {!user?.admin && (
+              <Link
+              to="/admin/restaurant"
+              className="flex items-center gap-4 hover:bg-gray-200 px-3 py-2 rounded-lg cursor-pointer hover:text-gray-900 font-medium"
+            >
+              <UtensilsCrossed />
+              <span>List Your Restaurant</span>
+            </Link>
+          )}
+
+          {/* Dashboard */}
           {user?.admin && (
             <>
               <Link
