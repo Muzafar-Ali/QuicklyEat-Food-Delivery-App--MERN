@@ -9,8 +9,9 @@ import SearchPageSkeleton from "./SearchPage/SearchPageSkeleton"
 
 const RestaurantCards = ({ restaurants, loading }: {restaurants: TAllRestaurants["data"] | null, loading: boolean}) => {
   return (
-    <>
-      <div className="grid md:grid-cols-3 gap-x-4 gap-y-6 w-full">
+    <div className="mt-5">
+      <div className="text-xl lg:text-2xl text-start font-normal md:font-bold pl-4">All Restaurants</div>
+      <div className="grid md:grid-cols-3 gap-x-4 gap-y-6 w-full mt-1">
         {loading ? ( <SearchPageSkeleton /> )  : 
         (
           restaurants?.map((restaurant) => (
@@ -66,7 +67,7 @@ const RestaurantCards = ({ restaurants, loading }: {restaurants: TAllRestaurants
           ))
         )}
       </div>
-    </>
+    </div>
   )
 }
 

@@ -102,7 +102,8 @@ export const verifyEmailHandler = async (req: Request<{}, {}, TVerifyEmail["body
 export const logoutHandler = async (_: Request, res: Response, next: NextFunction) => {
   try {
     // res.cookie("token", "", { expires: new Date(Date.now()) });
-     res.clearCookie("token").status(200).json({
+    res.clearCookie("token");
+    res.status(200).json({
       success: true, 
       message: "Logged out successfully"
     });

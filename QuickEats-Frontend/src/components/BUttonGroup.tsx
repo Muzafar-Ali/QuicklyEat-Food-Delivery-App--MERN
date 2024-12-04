@@ -1,12 +1,10 @@
-import { ArrowLeft, ArrowRight } from 'lucide-react';
-import React from 'react';
-
+import { ArrowRight } from 'lucide-react';
 
 const ButtonGroup = ({ next, previous, goToSlide, ...rest }: any) => {
     const { carouselState: { currentSlide } } = rest;
     return (
       <div >
-        <div className="w-8 md:w-12 h-8 md:h-12 p-1 bg-white border border-stone-300 rounded-full justify-center items-center inline-flex absolute top-[28%] left-[0%]">
+        <div className="w-8 md:w-11 h-8 md:h-11 p-1 bg-white border border-stone-300 rounded-full justify-center items-center inline-flex absolute top-[28%] left-[0%]">
           <button 
             aria-label="Previous slide"
             onClick={() => previous()}
@@ -16,7 +14,7 @@ const ButtonGroup = ({ next, previous, goToSlide, ...rest }: any) => {
           </button>
         </div>
   
-        <div className="w-8 md:w-12 h-8 md:h-12 p-1 bg-white border border-stone-300 rounded-full justify-center items-center inline-flex absolute top-[28%] right-[0%]">
+        <div className="w-8 md:w-11 h-8 md:h-11 p-1 bg-white border border-stone-300 rounded-full justify-center items-center inline-flex absolute top-[28%] right-[0%]">
           <button
             aria-label="Next slide" 
             onClick={() => next()}

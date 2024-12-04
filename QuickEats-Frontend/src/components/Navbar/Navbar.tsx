@@ -16,18 +16,18 @@ const Navbar = () => {
   const { setTheme } = useThemeStore();
 
   return (
-    <div className="max-w-[1350px] mx-auto w-full bg-white dark:bg-black fixed z-10 py-4">
-      <div className="flex items-center justify-between h-14">
+    <div className="max-w-[1350px] mx-auto w-full bg-white dark:bg-background fixed max-lg:left-0 top-0 z-20 py-2 lg:py-4">
+      <div className="flex items-center justify-between h-14 max-lg:pl-[30px]">
         <Link to="/" className="flex items-center space-x-2">
           <img
             src={logo} 
             alt="logo"
-            className="w-[50px] h-[50px] md:w-[70px] md:h-[70px] rounded-full "
+            className="w-[40px] h-[40px] lg:w-[70px] lg:h-[70px] rounded-full "
           />
-          <h1 className="font-bold text-xl text-hoverOrange md:font-extrabold md:text-3xl font-nunito ">QuickEats</h1>
+          <h1 className="font-bold text-xl text-hoverOrange lg:font-extrabold lg:text-3xl font-nunito ">QuickEats</h1>
         </Link>
-        <div className="hidden md:flex items-center gap-10">
-          <div className="hidden md:flex items-center gap-6">
+        <div className="hidden lg:flex items-center gap-10">
+          <div className="hidden lg:flex items-center gap-6">
             <Link to="/">Home</Link>
             <Link to="/profile">Profile</Link>
             <Link to="/order/status">Your Orders</Link>
@@ -107,7 +107,7 @@ const Navbar = () => {
             </div>
           </div>
         </div>
-        <div className="md:hidden lg:hidden">
+        <div className="lg:hidden fixed right-10">
           {/* Mobile responsive  */}
           <MobileNavbar />
         </div>

@@ -40,17 +40,17 @@ const OrderStatus = () => {
                   <h1>Order:</h1>
                   <h1>{order._id}</h1>
                 </div>
-                {order.cartItems.map((item) => (
+                {order.cartItems?.map((item) => (
                   <div className="md:mb-4">
                     <div className="flex flex-col md:flex-row justify-between items-center gap-2 md:gap-20">
                       <div className="flex flex-col md:flex-row items-center">
                         <img
-                          src={item.menuItemId.image}
+                          src={item.menuItemId?.image}
                           alt=""
                           className="w-14 h-14 rounded-md object-cover"
                           />
                         <h3 className="ml-4 text-gray-800 dark:text-gray-200 font-medium">
-                          {item.menuItemId.title}
+                          {item.menuItemId?.title}
                         </h3>
                       </div>
                       <div className="text-right">
@@ -60,18 +60,18 @@ const OrderStatus = () => {
                       </div>
                       <div className="text-right">
                         <div className="text-gray-800 dark:text-gray-200 flex items-center">
-                          <span className="md:text-lg font-medium"><span>$ </span>{item.price}</span>
+                          <span className="md:text-lg font-medium"><span>$ </span>{item?.price}</span>
                         </div>
                       </div>
                     </div>
                   </div>
                 ))}
               <div className="md:hidden mb-10">
-                <span className="text-[#FF5A5A]">{order.status.toUpperCase()}</span>
+                <span className="text-[#FF5A5A]">{order.status?.toUpperCase()}</span>
               </div>
               </div>
               <div className="hidden md:block">
-                <span className="text-[#FF5A5A]">{order.status.toUpperCase()}</span>
+                <span className="text-[#FF5A5A]">{order.status?.toUpperCase()}</span>
               </div>
             </div>
           ))}
