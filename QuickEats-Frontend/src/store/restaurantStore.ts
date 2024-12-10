@@ -41,7 +41,7 @@ export const useRestaurantStore = create<TRestaurantState>()(persist((set, get) 
       const response = await axios.get(`${config.baseUri}/api/v1/restaurant`, {
         withCredentials: true,
       });
-
+      
       if (response.data.success) {
         set({ loading: false, userRestaurant: response.data.restaurant });
       }

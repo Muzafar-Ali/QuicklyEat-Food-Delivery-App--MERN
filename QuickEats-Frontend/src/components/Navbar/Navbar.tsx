@@ -24,7 +24,7 @@ const Navbar = () => {
             alt="logo"
             className="w-[40px] h-[40px] lg:w-[70px] lg:h-[70px] rounded-full "
           />
-          <h1 className="font-bold text-xl text-hoverOrange lg:font-extrabold lg:text-3xl font-nunito ">QuickEats</h1>
+          <h1 className="font-bold text-xl text-hoverOrange lg:font-extrabold lg:text-3xl font-nunito ">QuicklyEat</h1>
         </Link>
         <div className="hidden lg:flex items-center gap-10">
           <div className="hidden lg:flex items-center gap-6">

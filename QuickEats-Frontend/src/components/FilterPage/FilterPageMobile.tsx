@@ -1,5 +1,4 @@
 import { filterOptions } from "@/utils/filterOptions";
-import { Button } from "../ui/button";
 import { Checkbox } from "../ui/checkbox";
 import { Label } from "../ui/label";
 import { useRestaurantStore } from "@/store/restaurantStore";
@@ -11,7 +10,7 @@ export type FilterOptionsState = {
 
 
 const FilterPageMobile = () => {
-  const { manageAppliedFilter, appliedFilter, removeAppliedFilter } = useRestaurantStore();
+  const { manageAppliedFilter, appliedFilter } = useRestaurantStore();
 
   const appliedFilterHandler = (value: string) => {    
     manageAppliedFilter(value);

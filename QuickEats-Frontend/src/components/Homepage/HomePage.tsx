@@ -13,7 +13,7 @@ const HomePage = () => {
   const [searchedRestaurant, setSearchedRestaurant] = useState<TRestaurant[]>([]);
   const [restaurants, setRestaurants] = useState<TRestaurant[]>([]);
   const {appliedFilter, getSearchedRestaurant, getAllRestaurant, removeAppliedFilter, manageAppliedFilter, loading} = useRestaurantStore();
-
+  
   const handleSearchedRestaurants = async() => {
     if (searchQuery) {
       const restaurant = await getSearchedRestaurant(searchQuery);
@@ -21,6 +21,7 @@ const HomePage = () => {
     }
   }
   
+  // get all restaurant
   useEffect(() => {
     const getRestaurants = async() => {
       const restaurants = await getAllRestaurant();
@@ -29,6 +30,7 @@ const HomePage = () => {
     getRestaurants();
   }, [])
 
+  // get restaurants as per user selection
   useEffect(() => {
     if (appliedFilter?.length > 0) {
       const getRestaurantsByMenu = async() => {

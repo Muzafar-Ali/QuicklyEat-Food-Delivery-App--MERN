@@ -1,7 +1,7 @@
 import { ArrowRight } from 'lucide-react';
 
-const ButtonGroup = ({ next, previous, goToSlide, ...rest }: any) => {
-    const { carouselState: { currentSlide } } = rest;
+const ButtonGroup = ({ next, previous }: any) => {
+    
     return (
       <div >
         <div className="w-8 md:w-11 h-8 md:h-11 p-1 bg-white border border-stone-300 rounded-full justify-center items-center inline-flex absolute top-[28%] left-[0%]">

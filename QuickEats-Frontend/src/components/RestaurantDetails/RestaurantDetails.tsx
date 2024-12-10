@@ -1,7 +1,6 @@
 import { Bike,  ShoppingBag, Timer } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Badge } from "../ui/badge";
 import { Separator } from "../ui/separator";
 import { useRestaurantStore } from "@/store/restaurantStore";
 import RestuarantMenu from "./RestaurantMenu";

@@ -1,5 +1,4 @@
 import { filterOptions } from "@/utils/filterOptions";
-import { Button } from "../ui/button";
 import { Checkbox } from "../ui/checkbox";
 import { Label } from "../ui/label";
 import { useRestaurantStore } from "@/store/restaurantStore";

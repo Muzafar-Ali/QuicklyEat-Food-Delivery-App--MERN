@@ -1,6 +1,5 @@
 import { CartState } from "@/types/cartType";
-import { TMenuItem } from "@/types/restaurantType";
-import { stat } from "fs";
+import { TMenuItem } from "@/types/menuType";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 

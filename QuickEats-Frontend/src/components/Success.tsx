@@ -1,10 +1,8 @@
  
-import { Separator } from "./ui/separator";
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
 import { useOrderStore } from "@/store/orderStore";
 import { useEffect, useState } from "react"; 
-import { CartItem } from "@/types/cartType";
 import { TOrder } from "@/types/orderType";
 import { useCartStore } from "@/store/cartStore";
 
