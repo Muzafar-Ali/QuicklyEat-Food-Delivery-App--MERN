@@ -18,7 +18,7 @@ const port = config.port;
 
 // CORS configuration
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: `${config.corsOrigin}`,
   credentials: true
 }));
 
@@ -28,8 +28,8 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
 // health check route
-app.get('/api/v1/health', (req, res) => {
-  res.send('QuickEats responds OK!');
+app.get('/api/v1/health', (req: any, res: any) => {
+  res.send('QuicklyEat responds OK!');
 });
 
 // routes
@@ -44,5 +44,5 @@ app.use(errorMiddleware)
 
 app.listen(port, () => {
   connectDB();
-  console.log(`app listening at http://localhost:${port}`);
+  console.log(`Server is running on port ${port}`);
 });

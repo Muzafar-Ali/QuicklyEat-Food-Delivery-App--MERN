@@ -11,7 +11,7 @@ type MenuState = {
   createMenu: (formData: FormData) => Promise<boolean>;
   getAllMenus: () => Promise<any>;
   updateMenu: (menuId: string, formData: FormData) => Promise<void>;
-  deleteMenu: (menuId: string, formData: FormData) => Promise<void>;
+  // deleteMenu: (menuId: string, formData: FormData) => Promise<void>;
   createMenuItem: (formData: FormData) => Promise<boolean>;
 
 }
@@ -77,24 +77,24 @@ export const useMenuStore = create<MenuState>()(persist((set) => ({
       set({ loading: false });
     }
   },
-  deleteMenu: async (menuId:string, formData: FormData) => {
-    try {
-      set({ loading: true });
-      const result = await axios.delete(`${config.baseUri}/api/v1/menu/${menuId}`, {
-        withCredentials: true,
-      });
+  // deleteMenu: async (menuId:string) => {
+  //   try {
+  //     set({ loading: true });
+  //     const result = await axios.delete(`${config.baseUri}/api/v1/menu/${menuId}`, {
+  //       withCredentials: true,
+  //     });
 
-      if(result.data.success){
-        toast.success(result.data.message);
-        set({loading:false, menu:null});
-      }
-      // update restaurant menu
-      useRestaurantStore.getState().deleteMenuToRestaurant(menuId);
-    } catch (error: any) {
-      toast.error(error.response.data.message);
-      set({ loading: false });
-    }
-  }, 
+  //     if(result.data.success){
+  //       toast.success(result.data.message);
+  //       set({loading:false, menu:null});
+  //     }
+  //     // update restaurant menu
+  //     useRestaurantStore.getState().deleteMenuToRestaurant(menuId);
+  //   } catch (error: any) {
+  //     toast.error(error.response.data.message);
+  //     set({ loading: false });
+  //   }
+  // }, 
   createMenuItem: async (formData: FormData) => {
     try {
       set({ loading: true });

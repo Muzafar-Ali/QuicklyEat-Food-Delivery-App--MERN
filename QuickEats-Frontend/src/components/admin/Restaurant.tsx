@@ -77,7 +77,6 @@ const Restaurant = () => {
   
   
   useEffect(() => {
-    
     const fetchRestaurant = async () => {
       await getRestaurantbyUserId();
       if(userRestaurant){

@@ -1,4 +1,4 @@
-import { TMenuItem } from "./restaurantType";
+import { TMenuItem } from "./menuType";
 
 export type CartItem = TMenuItem & { 
     quantity:number;

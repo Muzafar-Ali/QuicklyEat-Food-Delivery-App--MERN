@@ -30,7 +30,6 @@ export const createRestaurantHandler = async (req: Request<{}, {}, TRestaurant["
     
     if(!imageUrl) throw new ErrorHandler(400, "Unable to upload images");
     
-    
     const restaurant = await createRestaurant(req.body, id, imageUrl)
 
     res.status(201).json({
@@ -191,7 +190,7 @@ export const getRestaurantOrderHandler = async (req: Request, res: Response, nex
     if(!order || order.length === 0) throw new ErrorHandler(404, "No orders found");
     
     // Sort orders based on the natural order of status in the enum
-    const sortedOrders = order.sort((a, b) => {
+    const sortedOrders = order.sort((a: any, b: any) => {
       const statusOrder = ["pending", "confirmed", "preparing", "onTheWay", "delivered"]; // order display sequence
       const statusAIndex = statusOrder.indexOf(a.status);
       const statusBIndex = statusOrder.indexOf(b.status);

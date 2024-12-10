@@ -1,5 +1,5 @@
 import { useRestaurantStore } from "@/store/restaurantStore";
-import ButtonGroup from "../BUttonGroup";
+import ButtonGroup from "../ButtonGroup";
 import menuItems from "@/utils/menuItems";
 
 import Carousel from "react-multi-carousel";
@@ -54,11 +54,18 @@ const DishSlider = () => {
         // renderButtonGroupOutside={true}
         customButtonGroup={<ButtonGroup />}
       >
-        { menuItems?.map((menu) => (
-          <div className="flex flex-col items-center gap-2 cursor-pointer" 
+        { menuItems?.map((menu, index) => (
+          <div
+          key={index} 
+            className="flex flex-col items-center gap-2 cursor-pointer" 
             onClick={() => manageAppliedFilter(menu.name)}
           >
-            <img src={menu.image} alt="" className="w-24 h-24 object-cover rounded-lg border border-black border-opacity-20 dark:border-opacity-20 dark:border-white " />
+            <img 
+              src={menu.image} 
+              loading="lazy" 
+              alt="" 
+              className="w-24 h-24 object-cover rounded-lg border border-black border-opacity-20 dark:border-opacity-20 dark:border-white " 
+            />
             <h1 className="capitalize">{menu.name}</h1>
           </div>
             

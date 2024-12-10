@@ -6,7 +6,7 @@ const config = {
   dbUri: process.env.MONGO_URL,
   saltWorkFactor: 10,
   jwtSecretKey: process.env.JWT_SECRET_KEY,
-  secure: process.env.NODE_ENV === "development" ? false : true,
+  secure: process.env.ENV_NODE === "development" ? false : true,
   jwtTokenAge: 24*60*60*1000,
   verificationTokenExpiry: 24 * 60 * 60 * 1000, // 24 hours
   passwordResetTokenTokenExpiry: 1 * 60 * 60 * 1000, // 1 hour
