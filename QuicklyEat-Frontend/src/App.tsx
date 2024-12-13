@@ -20,6 +20,7 @@ import AddMenu from './components/admin/AddMenu'
 import Orders from './components/admin/Orders'
 import Success from './components/Success'
 import OrderStatus from './components/OrderStatus'
+import Failed from './components/Failed'
 
 
 const appRouter = createBrowserRouter([
@@ -50,6 +51,10 @@ const appRouter = createBrowserRouter([
       {
         path: "/success",
         element: <Success />,
+      },
+      {
+        path: "/failed",
+        element: <Failed />,
       },
 
        // admin routes

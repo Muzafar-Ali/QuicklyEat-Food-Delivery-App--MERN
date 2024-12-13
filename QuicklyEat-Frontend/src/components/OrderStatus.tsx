@@ -2,10 +2,22 @@
 import { useOrderStore } from "@/store/orderStore";
 import { useEffect, useState } from "react"; 
 import { TOrder } from "@/types/orderType";
+import { Copy, CopyCheck } from "lucide-react";
 
 const OrderStatus = () => {
   const [orders, setOrders] = useState<TOrder[]>([])
   const { getOrderByUserId } = useOrderStore();
+
+  const [copiedOrder, setCopiedOrder] = useState(null); // Track copied order by ID
+
+  // Function to copy text to clipboard
+  const copyToClipboard = (orderId: any) => {
+    navigator.clipboard.writeText(orderId).then(() => {
+      setCopiedOrder(orderId); // Set the copied order ID
+      setTimeout(() => setCopiedOrder(null), 2000); // Reset the "copied" state after 2 seconds
+    });
+  };
+
 
   useEffect(() => {
     const getOrders = async () => {
@@ -35,14 +47,23 @@ const OrderStatus = () => {
           {/* Your Ordered Item Display here  */}
           {orders?.map((order, index: number) => (
             <div className="flex flex-col md:flex-row items-center justify-between gap-20 border border-black border-opacity-20 dark:border-white dark:border-opacity-20 p-2 rounded-lg mt-2">
-              <div key={index} className="flex-1 ">
-                <div className="flex items-center justify-center gap-2 md:gap-5"> 
-                  <h1>Order:</h1>
-                  <h1>{order._id}</h1>
+              <div key={index} className="flex-1">
+                <div className="flex flex-col md:flex-row items-center justify-center md:gap-5 mb-4"> 
+                  <h1 className="text-sm md:text-base">Order Id:</h1>
+                  <div className="flex items-center md:space-x-2">
+                    <h1 className="text-sm md:text-base truncate max-md:max-w-[120px]">{order._id}</h1>
+                    <button
+                      onClick={() => copyToClipboard(order._id)}
+                      aria-label="Copy Order ID"
+                    >
+                      {/* Show CopyCheck icon for the copied order, otherwise show Copy icon */}
+                      {copiedOrder === order._id ? ( <CopyCheck size={18} /> ) : ( <Copy size={18} /> )}
+                    </button>
+                  </div>
                 </div>
                 {order.cartItems?.map((item) => (
                   <div className="md:mb-4">
-                    <div className="flex flex-col md:flex-row justify-between items-center gap-2 md:gap-20">
+                    <div className="flex flex-col md:flex-row justify-between items-center md:gap-20 mb-4">
                       <div className="flex flex-col md:flex-row items-center">
                         <img
                           src={item.menuItemId?.image}
@@ -55,12 +76,12 @@ const OrderStatus = () => {
                       </div>
                       <div className="text-right">
                         <div className="text-gray-800 dark:text-gray-200 flex items-center">
-                          <span className="md:text-lg font-medium"><span className="">Qty: </span>{item.quantity}</span>
+                          <span className="text-sm md:text-base font-medium "><span className="">Qty: </span>{item.quantity}</span>
                         </div>
                       </div>
                       <div className="text-right">
                         <div className="text-gray-800 dark:text-gray-200 flex items-center">
-                          <span className="md:text-lg font-medium"><span>$ </span>{item?.price}</span>
+                          <span className="text-sm md:text-base font-medium"><span>$ </span>{item?.price}</span>
                         </div>
                       </div>
                     </div>

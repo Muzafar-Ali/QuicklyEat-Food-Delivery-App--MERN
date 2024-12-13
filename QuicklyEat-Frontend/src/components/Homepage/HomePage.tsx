@@ -54,8 +54,8 @@ const HomePage = () => {
               <div>
                 <div className="flex items-center gap-x-5 flex-wrap">
                   <h1 className="text-base font-bold">Filters :</h1>
-                  {appliedFilter.map((filter) => (
-                    <h1 className="text-sm border px-1 py-1 rounded-md">
+                  {appliedFilter.map((filter, index) => (
+                    <h1 className="text-sm border px-1 py-1 rounded-md" key={index}>
                       {filter}
                       <X size={15} className="inline-block ml-2 cursor-pointer" onClick={() => manageAppliedFilter(filter)}/>
                     </h1>

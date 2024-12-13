@@ -41,7 +41,8 @@ export const useRestaurantStore = create<TRestaurantState>()(persist((set, get) 
       const response = await axios.get(`${config.baseUri}/api/v1/restaurant`, {
         withCredentials: true,
       });
-      
+       console.log('response user restaurants', response);
+        
       if (response.data.success) {
         set({ loading: false, userRestaurant: response.data.restaurant });
       }
@@ -51,77 +52,77 @@ export const useRestaurantStore = create<TRestaurantState>()(persist((set, get) 
       }
       set({ loading: false });
     }
-},
-getSingleRestaurant: async (restaurantId: string) => {
-  try {
-    set({ loading: true });
-    const response = await axios.get(`${config.baseUri}/api/v1/restaurant/${restaurantId}`);
+  },
+  getSingleRestaurant: async (restaurantId: string) => {
+    try {
+      set({ loading: true });
+      const response = await axios.get(`${config.baseUri}/api/v1/restaurant/${restaurantId}`);
 
-    if (response.data.success) {
-      set({ loading: false})
-    }  
-    return response.data.restaurant;
-  } catch (error) { 
-    console.error(error);
-    set({ loading: false });
-  }
-},
-getAllRestaurant: async () => {
-  try {
-    set({ loading: true });
-    
-    const response = await axios.get(`${config.baseUri}/api/v1/restaurant/all`);
-    if (response.data.success) {
+      if (response.data.success) {
+        set({ loading: false})
+      }  
+      return response.data.restaurant;
+    } catch (error) { 
+      console.error(error);
       set({ loading: false });
     }
+  },
+  getAllRestaurant: async () => {
+    try {
+      set({ loading: true });
+      
+      const response = await axios.get(`${config.baseUri}/api/v1/restaurant/all`);
+      if (response.data.success) {
+        set({ loading: false });
+      }
 
-    return response.data.restaurants;
-  } catch (error) {
-    console.error(error);
-  } finally {
-    set({ loading: false });
-  }
-},
-updateRestaurant: async (formData: FormData) => {
-  try {
-    set({ loading: true });
-    
-    const response = await axios.put(`${config.baseUri}/api/v1/restaurant`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      },
-      withCredentials: true,
-    });
-    
-    if (response.data.success) {
-      toast.success(response.data.message);
+      return response.data.restaurants;
+    } catch (error) {
+      console.error(error);
+    } finally {
       set({ loading: false });
     }
-  } catch (error: any) {
-    toast.error(error.response.data.message);
-    set({ loading: false });
-  }
-},
-addMenuToRestaurant: async (menu: TMenuItem) => {
-  try {
-    set({ loading: true });
-
-    const response = await axios.put(`${config.baseUri}/api/v1/restaurant`, menu, {
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      withCredentials: true,
-    });
-
-    if (response.data.success) {
-      toast.success(response.data.message);
+  },
+  updateRestaurant: async (formData: FormData) => {
+    try {
+      set({ loading: true });
+      
+      const response = await axios.put(`${config.baseUri}/api/v1/restaurant`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        },
+        withCredentials: true,
+      });
+      
+      if (response.data.success) {
+        toast.success(response.data.message);
+        set({ loading: false });
+      }
+    } catch (error: any) {
+      toast.error(error.response.data.message);
       set({ loading: false });
     }
-  } catch (error: any) {
-    toast.error(error.response.data.message);
-    set({ loading: false });
-  }
-},
+  },
+  addMenuToRestaurant: async (menu: TMenuItem) => {
+    try {
+      set({ loading: true });
+
+      const response = await axios.put(`${config.baseUri}/api/v1/restaurant`, menu, {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        withCredentials: true,
+      });
+
+      if (response.data.success) {
+        toast.success(response.data.message);
+        set({ loading: false });
+      }
+    } catch (error: any) {
+      toast.error(error.response.data.message);
+      set({ loading: false });
+    }
+  },
 
 // addMenuToRestaurant: (menu: TMenuItem) => {
 //   set((state: any) => ({

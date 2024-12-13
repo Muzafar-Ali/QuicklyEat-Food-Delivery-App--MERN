@@ -31,7 +31,7 @@ const Success = () => {
     );
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900 px-4">
+    <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900 px-4 flex-wrap">
       <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 max-w-lg w-full">
         <div className="mb-6 text-2xl font-bold text-gray-800 dark:text-gray-200 flex flex-col gap-5">
           <div className="flex flex-col md:items-start gap-5 text-lg md:text-2xl">
@@ -40,8 +40,8 @@ const Success = () => {
           </div>
           <Link to="/order/status">
             <Button className="bg-transparent border border-black border-opacity-30 dark:border-white dark:border-opacity-30 ">
-              <p className="text-[#FF5A5A] md:text-start font-medium text-lg md:text-xl">
-                Please check your order status in Order
+              <p className="text-[#FF5A5A] md:text-start font-medium text-base md:text-xl">
+                check your order status 
               </p>
             </Button>
           </Link>

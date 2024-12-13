@@ -7,6 +7,7 @@ import config from '../config/config';
 import axios from 'axios';
 import { useRestaurantStore } from './restaurantStore';
 
+console.log(config.baseUri);
 
 export const useUserStore = create<TUserState>()(persist((set) => ({
   user: null,
@@ -42,7 +43,7 @@ export const useUserStore = create<TUserState>()(persist((set) => ({
   },
 
   login: async (userInut: TUserLogin) => {
-    try {
+    try {      
       set({ loading: true })
       const response = await axios.post(`${config.baseUri}/api/v1/login`, userInut , {
         headers: {
@@ -81,11 +82,8 @@ export const useUserStore = create<TUserState>()(persist((set) => ({
         })
 
         useRestaurantStore.getState().userRestaurant = null
-        
-        // Clear the cookie
-        document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-        // Clear the local storage entry
         localStorage.removeItem("user-name");
+        localStorage.removeItem("restaurant");
 
         return true;
       }

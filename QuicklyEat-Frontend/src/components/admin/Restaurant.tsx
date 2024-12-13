@@ -42,7 +42,7 @@ const Restaurant = () => {
       return;
     }
     
-    // add restaurant api implementation start from here
+    // add restaurant api implementation
     try {
       const formData = new FormData();
       formData.append("restaurantName", input.restaurantName);
@@ -79,24 +79,24 @@ const Restaurant = () => {
   useEffect(() => {
     const fetchRestaurant = async () => {
       await getRestaurantbyUserId();
-      if(userRestaurant){
-        setInput({
-          restaurantName: userRestaurant.restaurantName || "",
-          city: userRestaurant.city || "",
-          country: userRestaurant.country || "",
-          deliveryTime: userRestaurant.deliveryTime || 0,
-          minimumOrder: userRestaurant.minimumOrder || 0,
-          deliveryCharges: userRestaurant.deliveryCharges || 0,
-          cuisines: userRestaurant.cuisines
-          ? userRestaurant.cuisines.map((cuisine: string) => cuisine)
-          : [],
-          image: undefined,
-        });
-      };
-      }
+    }
     fetchRestaurant();
-    
   }, []);
+
+  useEffect(() => {
+    if (userRestaurant) {
+      setInput({
+        restaurantName: userRestaurant.restaurantName,
+        city: userRestaurant.city,
+        country: userRestaurant.country,
+        deliveryTime: userRestaurant.deliveryTime,
+        minimumOrder: userRestaurant.minimumOrder,
+        deliveryCharges: userRestaurant.deliveryCharges,
+        cuisines: userRestaurant.cuisines,
+        image: undefined,
+      });
+    }
+  }, [userRestaurant]);
   
   return (
     <div className="max-w-6xl mx-auto my-20">
