@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 import { NextFunction, Request, Response } from "express";
 import { TUser, TUserLogin, TUserUpdate, TVerifyEmail, verifyEmailSchema } from "../schema/user.schema.js";
 import { createUser } from "../services/user.service.js";
-import { generateAndSetJwtToken } from "../utils/generateJwtToken.js";
+import { generateJwtTokenAndSetCookie } from "../utils/generateJwtToken.js";
 import { generateVerificationCode } from "../utils/generateVerificationToken.js";
 import config from "../config/config.js";
 import { sendPasswordResetEmail, sendResetSuccessEmail, sendVerificationEmail, sendWelcomeEmail } from "../mailtrap/emails.js";
@@ -20,10 +20,10 @@ export const signupHandler = async (req: Request<{}, {}, TUser["body"]>, res: Re
     if(!user) throw new ErrorHandler(404, "Failed to create user");
 
     const userId = user._id as mongoose.Types.ObjectId;
-    generateAndSetJwtToken(res, userId);
+    generateJwtTokenAndSetCookie(res, userId);
 
     // send email to verify email 
-    // await sendVerificationEmail(user.email, verificationCode)
+    await sendVerificationEmail(user.email, verificationCode)
     
     res.status(201).json({ 
       success: true,
@@ -48,7 +48,7 @@ export const loginHanlder = async (req: Request<{}, {}, TUserLogin["body"]>, res
     if(!isPasswordValid) throw new ErrorHandler(404, "incorrect email or password");
 
     const userId = user._id as mongoose.Types.ObjectId;
-    generateAndSetJwtToken(res, userId)
+    generateJwtTokenAndSetCookie(res, userId)
 
     user.lastLogin = new Date();
     await user.save();
@@ -85,7 +85,7 @@ export const verifyEmailHandler = async (req: Request<{}, {}, TVerifyEmail["body
     await user.save();
     
     // send verification email
-    // await sendWelcomeEmail(user.email, user.fullname)
+    await sendWelcomeEmail(user.email, user.fullname)
 
     res.status(200).json({
       success: true,
@@ -146,7 +146,6 @@ export const forgotPasswordHandler = async (req: Request, res: Response, next: N
 export const resetPasswordhandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { resteToken } = req.params;
-    const { newPassword } = req.body;
 
     const user = await UserModel.findOne({ 
       resetPasswordToken: resteToken, 

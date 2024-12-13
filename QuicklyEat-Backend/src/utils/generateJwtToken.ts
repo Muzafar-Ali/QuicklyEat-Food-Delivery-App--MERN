@@ -3,7 +3,7 @@ import { Response } from "express";
 import config from "../config/config.js";
 import mongoose, { Types } from "mongoose";
 
-export const generateAndSetJwtToken = (res:Response, userId: mongoose.Types.ObjectId ) => {
+export const generateJwtTokenAndSetCookie = (res:Response, userId: mongoose.Types.ObjectId ) => {
 
   const token = jwt.sign(
     { userId }, 
@@ -13,7 +13,7 @@ export const generateAndSetJwtToken = (res:Response, userId: mongoose.Types.Obje
   
   res.cookie("token", token, {
     httpOnly: true, 
-    sameSite: 'strict', 
+    sameSite: 'none', 
     maxAge: config.jwtTokenAge,
     secure: config.secure,
   });

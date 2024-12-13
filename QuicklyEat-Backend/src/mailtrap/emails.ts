@@ -29,10 +29,10 @@ export const sendWelcomeEmail = async (email: string, name: string) => {
     const res = await client.send({
       from: sender,
       to: recipient,
-      subject: 'Welcome to QuickEats',
+      subject: 'Welcome to QuicklyEat',
       html:htmlContent,
       template_variables:{
-        company_info_name:"QuickEats",
+        company_info_name:"QuicklyEat",
         name:name
       }});
     } catch (error) {
