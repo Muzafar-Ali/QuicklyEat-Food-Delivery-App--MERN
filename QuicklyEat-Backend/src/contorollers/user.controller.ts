@@ -203,3 +203,80 @@ export const updateProfileHandler = async (req: Request<{}, {}, TUserUpdate["bod
     next(error)
   }
 }
+
+export const addFavouriteHandler = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const userId = req.id;
+    const { restaurantId } = req.body;
+    
+    const user = await UserModel.findById(userId);
+    if(!user) throw new ErrorHandler(404, "User not found");
+
+    if(user.favourite.includes(restaurantId)) {
+      user.favourite = user.favourite.filter((fav) => fav !== restaurantId);
+    } else {
+      user.favourite.push(restaurantId);
+    }
+
+    await user.save();
+    
+    res.status(200).json({
+      success: true,
+      message: "Added to favourite successfully",
+      user: user,
+    })
+    
+  } catch (error) {
+    console.error("AddFavouriteHandler error = ", error)
+    next(error)
+  }
+}
+
+export const deleteFavouriteHandler = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const userId = req.id;
+    const { restaurantId } = req.params;
+
+    // Convert restaurantId to ObjectId (in case it's passed as a string)
+    const restaurantObjectId = new mongoose.Types.ObjectId(restaurantId);
+
+    // directly remove the restaurantId from the favourites array
+    const result = await UserModel.updateOne(
+      { _id: userId },
+      { $pull: { favourite: restaurantObjectId } }
+    );
+
+    // Check if the update was successful
+    if (result.modifiedCount === 0) {
+      res.status(404).json({ success: false, message: "Favourite not found" });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Removed favourite successfully",
+    })
+
+  } catch (error) {
+    console.error("deleteFavouriteHandler error = ", error)
+    next(error)
+  }
+}
+
+export const getFavouriteHandler = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const userId = req.id;
+
+    const user = await UserModel.findById(userId);
+    if(!user) throw new ErrorHandler(404, "User not found");
+
+    res.status(200).json({
+      success: true,
+      message: "Added to favourite successfully",
+      favourite: user.favourite,
+    })
+
+  } catch (error) {
+    console.error("createfavouriteHandler error = ", error)
+    next(error)
+  }
+}

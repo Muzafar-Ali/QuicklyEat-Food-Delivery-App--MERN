@@ -13,7 +13,7 @@ export const generateJwtTokenAndSetCookie = (res:Response, userId: mongoose.Type
   
   res.cookie("token", token, {
     httpOnly: true, 
-    sameSite: 'none', 
+    sameSite: 'lax', 
     maxAge: config.jwtTokenAge,
     secure: config.secure,
   });

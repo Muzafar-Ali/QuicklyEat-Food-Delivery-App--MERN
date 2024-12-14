@@ -32,12 +32,15 @@ const userSchema = new mongoose.Schema<TUserDocument>({
   country:{
     type:String,
     default:"Update your country"
-    
   },
   profilePicture:{
     type:String,
     default:"",
   },
+  favourite:[{
+    type:mongoose.Schema.Types.ObjectId, 
+    ref:'Restaurant'
+  }],
   admin:{type:Boolean, default:false},
   // advanced authentication
   lastLogin:{

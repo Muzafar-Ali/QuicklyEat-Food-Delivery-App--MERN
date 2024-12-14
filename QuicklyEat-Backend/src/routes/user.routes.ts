@@ -1,5 +1,15 @@
 import { Router } from "express";
-import { forgotPasswordHandler, loginHanlder, logoutHandler, resetPasswordhandler, signupHandler, updateProfileHandler, verifyEmailHandler } from "../contorollers/user.controller.js";
+import { 
+  addFavouriteHandler, 
+  deleteFavouriteHandler, 
+  forgotPasswordHandler, 
+  getFavouriteHandler, 
+  loginHanlder, 
+  logoutHandler, 
+  resetPasswordhandler, 
+  signupHandler, 
+  updateProfileHandler, 
+  verifyEmailHandler } from "../contorollers/user.controller.js";
 import createRateLimiter from "../utils/createRateLimiter.js";
 import validateRequestData from "../middlewares/validateRequestData.js";
 import userSchema, { loginSchema, userUpdateSchema, verifyEmailSchema } from "../schema/user.schema.js";
@@ -18,6 +28,9 @@ route.post('/verify', validateRequestData(verifyEmailSchema), verifyEmailHandler
 route.post('/forgot-password', forgotPasswordHandler)
 route.post('/reset-password/:resteToken', resetPasswordhandler)
 route.post('/logout', logoutHandler)
+route.post('/favourite', isAuthenticated, addFavouriteHandler)
+route.get('/favourite', isAuthenticated, getFavouriteHandler)
+route.delete('/favourite/:restaurantId', isAuthenticated, deleteFavouriteHandler)
 route.put("/update", [isAuthenticated, validateRequestData(userUpdateSchema), upload.single("image")], updateProfileHandler);
 
 export default route;

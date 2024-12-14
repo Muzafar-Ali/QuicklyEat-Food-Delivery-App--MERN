@@ -1,4 +1,4 @@
-import { Document } from "mongoose";
+import mongoose, { Document } from "mongoose";
 
 export type TUser = {
   fullname: string;
@@ -11,6 +11,7 @@ export type TUser = {
   country: string;
   profilePicture: string;  
   admin: boolean;
+  favourite: mongoose.Schema.Types.ObjectId[];
   comparePassword(candidatePassword: string): Promise<boolean>;
   // optional properties
   lastLogin?: Date;
