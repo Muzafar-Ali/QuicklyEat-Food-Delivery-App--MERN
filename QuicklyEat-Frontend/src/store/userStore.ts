@@ -205,7 +205,6 @@ export const useUserStore = create<TUserState>()(persist((set) => ({
   },
   addFavourite: async (restaurantId: string) => {
     try {
-      set({ loading: true })
       const response = await axios.post(`${config.baseUri}/api/v1/favourite`, { restaurantId }, {
         headers: {
           'Content-Type': 'application/json'
@@ -215,7 +214,6 @@ export const useUserStore = create<TUserState>()(persist((set) => ({
 
       if(response.data.success) {
         toast.success(response.data.message)
-        set({ loading: false })
         return true;
       }
       return false;
@@ -223,12 +221,10 @@ export const useUserStore = create<TUserState>()(persist((set) => ({
     } catch (error: any) {
       const errorMessage = error.response?.data?.message ?? "server not responding. Please try again later.";
       toast.error(errorMessage)
-      set({ loading: false })
     }
   },
   removeFavourite: async (restaurantId: string) => {
     try {
-      set({ loading: true })
       const response = await axios.delete(`${config.baseUri}/api/v1/favourite/${restaurantId}`, {
         headers: {
           'Content-Type': 'application/json'
@@ -238,7 +234,6 @@ export const useUserStore = create<TUserState>()(persist((set) => ({
 
       if(response.data.success) {
         toast.success(response.data.message)
-        set({ loading: false })
         return true;
       }
       return false;
@@ -246,12 +241,10 @@ export const useUserStore = create<TUserState>()(persist((set) => ({
     } catch (error: any) {
       const errorMessage = error.response?.data?.message ?? "server not responding. Please try again later.";
       toast.error(errorMessage)
-      set({ loading: false })
     }
   },
   getFavourites: async () => {
     try {
-      set({ loading: true })
       const response = await axios.get(`${config.baseUri}/api/v1/favourite`, {
         headers: {
           'Content-Type': 'application/json'
@@ -260,14 +253,12 @@ export const useUserStore = create<TUserState>()(persist((set) => ({
       });
       
       if(response.data.success) {
-        set({ loading: false })
         return response.data.favourite;
       }
 
     } catch (error: any) {
       const errorMessage = error.response?.data?.message ?? "server not responding. Please try again later.";
       toast.error(errorMessage)
-      set({ loading: false })
     }
   }
   
