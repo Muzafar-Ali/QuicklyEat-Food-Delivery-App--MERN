@@ -5,6 +5,7 @@ import { Timer, Soup, Bike, Star } from "lucide-react"
 import { Link } from "react-router-dom"
 import StarsAndReviews from "./RestaurantDetails/StarsAndReviews"
 import SearchPageSkeleton from "./SearchPage/SearchPageSkeleton"
+import Favourite from "./RestaurantDetails/Favourite"
 
 
 const RestaurantCards = ({ restaurants, loading }: {restaurants: TAllRestaurants["data"] | null, loading: boolean}) => {
@@ -18,7 +19,7 @@ const RestaurantCards = ({ restaurants, loading }: {restaurants: TAllRestaurants
           <div key={restaurant?._id}>
             <Card
             key={restaurant._id}
-            className="bg-white dark:bg-gray-800 shadow-xl rounded-xl overflow-hidden hover:shadow-2xl transition-shadow duration-300 border border-black border-opacity-20 dark:border-opacity-20 dark:border-white"
+            className="bg-white dark:bg-gray-800 shadow-xl rounded-xl overflow-hidden hover:shadow-2xl transition-shadow duration-300 border border-black border-opacity-20 dark:border-opacity-20 dark:border-white relative"
             >
               <Link to={`/restaurant/${restaurant?._id}`} className="relative">
                 <AspectRatio ratio={16 / 10}>
@@ -29,10 +30,10 @@ const RestaurantCards = ({ restaurants, loading }: {restaurants: TAllRestaurants
                     />
                 </AspectRatio>
                 {restaurant.topRestuarant && (
-                  <div className="absolute top-2  bg-white dark:bg-gray-700 bg-opacity-75 rounded-lg ml-2 px-3 py-2">
+                  <div className="absolute top-2 bg-white dark:bg-gray-700 bg-opacity-75 rounded-lg ml-2 px-3 py-2">
                     <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
                       <div className="flex items-center gap-1">
-                        <p className="text-black dark:text-hoverOrange text-base fonb">Top</p> <Star fill="orange" size={15}/>
+                        <p className="text-black dark:text-hoverOrange text-base font-bold">Top</p> <Star fill="orange" size={15}/>
                       </div>  
                     </span>
                   </div>
@@ -60,7 +61,12 @@ const RestaurantCards = ({ restaurants, loading }: {restaurants: TAllRestaurants
                     </h1>
                   </div>
                 </Link>
-                <StarsAndReviews reviews={restaurant?.reviews} averageRating={restaurant?.averageRating} restaurantId={restaurant._id!}/>
+                <div className="flex items-center justify-between">
+                  <StarsAndReviews reviews={restaurant?.reviews} averageRating={restaurant?.averageRating} restaurantId={restaurant._id!}/>
+                  <div className="absolute top-2 right-2 z-10 bg-white dark:bg-gray-700 bg-opacity-75 rounded-md p-1">
+                    <Favourite restaurantId={restaurant?._id!}/>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </div>

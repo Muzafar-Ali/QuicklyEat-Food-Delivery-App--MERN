@@ -16,7 +16,7 @@ const Footer = () => {
               alt="logo"
               className="w-[30px] h-[30px] md:w-[40px] md:h-[40px] rounded-full "
             />
-            <h1 className="font-bold text-base text-hoverOrange md:font-extrabold md:text-xl font-nunito ">QuickEats</h1>
+            <h1 className="font-bold text-base text-hoverOrange md:font-extrabold md:text-xl font-nunito ">QuicklyEat</h1>
           </Link>
         </div>
         <div className="flex items-center gap-x-5">
@@ -33,7 +33,7 @@ const Footer = () => {
       </div>
       <Separator className=""/>
       <div className="text-start text-sm md:text-base mt-2 mb-10 opacity-80">
-      <span>&#169;</span> 2024 QuickEats. All rights reserved.
+      <span>&#169;</span> 2024 QuicklyEat. All rights reserved.
       </div>
     </div>
   )

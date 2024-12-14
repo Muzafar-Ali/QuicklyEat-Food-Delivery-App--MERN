@@ -8,6 +8,7 @@ export type TUser = {
   city:string;
   country:string;
   profilePicture:string;
+  favourite:string[];
   admin:boolean;
   isVerified:boolean;
 }
@@ -25,4 +26,7 @@ export type TUserState = {
   forgotPassword: (email: string) => Promise<boolean | undefined>; 
   resetPassword: (token: string, newPassword:string) => Promise<boolean | undefined>; 
   updateProfile: (input: any) => Promise<boolean | undefined>;
+  addFavourite: (restaurantId: string) => Promise<boolean | undefined>;
+  removeFavourite: (restaurantId: string) => Promise<boolean | undefined>;
+  getFavourites: () => Promise<string[]>;
 }

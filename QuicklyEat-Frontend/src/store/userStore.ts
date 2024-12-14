@@ -7,8 +7,6 @@ import config from '../config/config';
 import axios from 'axios';
 import { useRestaurantStore } from './restaurantStore';
 
-console.log(config.baseUri);
-
 export const useUserStore = create<TUserState>()(persist((set) => ({
   user: null,
   isAuthenticated: false,
@@ -82,7 +80,7 @@ export const useUserStore = create<TUserState>()(persist((set) => ({
         })
 
         useRestaurantStore.getState().userRestaurant = null
-        localStorage.removeItem("user-name");
+        localStorage.removeItem("user");
         localStorage.removeItem("restaurant");
 
         return true;
@@ -106,6 +104,7 @@ export const useUserStore = create<TUserState>()(persist((set) => ({
         set({ loading: false });
         return true;
       }
+      return false;
 
     } catch (error: any) {
       const errorMessage = error.response?.data?.message ?? "server not responding. Please try again later.";
@@ -117,7 +116,6 @@ export const useUserStore = create<TUserState>()(persist((set) => ({
   resetPassword: async (token: string, newPassword: string) => {
     try {
       set({ loading: true });
-      
       const response = await axios.post(`${config.baseUri}/api/v1//reset-password/${token}`, { newPassword });
       
       if (response.data.success) {
@@ -125,6 +123,7 @@ export const useUserStore = create<TUserState>()(persist((set) => ({
         set({ loading: false });
         return true;
       }
+      return false;
       
     } catch (error: any) {
       const errorMessage = error.response?.data?.message ?? "server not responding. Please try again later.";
@@ -151,6 +150,7 @@ export const useUserStore = create<TUserState>()(persist((set) => ({
         })
         return true;
       }
+      return false;
 
     } catch (error: any) {
       const errorMessage = error.response?.data?.message ?? "server not responding. Please try again later.";
@@ -162,8 +162,6 @@ export const useUserStore = create<TUserState>()(persist((set) => ({
   },
   
   updateProfile: async (userInut: TUserSignup) => {
-    console.log('userInut', userInut);
-    
     try {
       set({ loading: true })
       
@@ -205,10 +203,77 @@ export const useUserStore = create<TUserState>()(persist((set) => ({
       set({isAuthenticated: false, isCheckingAuth: false });
     }
   },
+  addFavourite: async (restaurantId: string) => {
+    try {
+      set({ loading: true })
+      const response = await axios.post(`${config.baseUri}/api/v1/favourite`, { restaurantId }, {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        withCredentials: true,
+      });
+
+      if(response.data.success) {
+        toast.success(response.data.message)
+        set({ loading: false })
+        return true;
+      }
+      return false;
+
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.message ?? "server not responding. Please try again later.";
+      toast.error(errorMessage)
+      set({ loading: false })
+    }
+  },
+  removeFavourite: async (restaurantId: string) => {
+    try {
+      set({ loading: true })
+      const response = await axios.delete(`${config.baseUri}/api/v1/favourite/${restaurantId}`, {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        withCredentials: true,
+      });
+
+      if(response.data.success) {
+        toast.success(response.data.message)
+        set({ loading: false })
+        return true;
+      }
+      return false;
+
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.message ?? "server not responding. Please try again later.";
+      toast.error(errorMessage)
+      set({ loading: false })
+    }
+  },
+  getFavourites: async () => {
+    try {
+      set({ loading: true })
+      const response = await axios.get(`${config.baseUri}/api/v1/favourite`, {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        withCredentials: true,
+      });
+      
+      if(response.data.success) {
+        set({ loading: false })
+        return response.data.favourite;
+      }
+
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.message ?? "server not responding. Please try again later.";
+      toast.error(errorMessage)
+      set({ loading: false })
+    }
+  }
   
 }),
   {
-    name: 'user-name',
+    name: 'user',
     storage: createJSONStorage(() => localStorage),
   }
 ))

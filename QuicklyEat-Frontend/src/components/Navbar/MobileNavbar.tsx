@@ -25,7 +25,7 @@ const MobileNavbar = () => {
       </SheetTrigger>
       <SheetContent className="flex flex-col">
         <SheetHeader className="flex flex-row items-center justify-between mt-2">
-          <SheetTitle>QuickEats</SheetTitle>
+          <SheetTitle>QuicklyEat</SheetTitle>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="icon">
@@ -106,7 +106,7 @@ const MobileNavbar = () => {
               <AvatarImage src={user?.profilePicture} />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
-            <h1 className="font-bold font-nunito">QuickEats</h1>
+            <h1 className="font-bold font-nunito">QuicklyEat</h1>
           </div>
           <SheetClose asChild>
             {loading ? (
