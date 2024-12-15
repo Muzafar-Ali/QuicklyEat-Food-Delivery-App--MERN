@@ -31,7 +31,7 @@ const RestaurantDetails = () => {
             <h1 className="font-bold text-2xl text-start font-roboto tracking-wide">{singleRestaurant?.restaurantName}</h1>
             <div className="flex gap-2 my-2 flex-wrap">
               {singleRestaurant?.cuisines.map((cuisine: string, index: number) => (
-              <div className="flex items-center gap-x-2">
+              <div key={index} className="flex items-center gap-x-2">
                 <div key={index} className="px-2 border rounded-e-xl bg-secondary text-sm capitalize">{cuisine}</div>
                 { index !== singleRestaurant?.cuisines.length - 1 && <div className="text-base lg:text-lg text-gray-400">-</div>}
               </div>

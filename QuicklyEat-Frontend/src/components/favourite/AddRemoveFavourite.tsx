@@ -2,8 +2,8 @@ import { useUserStore } from "@/store/userStore";
 import { Heart } from "lucide-react";
 import { useEffect, useState } from "react";
 
-const Favourite = ({ restaurantId }: { restaurantId: string }) => {
-  const { addFavourite, getFavourites, removeFavourite } = useUserStore();
+const AddRemoveFavourite = ({ restaurantId }: { restaurantId: string }) => {
+  const { addFavourite, getFavouriteList, removeFavourite } = useUserStore();
   const [favourites, setFavourites] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -11,7 +11,7 @@ const Favourite = ({ restaurantId }: { restaurantId: string }) => {
     const fetchFavourites = async () => {
       try {
         setLoading(true); // Show loading state
-        const favs = await getFavourites(); // Call getFavourites to get the list
+        const favs = await getFavouriteList(); // Call getFavourites to get the list
         setFavourites(favs); // Set the favourites to local state
       } catch (error) {
         console.error("Error fetching favourites:", error);
@@ -21,7 +21,7 @@ const Favourite = ({ restaurantId }: { restaurantId: string }) => {
     };
 
     fetchFavourites();
-  }, [getFavourites]); // Only re-run when getFavourites function changes
+  }, [getFavouriteList]); // Only re-run when getFavourites function changes
 
   const isFavourite = favourites.includes(restaurantId); // Check if the restaurant is in the favourites list
 
@@ -59,4 +59,4 @@ const Favourite = ({ restaurantId }: { restaurantId: string }) => {
   );
 };
 
-export default Favourite;
+export default AddRemoveFavourite;

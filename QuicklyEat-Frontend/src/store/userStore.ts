@@ -6,7 +6,7 @@ import { TUserLogin, TUserSignup } from '@/schema/userSchema';
 import config from '../config/config';
 import axios from 'axios';
 import { useRestaurantStore } from './restaurantStore';
-
+ 
 export const useUserStore = create<TUserState>()(persist((set) => ({
   user: null,
   isAuthenticated: false,
@@ -243,9 +243,27 @@ export const useUserStore = create<TUserState>()(persist((set) => ({
       toast.error(errorMessage)
     }
   },
-  getFavourites: async () => {
+  getFavouriteList: async () => {
     try {
       const response = await axios.get(`${config.baseUri}/api/v1/favourite`, {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        withCredentials: true,
+      });
+      
+      if(response.data.success) {
+        return response.data.favourite;
+      }
+
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.message ?? "server not responding. Please try again later.";
+      toast.error(errorMessage)
+    }
+  },
+  getAllFavourites: async () => {
+    try {
+      const response = await axios.get(`${config.baseUri}/api/v1/favourite/all`, {
         headers: {
           'Content-Type': 'application/json'
         },

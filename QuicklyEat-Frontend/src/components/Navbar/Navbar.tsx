@@ -31,6 +31,7 @@ const Navbar = () => {
             <Link to="/">Home</Link>
             <Link to="/profile">Profile</Link>
             <Link to="/order/status">Your Orders</Link>
+            <Link to="/favourite">Favourite</Link>
 
             {!user?.admin && (
               <Link to="/admin/restaurant">

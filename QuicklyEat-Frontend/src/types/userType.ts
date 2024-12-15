@@ -1,4 +1,5 @@
 import { TUserLogin, TUserSignup } from "@/schema/userSchema";
+import { TRestaurant } from "./restaurantType";
 
 export type TUser = {
   fullname:string;
@@ -28,5 +29,6 @@ export type TUserState = {
   updateProfile: (input: any) => Promise<boolean | undefined>;
   addFavourite: (restaurantId: string) => Promise<boolean | undefined>;
   removeFavourite: (restaurantId: string) => Promise<boolean | undefined>;
-  getFavourites: () => Promise<string[]>;
+  getFavouriteList: () => Promise<string[]>;
+  getAllFavourites: () => Promise<TRestaurant[]>;
 }
