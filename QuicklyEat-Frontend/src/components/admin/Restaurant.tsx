@@ -100,11 +100,10 @@ const Restaurant = () => {
   
   return (
     <div className="max-w-6xl mx-auto my-20">
-      <div>
         <div>
           <h1 className="font-extrabold text-2xl mb-5">Add Restaurants</h1>
           <form onSubmit={submitHandler}>
-            <div className="md:grid grid-cols-2 gap-6 space-y-2 md:space-y-0">
+            <div className="md:grid grid-cols-2 gap-6 space-y-2 md:space-y-0 bg-gray-50 dark:bg-gray-800 p-5 md:p-10">
               {/* Restaurant Name  */}
               <div>
                 <Label>Restaurant Name</Label>
@@ -247,7 +246,6 @@ const Restaurant = () => {
             </div>
           </form>
         </div>
-      </div>
     </div>
   );
 };

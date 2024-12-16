@@ -18,6 +18,7 @@ export type TCheckoutSessionRequest = {
   restaurantId:string;
   totalAmount:string;
 }
+
 export type TOrders =  TCheckoutSessionRequest & {
   _id:string;
   status:string;

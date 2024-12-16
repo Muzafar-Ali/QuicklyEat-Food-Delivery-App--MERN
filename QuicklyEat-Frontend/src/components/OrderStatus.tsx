@@ -39,19 +39,19 @@ const OrderStatus = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900 px-4 mt-10">
-      <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 max-w-4xl w-full">
+      <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg py-6 px-4 md:px-10 max-w-5xl w-full max-md:my-10 ">
         <div className="mb-6">
           <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-4">
             Order Summary
           </h2>
           {/* Your Ordered Item Display here  */}
           {orders?.map((order, index: number) => (
-            <div className="flex flex-col md:flex-row items-center justify-between gap-20 border border-black border-opacity-20 dark:border-white dark:border-opacity-20 p-2 rounded-lg mt-2">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-20 border border-black border-opacity-20 dark:border-white dark:border-opacity-20 p-2 rounded-lg mt-2 bg-gray-50 dark:bg-gray-700">
               <div key={index} className="flex-1">
                 <div className="flex flex-col md:flex-row items-center justify-center md:gap-5 mb-4"> 
                   <h1 className="text-sm md:text-base">Order Id:</h1>
                   <div className="flex items-center md:space-x-2">
-                    <h1 className="text-sm md:text-base truncate max-md:max-w-[120px]">{order._id}</h1>
+                    <h1 className="text-sm md:text-base truncate max-md:max-w-[110px]">{order._id}</h1>
                     <button
                       onClick={() => copyToClipboard(order._id)}
                       aria-label="Copy Order ID"
@@ -68,15 +68,15 @@ const OrderStatus = () => {
                         <img
                           src={item.menuItemId?.image}
                           alt=""
-                          className="w-14 h-14 rounded-md object-cover"
+                          className="w-10 h-10 rounded-md object-cover"
                           />
-                        <h3 className="ml-4 text-gray-800 dark:text-gray-200 font-medium">
+                        <h3 className="ml-4 text-gray-800 dark:text-gray-200 font-medium text-sm lg:text-base">
                           {item.menuItemId?.title}
                         </h3>
                       </div>
                       <div className="text-right">
                         <div className="text-gray-800 dark:text-gray-200 flex items-center">
-                          <span className="text-sm md:text-base font-medium "><span className="">Qty: </span>{item.quantity}</span>
+                          <span className="text-sm md:text-base font-medium "><span className="">QT: </span>{item.quantity}</span>
                         </div>
                       </div>
                       <div className="text-right">
@@ -87,12 +87,14 @@ const OrderStatus = () => {
                     </div>
                   </div>
                 ))}
-              <div className="md:hidden mb-10">
-                <span className="text-[#FF5A5A]">{order.status?.toUpperCase()}</span>
+                <div className="flex flex-col mb-10 md:hidden">
+                  <span className="text-sm">{'Status'}</span>
+                  <span className="text-[#FF5A5A] text-sm">{order.status?.toUpperCase()}</span>
+                </div>
               </div>
-              </div>
-              <div className="hidden md:block">
-                <span className="text-[#FF5A5A]">{order.status?.toUpperCase()}</span>
+              <div className="hidden md:flex flex-col">
+                <span className="text-base">{'Status'}</span>
+                <span className="text-[#FF5A5A] text-base">{order.status?.toUpperCase()}</span>
               </div>
             </div>
           ))}

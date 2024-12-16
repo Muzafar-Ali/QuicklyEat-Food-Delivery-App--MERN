@@ -129,7 +129,7 @@ export const useRestaurantStore = create<TRestaurantState>()(persist((set, get) 
 //     restaurant: state.restaurant ? { ...state.restaurant, menus: [...state.restaurant.menus, menu] } : null,
 //   }))
 // },
-updateMenuToRestaurant: (updatedMenu: TMenuItem) => {
+updateRestaurantMenu: (updatedMenu: TMenuItem) => {
   set((state: any) => {
       
     if (state.restaurant) {
@@ -153,12 +153,14 @@ getRestaurantOrders: async () => {
     
     if (response.data.success) {
       set({ loading: false });
+      return response.data.order
     }
     
-    return response.data.order
+    return [];
   } catch (error: any) {
     toast.error(error.response.data.message);
     console.error(error);
+    return [];
   }
 },
 updateRestaurantOrderStatus: async (orderId: string, status: string) => {

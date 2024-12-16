@@ -152,7 +152,7 @@ const AddMenu = () => {
         </Dialog>
       </div>
       {userRestaurant?.menus.map((menu: any, idx: number) => (
-        <div key={idx} className="mt-6 space-y-4">
+        <div key={idx} className="mt-6 space-y-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
           <div className="flex flex-col md:flex-row md:items-center md:space-x-4 md:p-4 p-2 shadow-md rounded-lg border">
             <img
               src={menu.image}
