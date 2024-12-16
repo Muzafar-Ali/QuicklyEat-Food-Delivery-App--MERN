@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 import { NextFunction, Request, Response } from "express";
 import { TUser, TUserLogin, TUserUpdate, TVerifyEmail, verifyEmailSchema } from "../schema/user.schema.js";
 import { createUser } from "../services/user.service.js";
-import { generateJwtTokenAndSetCookie } from "../utils/generateJwtToken.js";
+import { generateJwtTokenAndSetCookie } from "../utils/generateJwtTokenAndSetCookie.js";
 import { generateVerificationCode } from "../utils/generateVerificationToken.js";
 import config from "../config/config.js";
 import { sendPasswordResetEmail, sendResetSuccessEmail, sendVerificationEmail, sendWelcomeEmail } from "../mailtrap/emails.js";
@@ -262,11 +262,33 @@ export const deleteFavouriteHandler = async (req: Request, res: Response, next: 
   }
 }
 
-export const getFavouriteHandler = async (req: Request, res: Response, next: NextFunction) => {
+export const getFavouriteListHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = req.id;
 
     const user = await UserModel.findById(userId);
+    if(!user) throw new ErrorHandler(404, "User not found");
+
+    res.status(200).json({
+      success: true,
+      message: "Added to favourite successfully",
+      favourite: user.favourite,
+    })
+
+  } catch (error) {
+    console.error("createfavouriteHandler error = ", error)
+    next(error)
+  }
+}
+
+export const getFavouritesHandler = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const userId = req.id;
+
+    const user = await UserModel.findById(userId).populate({
+      path: "favourite",
+      // select: "name image rating ratingCount address city country",
+    })
     if(!user) throw new ErrorHandler(404, "User not found");
 
     res.status(200).json({

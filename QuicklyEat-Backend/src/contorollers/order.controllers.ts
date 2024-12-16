@@ -70,7 +70,20 @@ export const createCheckoutSessionHandler = async (req: Request, res: Response, 
     if(!restaurant) throw new ErrorHandler(404, "Restaurant not found");
     
     // line items
-    const menus = restaurant.menus;   
+    const menus = restaurant.menus as unknown as [{
+      _id: string,
+      name: string,
+      description: string,
+      image: string,
+      menuItems: [{ 
+        _id: string,
+         title: string,
+         price: string,
+         description: string,
+         image: string,
+      }],
+    }];   
+    
     const lineItems = createLineItems( checkoutSession, menus );
 
     const order = new OrderModel({
@@ -81,6 +94,25 @@ export const createCheckoutSessionHandler = async (req: Request, res: Response, 
       totalAmount,
       status: "pending"
     });
+
+    // Get images only for the items in the cart
+    const cartItemImages = checkoutSession.cartItems.map(cartItem => {
+      // Find the menu item in the menus array by matching the menuItemId
+      const menuItem = menus.flatMap(menu => menu.menuItems)
+        .find(menuItem => menuItem._id.toString() === cartItem.menuItemId.toString());
+
+      // If menuItem exists, return the image, otherwise return null
+      return menuItem?.image || null;
+    }).filter(Boolean); // Remove any null values in case an item doesn't have an image
+
+     // Convert to JSON string
+    let imageUrls = JSON.stringify(cartItemImages);
+    
+    // This section of the code will be removed once we transition to paid Stripe services
+    // Ensure metadata stays within the character limit (500 characters max)
+    if (imageUrls.length > 500) {
+      imageUrls = imageUrls.substring(0, 500); // trim to 500 characters if needed
+    }
 
     const session = await stripe.checkout.sessions.create({
       line_items: lineItems,
@@ -93,7 +125,7 @@ export const createCheckoutSessionHandler = async (req: Request, res: Response, 
       cancel_url: `${config.clientUrl}/failed`,
       metadata: {
         orderId: order._id!.toString(),
-        images: JSON.stringify(menus.flatMap((menuItem: any) => menuItem.image))
+        images: imageUrls
       }
     });
     
@@ -122,7 +154,7 @@ export const getAllOrderHandler = async (req: Request, res: Response, next: Next
     if(!orders) throw new ErrorHandler(404, "Order not found");
 
     // Sort orders based on the natural order of status in the enum
-    const sortedOrders = orders.sort((a, b) => {
+    const sortedOrders = orders.sort((a: any, b: any) => {
       const statusOrder = ["pending", "confirmed", "preparing", "onTheWay", "delivered"]; // order display sequence
       const statusAIndex = statusOrder.indexOf(a.status);
       const statusBIndex = statusOrder.indexOf(b.status);
@@ -152,10 +184,9 @@ export const getOrderByUserIdHandler = async (req: Request, res: Response, next:
     .populate("cartItems.menuItemId")
     
     if(!orders) throw new ErrorHandler(404, "Order not found");
-    console.log('orders', orders);
     
     // Sort orders based on the natural order of status in the enum
-    const sortedOrders = orders.sort((a, b) => {
+    const sortedOrders = orders.sort((a: any, b: any) => {
       const statusOrder = ["pending", "confirmed", "preparing", "onTheWay", "delivered"]; // order display sequence
       const statusAIndex = statusOrder.indexOf(a.status);
       const statusBIndex = statusOrder.indexOf(b.status);

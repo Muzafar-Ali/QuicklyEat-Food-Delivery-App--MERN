@@ -3,7 +3,8 @@ import {
   addFavouriteHandler, 
   deleteFavouriteHandler, 
   forgotPasswordHandler, 
-  getFavouriteHandler, 
+  getFavouriteListHandler, 
+  getFavouritesHandler, 
   loginHanlder, 
   logoutHandler, 
   resetPasswordhandler, 
@@ -29,7 +30,8 @@ route.post('/forgot-password', forgotPasswordHandler)
 route.post('/reset-password/:resteToken', resetPasswordhandler)
 route.post('/logout', logoutHandler)
 route.post('/favourite', isAuthenticated, addFavouriteHandler)
-route.get('/favourite', isAuthenticated, getFavouriteHandler)
+route.get('/favourite', isAuthenticated, getFavouriteListHandler)
+route.get('/favourite/all', isAuthenticated, getFavouritesHandler)
 route.delete('/favourite/:restaurantId', isAuthenticated, deleteFavouriteHandler)
 route.put("/update", [isAuthenticated, validateRequestData(userUpdateSchema), upload.single("image")], updateProfileHandler);
 
