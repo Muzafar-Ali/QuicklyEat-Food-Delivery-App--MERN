@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { TOrder } from "@/types/orderType";
 import { Copy, CopyCheck } from "lucide-react";
 
-const OrderStatus = () => {
+const UserOrders = () => {
   const [orders, setOrders] = useState<TOrder[]>([])
   const { getOrderByUserId } = useOrderStore();
 
@@ -104,4 +104,4 @@ const OrderStatus = () => {
   );
 };
 
-export default OrderStatus;
+export default UserOrders;

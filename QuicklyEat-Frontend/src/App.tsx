@@ -17,10 +17,11 @@ import AuthenticatedUser from './components/protectedRoutes/AuthenticatedUser'
 import AdminRoute from './components/protectedRoutes/AdminRoute'
 import Restaurant from './components/admin/Restaurant'
 import AddMenu from './components/admin/AddMenu'
-import Orders from './components/admin/Orders'
 import Success from './components/Success'
-import OrderStatus from './components/OrderStatus'
 import Failed from './components/Failed'
+import Favourite from './components/favourite/Favourite'
+import UserOrders from './components/UserOrders'
+import RestaurantOrders from './components/admin/RestaurantOrders'
 
 
 const appRouter = createBrowserRouter([
@@ -45,8 +46,12 @@ const appRouter = createBrowserRouter([
         element: <Cart/>
       },
       {
-        path: "/order/status",
-        element: <OrderStatus />,
+        path: "/orders",
+        element: <UserOrders />,
+      },
+      {
+        path: "/favourite",
+        element: <Favourite />,
       },
       {
         path: "/success",
@@ -68,7 +73,7 @@ const appRouter = createBrowserRouter([
       },
       {
         path: "/admin/orders",
-        element:<AdminRoute><Orders /></AdminRoute>,
+        element:<AdminRoute><RestaurantOrders /></AdminRoute>,
       },
     ]
   },

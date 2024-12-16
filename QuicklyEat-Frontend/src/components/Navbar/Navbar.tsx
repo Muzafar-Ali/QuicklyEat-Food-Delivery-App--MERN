@@ -30,7 +30,7 @@ const Navbar = () => {
           <div className="hidden lg:flex items-center gap-6">
             <Link to="/">Home</Link>
             <Link to="/profile">Profile</Link>
-            <Link to="/order/status">Your Orders</Link>
+            <Link to="/orders">Your Orders</Link>
             <Link to="/favourite">Favourite</Link>
 
             {!user?.admin && (

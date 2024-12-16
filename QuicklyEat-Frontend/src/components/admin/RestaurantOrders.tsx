@@ -13,7 +13,7 @@ import { useEffect, useState } from "react";
 import Orderitems from "./Orderitems";
 import { Copy, CopyCheck } from "lucide-react";
 
-const Orders = () => {
+const RestaurantOrders = () => {
   const [restaurantOrder, setRestaurantOrder] = useState<TOrders[]>([])
   const { getRestaurantOrders, updateRestaurantOrderStatus } = useRestaurantStore();
   const [copiedOrder, setCopiedOrder] = useState(null); // Track copied order by ID
@@ -131,4 +131,4 @@ const Orders = () => {
   );
 };
 
-export default Orders;
+export default RestaurantOrders;
