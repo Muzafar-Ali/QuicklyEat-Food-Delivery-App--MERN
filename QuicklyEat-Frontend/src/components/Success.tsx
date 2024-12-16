@@ -38,7 +38,7 @@ const Success = () => {
             <p>Thanks for shopping with us!</p>
             <p>Your order has been placed successfully</p>
           </div>
-          <Link to="/order/status">
+          <Link to="/orders">
             <Button className="bg-transparent border border-black border-opacity-30 dark:border-white dark:border-opacity-30 ">
               <p className="text-[#FF5A5A] md:text-start font-medium text-base md:text-xl">
                 check your order status 
