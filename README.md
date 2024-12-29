@@ -4,11 +4,8 @@
 
 1. [Overview](#overview)
 2. [Features](#features)
-3. [Installation](#installation)
-4. [Usage](#usage)
 5. [Technologies Used](#technologies-used)
 6. [Contributing](#contributing)
-7. [License](#license)
 8. [Contact](#contact)
 
 ---
@@ -23,9 +20,32 @@ The app is deployed with:
 - **Frontend**: [QuicklyEat Frontend](https://quickly-eat-frontend-deploy.vercel.app/) (Vercel)
 - **Backend**: Hosted on [Render](https://render.com/)
 
+## 🛠️ Tech Stack
+* React.js
+* Vite
+* TypeScript
+* Tailwind CSS
+* ShadCN UI
+* Axios
+* React Router DOM
+* Zustand
+  
+* Backend (QuicklyEat Backend)
+* Node.js
+* Express.js
+* MongoDB
+* Mongoose
+* JWT (JSON Web Tokens)
+* Cloudinary
+* Stripe
+* Nodemon
+* Bcrypt.js & Bcrypt
+* Mailtrap
+* Multer 
+* Rate Limiting (express-rate-limit)
+* Zod
 ---
-
-## Features
+## ⭐ Features
 
 - **Restaurant Search**: Easily search for restaurants by name, cuisine, or location.
 - **Restaurant Details**: View restaurant profiles with menus, hours, and delivery options.
