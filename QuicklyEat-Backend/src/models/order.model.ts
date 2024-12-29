@@ -37,7 +37,7 @@ const orderSchema = new mongoose.Schema<TOrderDocument>({
   totalAmount: Number,
   status:{
     type: String,
-    enum: ["pending" , "confirmed" , "preparing" , "onTheWay" , "delivered"],
+    enum: ["pending" , "confirmed" , "preparing" , "ontheway" , "delivered"],
     required: true
   }
 

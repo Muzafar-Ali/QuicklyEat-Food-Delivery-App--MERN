@@ -85,7 +85,7 @@ const StarsAndReviews = ({reviews, averageRating, restaurantId}: { reviews: any,
         <div className="text-sm">
           {averageRating?.toFixed(1)}<span>/5</span>
         </div>
-        <div className="text-sm text-gray-400">({reviews?.length})</div>
+        <div className="text-sm text-gray-500">({reviews?.length})</div>
       </div>
 
       {/* <div className="flex items-center gap-1">
@@ -104,7 +104,7 @@ const StarsAndReviews = ({reviews, averageRating, restaurantId}: { reviews: any,
                     <img 
                       src={review?.userId?.profilePicture} 
                       alt="profile pic"
-                      className={`${review?.userId?.profilePicture? "": 'bg-black dark:bg-white'} w-6 h-6 rounded-full` }                    />
+                      className={`${review?.userId?.profilePicture? "": 'bg-gray-500 dark:bg-white'} w-6 h-6 rounded-full` }                    />
                     <div className="font-bold">{review?.userId?.fullname}</div>
                     <div className="flex items-center gap-1">
                       {Array.from({length: 5}).map((_, index) => (

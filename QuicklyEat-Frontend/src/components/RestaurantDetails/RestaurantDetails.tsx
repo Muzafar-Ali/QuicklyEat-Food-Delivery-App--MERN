@@ -53,7 +53,11 @@ const RestaurantDetails = () => {
                 <Bike size={18}/> <span className="text-[#D19254] text-base">Free delivery</span>
               </div>
               <div className="flex items-center space-x-2">
-                <ShoppingBag size={16}/> <span>Min.order $20</span>
+                <ShoppingBag size={16}/> 
+                <span>Min.order 
+                  {singleRestaurant?.minimumOrder === 0 ? '': <span className="text-[#D19254]"> $</span>} 
+                  {singleRestaurant?.minimumOrder === 0 ? " Not required -": <span className="text-[#D19254]">{singleRestaurant?.minimumOrder}</span>}
+                </span>
               </div>
               <div className="flex items-center gap-2">
               <StarsAndReviews reviews={singleRestaurant?.reviews} averageRating={singleRestaurant?.averageRating} restaurantId={singleRestaurant?._id!}/>
@@ -87,9 +91,11 @@ const RestaurantDetails = () => {
             </div>
             <div className="flex items-center gap-2">
               <Bike size={18}/> <span className="text-[#D19254] text-base">Free delivery</span>
-              <ShoppingBag size={16}/> <span>Min.order 
-                {singleRestaurant?.minimumOrder === 0 ? '': <span> $</span>} 
-                {singleRestaurant?.minimumOrder === 0 ? "No requirement -": singleRestaurant?.minimumOrder}</span>
+              <ShoppingBag size={16}/> 
+              <span>Min.order 
+                {singleRestaurant?.minimumOrder === 0 ? '': <span className="text-[#D19254]"> $</span>} 
+                {singleRestaurant?.minimumOrder === 0 ? " Not required -": <span className="text-[#D19254]">{singleRestaurant?.minimumOrder}</span>}
+              </span>
             </div>
             <div className="flex items-center gap-2">
               <StarsAndReviews reviews={singleRestaurant?.reviews} averageRating={singleRestaurant?.averageRating} restaurantId={singleRestaurant?._id!}/>

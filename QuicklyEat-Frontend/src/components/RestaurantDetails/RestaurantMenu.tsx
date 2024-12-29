@@ -27,7 +27,7 @@ const RestaurantMenu = ({ menus, restaurantId }: { menus: TMenu[], restaurantId:
                       addToCart(item, restaurantId);
                       toast.success("item added to cart");
                     }}
-                    className="bg-white border border-black hover:bg-hoverOrange rounded-full px-2  absolute top-[100px] left-[500px]"
+                    className="bg-white border border-black hover:bg-hoverOrange rounded-full px-2 absolute top-[60px] md:top-[100px] right-5 md:right-10"
                   >
                     <span className="text-2xl text-black">+</span>
                   </button>

@@ -92,7 +92,7 @@ export const createCheckoutSessionHandler = async (req: Request, res: Response, 
       deliveryDetails: checkoutSession.deliveryDetails,
       cartItems: checkoutSession.cartItems,
       totalAmount,
-      status: "pending"
+      status: "confirmed"
     });
 
     // Get images only for the items in the cart

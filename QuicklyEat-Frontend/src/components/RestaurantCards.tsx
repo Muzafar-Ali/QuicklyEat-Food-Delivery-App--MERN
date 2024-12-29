@@ -54,7 +54,7 @@ const RestaurantCards = ({ restaurants, loading }: {restaurants: TAllRestaurants
                     <Timer className="w-5 h-5" />
                     <h1 className="flex items-center gap-2 font-normal">
                       <span className="text-sm">Delivery in</span> <span className="text-[#D19254] text-sm">{restaurant?.deliveryTime || "NA"} mins</span> 
-                      <span className=" opacity-50" >*</span>
+                      <span className=" opacity-60" >*</span>
                       <div className="flex items-center space-x-1">
                         <span className="opacity-70"><Bike size={14}/></span><span className="text-[#D19254] text-sm">Free</span>
                       </div>
@@ -62,7 +62,9 @@ const RestaurantCards = ({ restaurants, loading }: {restaurants: TAllRestaurants
                   </div>
                 </Link>
                 <div className="flex items-center justify-between">
-                  <StarsAndReviews reviews={restaurant?.reviews} averageRating={restaurant?.averageRating} restaurantId={restaurant._id!}/>
+                  <div className="opacity-65">
+                    <StarsAndReviews reviews={restaurant?.reviews} averageRating={restaurant?.averageRating} restaurantId={restaurant._id!}/>
+                  </div>
                   <div className="absolute top-2 right-2 z-10 bg-white dark:bg-gray-700 bg-opacity-75 rounded-md p-1">
                     <AddRemoveFavourite restaurantId={restaurant?._id!}/>
                   </div>
