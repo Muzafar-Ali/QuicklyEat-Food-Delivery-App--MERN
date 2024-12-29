@@ -1,13 +1,5 @@
 # QuicklyEat - Food Delivery App
 
-## Table of Contents
-
-1. [Overview](#overview)
-2. [Features](#features)
-5. [Technologies Used](#technologies-used)
-6. [Contributing](#contributing)
-8. [Contact](#contact)
-
 ---
 
 ## Overview
