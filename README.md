@@ -55,19 +55,3 @@ The app is deployed with:
 - **Responsive Design**: Works seamlessly on both mobile and desktop devices.
 
 ---
-
-## Installation
-
-To run the project locally, follow these steps:
-
-### Prerequisites
-
-- **Node.js** (for both frontend and backend)
-- **MongoDB** (or use MongoDB Atlas for cloud-based database)
-- **Git** (for version control)
-
-### Frontend Setup
-
-1. Clone the frontend repository:
-   ```bash
-   git clone https://github.com/yourusername/quicklyeat-frontend.git
