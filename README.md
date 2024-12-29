@@ -47,6 +47,18 @@ The app is deployed with:
 ---
 ## ⭐ Features
 
+
+** Rate Limiting:
+Implemented rate limiting during user login and signup to prevent brute-force attacks and ensure stability. This helps protect user accounts and reduce server load during high traffic times.
+
+** Protected Routes:
+Several app routes are protected, ensuring only authorized users can access them. The following routes require authentication:
+/profile: View and edit user profile information.
+/search/:text: Search for restaurants by name or category.
+/restaurant/:id: View restaurant details.
+/cart: Manage the user's order cart.
+
+
 - **Restaurant Search**: Easily search for restaurants by name, cuisine, or location.
 - **Restaurant Details**: View restaurant profiles with menus, hours, and delivery options.
 - **Order Management**: Add, edit, and remove items from your cart before checkout.
