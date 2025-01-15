@@ -42,6 +42,9 @@ The app is deployed with:
 - **Rate Limiting:
 Implemented rate limiting during user login and signup to prevent brute-force attacks and ensure stability. This helps protect user accounts and reduce server load during high traffic times.
 
+- **Data Validation with Zod:
+Integrated Zod for comprehensive data validation, ensuring that all incoming request body data is properly validated for type safety and integrity.
+
 - **Protected Routes:
 Several app routes are protected, ensuring only authorized users can access them. The following routes require authentication:
 /profile: View and edit user profile information.
