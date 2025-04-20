@@ -6,8 +6,6 @@
 
 QuicklyEat is a food delivery platform built using the **MERN stack** (MongoDB, Express, React, Node.js) that enables users to search for local restaurants, view detailed restaurant menus, and place orders online. The application is designed with an intuitive user interface to provide a seamless and efficient food ordering experience, making it easy for users to find their favorite restaurants and quickly place orders for delivery.
 
-Whether you’re a busy professional, a student, or just someone who enjoys the convenience of food delivery, QuicklyEat ensures that the ordering process is fast, easy, and secure.
-
 The app is deployed with:
 - **Frontend**: [QuicklyEat Frontend](https://quickly-eat-frontend-deploy.vercel.app/) (Vercel)
 - **Backend**: Hosted on [Render](https://render.com/)
@@ -39,31 +37,25 @@ The app is deployed with:
 ---
 ## ⭐ Features
 
-- **Rate Limiting:
-Implemented rate limiting during user login and signup to prevent brute-force attacks and ensure stability. This helps protect user accounts and reduce server load during high traffic times.
-
-- **Data Validation with Zod:
-Integrated Zod for comprehensive data validation, ensuring that all incoming request body data is properly validated for type safety and integrity.
-
-- **Protected Routes:
-Several app routes are protected, ensuring only authorized users can access them. The following routes require authentication:
-/profile: View and edit user profile information.
-/search/:text: Search for restaurants by name or category.
-/restaurant/:id: View restaurant details.
-/cart: Manage the user's order cart.
-
-- **Authenticated User Routes:
+✅ Authenticated User Routes:
 Certain routes are accessible only for authenticated users:
 /login: User login functionality.
 /signup: User signup functionality.
 /forgot-password: User password reset functionality.
 
-
-- **Restaurant Search**: Easily search for restaurants by name, cuisine, or location.
-- **Restaurant Details**: View restaurant profiles with menus, hours, and delivery options.
-- **Order Management**: Add, edit, and remove items from your cart before checkout.
-- **Secure Payments**: Fast and secure payment processing.
-- **Notifications**: Receive real-time notifications for order updates.
-- **Responsive Design**: Works seamlessly on both mobile and desktop devices.
-
+✅ Restaurant Search : Find your favorite restaurants by name, cuisine, or location.
+✅ Restaurant Profiles : Browse detailed menus, hours, and delivery options.
+✅ Restaurant Details: View restaurant profiles with detailed information, including menus, hours, and delivery options.
+✅ Order Management : Add, edit, and remove items in your cart before checkout.
+✅ Secure Payments : Integrated with Stripe for fast and secure payment processing.
+✅ Notifications : Stay updated with real-time order status notifications.
+✅ Rate Limiting : Utilized express-rate-limit to prevent brute-force attacks and excessive requests, user login and signup.
+✅ User Profile : Manage your personal profile with secure authentication routes.
+✅ Access & Refresh Tokens : Easy and secure logins with access and refresh tokens for lasting sessions.
+✅ Wishlist / Favorites : Save your go-to restaurants for quicker access next time.
+✅ Consumer Reviews : Read and write reviews to help others find the best spots.
+✅ Data vakidation & sanitization using zod : ensuring that all incoming request body data is properly validated for type safety and integrity.
+✅ Protected Routes : Ensures only authenticated & verified users access app features, redirecting others to login/verification. 
+✅ Admin routes : add stricter checks, allowing only users with admin rights to access restricted sections.
+✅ Responsive Design : Full mobile and desktop support for on-the-go convenience.
 ---
