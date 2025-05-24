@@ -3,19 +3,19 @@ import mongoose from "mongoose";
 const reviewSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",  // Reference to the User model
+    ref: "User",
     required: true
   },
   restaurantId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Restaurant",  // Reference to the Restaurant model
+    ref: "Restaurant",
     required: true
   },
   rating: {
     type: Number,
     required: true,
-    min: 1,  // Minimum rating of 1
-    max: 5   // Maximum rating of 5
+    min: 1,
+    max: 5
   },
   comment: {
     type: String,

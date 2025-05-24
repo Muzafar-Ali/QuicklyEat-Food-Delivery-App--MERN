@@ -41,7 +41,7 @@ const restaurantSchema = new mongoose.Schema<TRestaurantDocument>({
   },
   reviews: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Review"  // Reference to the Review model
+    ref: "Review"
   }],
   averageRating: {
     type: Number,

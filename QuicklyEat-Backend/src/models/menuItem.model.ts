@@ -4,7 +4,7 @@ import { TMenuItemDocument } from "../types/menu.type.js";
 const menuItemSchema = new mongoose.Schema<TMenuItemDocument>({
   title: {
     type: String,
-    required: true, // Name of the dish
+    required: true,
     trim: true,
   },
   price: {
@@ -13,7 +13,7 @@ const menuItemSchema = new mongoose.Schema<TMenuItemDocument>({
   },
   description: {
     type: String,
-    required: true, // Short description of the item
+    required: true,
     trim: true,
   },
   image: {

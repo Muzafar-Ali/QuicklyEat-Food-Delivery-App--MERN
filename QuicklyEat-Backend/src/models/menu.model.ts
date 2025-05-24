@@ -4,28 +4,28 @@ import { TMenuDocument } from "../types/menu.type.js";
 const menuSchema = new mongoose.Schema<TMenuDocument>({
   name: {
     type: String,
-    required: true, // E.g., "Burgers", "Fries", "Drinks"
+    required: true,
     trim: true,
   },
   description: {
     type: String,
-    trim: true, // Optional section description, like "Our delicious range of burgers"
+    trim: true,
   },
   image: {
-    type: String, // URL or path to the image
+    type: String,
     required: true,
   },
   restaurant: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Restaurant', // Reference to the restaurant this menu belongs to
+    ref: 'Restaurant',
     required: true,
   },
   menuItems: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'MenuItem', // Reference to the MenuItem model
+    ref: 'MenuItem',
   }],
 
-},{timestamps:true});
+},{ timestamps: true });
 
 
 const MenuModel = mongoose.model<TMenuDocument>('Menu', menuSchema);

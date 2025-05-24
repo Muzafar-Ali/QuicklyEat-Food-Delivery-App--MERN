@@ -42,3 +42,53 @@ Certain routes are accessible only for authenticated users:
 ✅ **Responsive Design**: Full mobile and desktop support for on-the-go convenience.
 
 ---
+
+## 🏠 Home Page (Main)
+
+![Home Page](/Screenshots/home-page.png)  
+![Home Page](/Screenshots/home-page2.png)  
+
+---
+
+### 🔍 Search  
+
+![Search Functionality](/Screenshots/Search.png)  
+
+---
+### 🍽️ Restaurant Display  
+
+![Restaurant Page](/Screenshots/restaurant-details-page.png)  
+
+---
+
+### 🔖 Favorites Section  
+
+![Favorites Page](/Screenshots/favorites1.png)  
+![Favorites Page](/Screenshots/favorites2.png)  
+
+---
+
+### ⭐ Reviews  
+
+![Reviews Section](/Screenshots/reviews.png)  
+
+---
+
+### 🛒 Cart Preview  
+
+![Cart Functionality](/Screenshots/cart.png)  
+
+---
+
+### 🚀 Proceed to Checkout  
+
+![Checkout Process](/Screenshots/proceed.png)  
+
+<!-- <div style="display: flex; flex-direction: column; gap: 20px; align-items: center;">
+  <img src="/Screenshots/5.%20favorites1.png" alt="Favorites Page 1" style="width: 900px;"/>
+  <img src="/Screenshots/6.%20favorites2.png" alt="Favorites Page 2" style="width: 900px;"/>
+</div> -->
+
+<!-- | ![Favorites Page 1](/Screenshots/5.%20favorites1.png) | ![Favorites Page 2](/Screenshots/6.%20favorites2.png) |
+|-------------------------------------------------------|-------------------------------------------------------|
+| *Caption for Image 1*                                  | *Caption for Image 2*                                  | -->
