@@ -9,6 +9,7 @@ QuicklyEat is a food delivery platform built using the **MERN stack** (MongoDB, 
 The app is deployed with:
 - **Frontend**: [QuicklyEat Frontend](https://quickly-eat-frontend-deploy.vercel.app/) (Vercel)
 - **Backend**: Hosted on [Render](https://render.com/)
+- **Application Demo**: [Watch on YouTube](https://render.com/)
 
 ## 🛠️ Tech Stack
 
