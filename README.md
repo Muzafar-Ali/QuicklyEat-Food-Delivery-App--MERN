@@ -82,7 +82,14 @@ Certain routes are accessible only for authenticated users:
 
 ### 🚀 Proceed to Checkout  
 
-![Checkout Process](/Screenshots/proceed.png)  
+![Checkout Process](/Screenshots/proceed.png) 
+
+---
+
+### 💳 Stripe Payment  
+
+![payment Process](/Screenshots/payment.png) 
+
 
 <!-- <div style="display: flex; flex-direction: column; gap: 20px; align-items: center;">
   <img src="/Screenshots/5.%20favorites1.png" alt="Favorites Page 1" style="width: 900px;"/>
